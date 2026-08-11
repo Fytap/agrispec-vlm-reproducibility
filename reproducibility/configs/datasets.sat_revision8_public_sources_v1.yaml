@@ -1,0 +1,47 @@
++schema_version: 1
+status: frozen_for_sat_revision8
+created_at: 2026-08-10
+data_scope: public_datasets_only
+
+datasets:
+  - id: sugarbeets2016_cropweed
+    role_in_manuscript: source_specialist_training_and_source_validation_diagnostics
+    official_source: https://www.ipb.uni-bonn.de/data/sugarbeets2016/index.html
+    source_version: 2016_cropweed_annotation_release
+    downloaded_at: 2026-08-06T17:03:00+08:00
+    archive_format: multivolume_rar
+    part_count: 11
+    total_bytes: 22950895611
+    part_hashes_tsv_sha256: 424a2e9dd629330ca9968ab91d7c26aed594f87832011941e7d20215f3c7cb2c
+    integrity_test: unrar_test_exit_0
+    license: CC-BY-SA-4.0
+    license_evidence:
+      official_source_snapshot_sha256: 7bfdd1469aa67a5a2ae70e210d10f0e73a11c8605cc55a11d2f65b6fbcc7a5e8
+      cc_deed_snapshot_sha256: 17de6b7071e8f4816b103fb45aff75f71c94821f303534fc3e21cb68bd0f7148
+      snapshot_date: 2026-08-07T11:19:06+08:00
+    redistribution_boundary: attribution_and_share_alike_required; raw images and annotations are not redistributed in the submission archive
+
+  - id: weedsgalore_official_dataset
+    role_in_manuscript: target_training_validation_and_official_test
+    official_source: https://doidata.gfz.de/weedsgalore_e_celikkan_2024/weedsgalore-dataset.zip
+    source_version: WACV_2025_public_archive
+    downloaded_at: 2026-08-05T22:00:09+08:00
+    archive_filename: weedsgalore-dataset.zip
+    archive_bytes: 336989804
+    archive_sha256: 5d8395c274d990cd8fbfa728445f65c398be2b5d777bd5145eb9ae5ca4d9b68c
+    integrity_test: zip_crc_and_structure_passed
+    archive_entries: 1119
+    archive_files: 1097
+    unsafe_members: 0
+    encrypted_members: 0
+    license: CC-BY-4.0
+    bundled_license_sha256: 9ba9550ad48438d0836ddab3da480b3b69ffa0aac7b7878b5a0039e7ab429411
+    redistribution_boundary: attribution_required; raw images and masks are not redistributed in the submission archive
+
+manuscript_redistribution:
+  images: excluded
+  masks: excluded
+  public_model_weights: excluded
+  training_checkpoints: excluded
+  included: derived non-image tables, configuration files, hashes, scripts, and sanitized run summaries
+

@@ -1,0 +1,73 @@
+{
+  "config_sha256": "4a104894c43a1ea80505af3dd14805a76e70cdaa956a103e1b4c32714ef2cb46",
+  "dataset_accounting": {
+    "evaluated_crop_instances": 2168,
+    "evaluated_weed_instances": 10029,
+    "excluded_semantic_instance_inconsistencies": 0,
+    "reported_crop_instances": 2169,
+    "reported_weed_instances": 10031
+  },
+  "git_commit": "fb9c99c57799275f849e961ae6a52525bf4ea752",
+  "inputs": {
+    "archive_sha256": "5d8395c274d990cd8fbfa728445f65c398be2b5d777bd5145eb9ae5ca4d9b68c",
+    "grid_summary_sha256": "a6139b7d4bd4e712e750baa6487fbd2e8d2f906fb7a27d0ee28237953876cfa5",
+    "manifest_sha256": "3a577a747934069d2f50f6d5732cea019b554d557c98a01e796b000ea4f2085e"
+  },
+  "matching_contract": {
+    "role_qualified_proposal_recall": "spatial rule plus at least 50% candidate labeled coverage and at least 90% same-role purity",
+    "spatial_proposal_recall": "candidate covers at least 50% of a truth instance, ignoring candidate role",
+    "split_merge_sensitivity_thresholds": [
+      0.1,
+      0.25,
+      0.5
+    ]
+  },
+  "official_split_counts": {
+    "test": 26,
+    "train": 104,
+    "val": 26
+  },
+  "outputs": {
+    "candidate_burden_sha256": "609ba410bac2dfbb27a08855ebdad822c6c9839f0eaeb2738d28381701914415",
+    "matching_sensitivity_sha256": "de41e48ccaca4ff010fa9614d0453526989b3c21755d0d0624a93505368c3f62",
+    "proposal_layers_sha256": "47136c7bef45a34d266bd20c3660a4773e2e684946b4b24293516fb265557035",
+    "setting_selection_sha256": "da03b32243581c60c6dc58376088b5beb174d3280021acb74e9657533c066628",
+    "spatial_manifest_sha256": "edb4ba74f8578815921fe1fef3e489db01b800133bf0c37a125efe2e31d471cd",
+    "split_merge_sha256": "b72d5ac4d036941b98c0f20f06b6f93369c8502bdd4ff79dd5a037d9d82cf12d"
+  },
+  "run_id": "P2_WEEDSGALORE_OFFICIAL_SPATIAL_PROPOSAL_AUDIT_20260810_v1",
+  "runtime": {
+    "numpy": "2.2.6",
+    "python": "3.10.12 (main, Mar  3 2026, 11:56:32) [GCC 11.4.0]",
+    "wall_seconds": 35.459151783026755
+  },
+  "scope": {
+    "formal_risk_certificate": false,
+    "official_spatial_split_primary": true,
+    "proposal_generation_reads_target_truth": false,
+    "public_data_only": true,
+    "sealed_test_read": false,
+    "training_split_truth_used_for_setting_selection": true,
+    "validation_and_test_used_for_setting_selection": false
+  },
+  "script_sha256": "b478aad376d91191b3abd24c8c67e58ad0de74edcb9cf1b162cdf64987f333b0",
+  "setting_selection": {
+    "maximum_training_candidates_per_image": 100.0,
+    "objective": "maximum official-training role-qualified weed-instance proposal recall",
+    "selected_record": {
+      "feasible_candidate_burden": 1,
+      "minimum_area_pixels": 32,
+      "setting": "T070_A032",
+      "threshold": 0.7,
+      "training_candidates": 9887,
+      "training_candidates_per_image": 95.0673076923077,
+      "training_images": 104,
+      "training_role_qualified_weed_proposal_recall": 0.2856045475495468,
+      "training_spatial_weed_proposal_recall": 0.5271163005069903,
+      "training_weed_instances": 6509
+    },
+    "selected_setting": "T070_A032",
+    "tie_break": "lower candidate burden, then higher foreground threshold, then larger minimum area"
+  },
+  "status": "completed_official_spatial_proposal_audit"
+}

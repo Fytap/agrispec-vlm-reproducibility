@@ -1,0 +1,47 @@
+run_id: P2_WEEDSGALORE_REVISION10_ROBUST_QUEUE_20260811_V1
+analysis_class: reviewer_requested_post_test_diagnostic
+status: frozen_before_execution
+purpose: >-
+  Quantify date-macro, worst-date, patch-proxy and allocation-concentration
+  behaviour for the already-scored official WeedsGalore test queue. This analysis
+  does not select a new ranker, candidate generator or matching threshold.
+inputs:
+  queue_policy_run: results/p2_development/P2_WEEDSGALORE_REVISION8_QUEUE_POLICY_TILE_AUDIT_20260810_v1
+  target_semantic_run: results/p2_development/P2_WEEDSGALORE_TARGET_SEMANTIC_QUEUE_BASELINE_20260810_v3
+roles:
+  candidate_scores: official_test_scoring_only
+  matching_outputs: official_test_scoring_only
+  target_semantic_outputs: official_test_scoring_only
+policies:
+  primary: bounded_global_min5_max50_N520
+  fixed_reference: fixed_K20_per_image
+  unconstrained_diagnostic: global_top_N520
+  transferred_threshold_diagnostic: validation_score_threshold_transferred
+allocation_contract:
+  total_budget: 520
+  minimum_candidates_per_tile: 5
+  maximum_candidates_per_tile: 50
+metrics:
+  - all_candidate_queue_precision
+  - queued_spatial_weed_instance_recall
+  - queued_role_qualified_weed_instance_recall
+  - one_to_one_role_qualified_recall
+  - crop_overlap_scene_frequency_0.10
+reporting:
+  acquisition_date_macro: true
+  acquisition_date_worst: true
+  patch_proxy_macro: true
+  patch_proxy_worst: true
+  per_tile_allocation: true
+  allocation_gini: true
+  candidate_auc_ap_by_date_and_tile: true
+  population_p_values: false
+governance:
+  changes_frozen_protocol: false
+  opens_new_test_data: false
+  uses_test_for_selection: false
+  test_use: descriptive_post_test_diagnostic_only
+  limitations:
+    - The official split contains one field and two held-out spatial patches.
+    - The candidate scores and matching outputs were already produced before this diagnostic.
+    - Date and tile summaries are descriptive and are not population-level confidence guarantees.

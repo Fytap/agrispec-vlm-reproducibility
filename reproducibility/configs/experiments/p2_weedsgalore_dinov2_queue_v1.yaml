@@ -1,0 +1,19 @@
+schema_version: 1
+experiment_id: P2_WEEDSGALORE_DINOV2_QUEUE_V1
+status: frozen_posthoc_sat_major_revision_development
+scope:
+  public_data_only: true
+  sealed_test: prohibited
+  held_out_date_labels_used_for_offline_scoring_only: true
+  compute: CPU_only
+inputs:
+  target_finetune_run: P2_WEEDSGALORE_DINOV2_TARGET_FINETUNE_20260810_v2
+queue:
+  fixed_review_budgets: [1, 5, 10, 20]
+  repeats: 3
+  crop_overlap_fraction_grid: [0.0, 0.01, 0.10, 0.50]
+outputs:
+  directory: results/p2_development/P2_WEEDSGALORE_DINOV2_QUEUE_20260810_v1
+preservation:
+  overwrite_existing_output: prohibited
+  failures: retain

@@ -1,0 +1,25 @@
+{
+  "run_id": "P2_SUGARBEETS_SEMANTIC_SPECIALIST_VAL_CALIBRATION_20260808_V1",
+  "verification_status": "scientific_outputs_verified_with_launcher_exit_capture_defect",
+  "verified_on": "2026-08-08",
+  "process_exit_status": "not_recoverable_from_empty_exit_marker",
+  "recorded_exit_marker": "__EXIT_CODE__=",
+  "evidence": {
+    "tmux_session_ended": true,
+    "gpu_processes_after_run": 0,
+    "traceback_or_child_failure_observed": false,
+    "summary_status": "completed_nonsealed_specialist_val_semantic_calibration",
+    "source_manifest_rows": 901,
+    "role_histogram_rows": 2002,
+    "selected_threshold": 0.961,
+    "selected_balanced_accuracy": 0.7223961314102073
+  },
+  "sha256": {
+    "summary_json": "226dfff2dae785194fc28b1fd40388f778d202955fd831112b08d8248de10b46",
+    "specialist_val_source_manifest_tsv": "f72e36cd08f114a0b7fa85207ad95f3a3c7f038f8bda5253fbe861d684062b72",
+    "role_score_histogram_tsv": "c2428c28bf4b46dfa427445091b451d6118c61732963155a1f9cf8001298ba72",
+    "raw_log": "c767b2f687153ad3ba24a40666596297c804302e3daa5e73910849bb10624732"
+  },
+  "strict_definition_of_done_exit_status_captured": false,
+  "handling": "Preserve v1 without overwrite or silent retry; any repair must be registered as a distinct v2 run."
+}

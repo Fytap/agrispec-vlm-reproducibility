@@ -1,0 +1,130 @@
+{
+  "git_commit": "fb9c99c57799275f849e961ae6a52525bf4ea752",
+  "governance": {
+    "analysis_class": "reviewer_requested_post_test_diagnostic",
+    "post_test_registered_before_this_run": {
+      "config": "configs/experiments/p2_weedsgalore_target_semantic_queue_baseline_v3.yaml",
+      "config_sha256": "89fb0d08a804c705ccffedc6201ac27b24c307fd07c31aa4ad7830fb61cd2641",
+      "epochs": 40,
+      "minimum_areas": [
+        16,
+        32,
+        64
+      ],
+      "selection_metric": "K20 one-to-one role-qualified weed-instance recall",
+      "selection_role": "official validation only",
+      "thresholds": [
+        0.3,
+        0.5,
+        0.7
+      ]
+    },
+    "pre_test_frozen_items": [],
+    "reason": "equal-target-supervision semantic segmentation baseline requested after review",
+    "test_labels_not_used_for": [
+      "epoch selection",
+      "foreground threshold selection",
+      "minimum component area selection",
+      "candidate-ID selection",
+      "training updates"
+    ],
+    "test_use": "offline scoring after validation-only selection"
+  },
+  "inputs": {
+    "archive": "data/raw/P2_SESSION_CLAIM_CHAINS_20260805/weedsgalore/weedsgalore-dataset.zip",
+    "archive_sha256": "5d8395c274d990cd8fbfa728445f65c398be2b5d777bd5145eb9ae5ca4d9b68c",
+    "config": "configs/experiments/p2_weedsgalore_target_semantic_queue_baseline_v3.yaml",
+    "config_sha256": "89fb0d08a804c705ccffedc6201ac27b24c307fd07c31aa4ad7830fb61cd2641"
+  },
+  "limitations": [
+    "This is a post-test diagnostic baseline added after reviewer feedback, not a preregistered confirmatory test.",
+    "The official split contains spatial patches from one field and does not support cross-farm inference.",
+    "No operator or actuator study was performed."
+  ],
+  "model": {
+    "architecture": "ResNet18-UNet",
+    "checkpoint_sha256": "1c41cc81893ddb31fb208074cd36d9a6ca0591f93b01659fda845aaf3bf8bf43",
+    "classes": [
+      "background",
+      "crop",
+      "weed"
+    ],
+    "encoder_initialization": "ImageNet-1K ResNet18 public weights"
+  },
+  "official_test_queue_metrics": {
+    "K20_AR_IoU_0.25": 0.2505841121495327,
+    "K20_AR_IoU_0.50": 0.16355140186915887,
+    "K20_AR_IoU_0.75": 0.030957943925233645,
+    "K20_all_candidate_precision": 0.6853281853281853,
+    "K20_crop_overlap_scene_frequency": 0.23076923076923078,
+    "K20_many_to_one_role_qualified_recall": 0.26460280373831774,
+    "K20_many_to_one_spatial_recall": 0.3037383177570093,
+    "K20_one_to_one_role_qualified_recall": 0.20327102803738317,
+    "accepted_candidates": 518,
+    "candidates": 1347,
+    "candidates_per_image": 51.80769230769231,
+    "crop_instances": 256,
+    "eligible_weed_candidates": 355,
+    "images": 26,
+    "queued_crop_fraction_maximum": 0.9473684210526315,
+    "queued_crop_fraction_median": 0.0,
+    "queued_crop_fraction_q75": 0.0,
+    "queued_crop_fraction_q95": 0.0,
+    "weed_instances": 1712
+  },
+  "official_test_semantic_metrics": {
+    "background_iou": 0.9777776325814955,
+    "crop_iou": 0.6956678731032607,
+    "mean_iou": 0.7955273068989004,
+    "plant_role_mean_iou": 0.7044021440576027,
+    "weed_iou": 0.7131364150119448
+  },
+  "run_id": "P2_WEEDSGALORE_TARGET_SEMANTIC_QUEUE_BASELINE_20260810_v3",
+  "runtime": {
+    "evaluation_local_device": 5,
+    "physical_gpu_ids_training": [
+      5,
+      6,
+      7
+    ],
+    "test_peak_gpu_memory_bytes": 583768576,
+    "test_seconds_per_tile": 0.0358090576214286,
+    "test_total_seconds": 0.9310354981571436
+  },
+  "selected_on_validation": {
+    "K20_AR_IoU_0.25": 0.22289823008849557,
+    "K20_AR_IoU_0.50": 0.15984513274336284,
+    "K20_AR_IoU_0.75": 0.03982300884955752,
+    "K20_all_candidate_precision": 0.7038461538461539,
+    "K20_crop_overlap_scene_frequency": 0.34615384615384615,
+    "K20_many_to_one_role_qualified_recall": 0.23008849557522124,
+    "K20_many_to_one_spatial_recall": 0.34845132743362833,
+    "K20_one_to_one_role_qualified_recall": 0.19081858407079647,
+    "accepted_candidates": 520,
+    "background_iou": 0.9746120814310326,
+    "candidates": 1557,
+    "candidates_per_image": 59.88461538461539,
+    "crop_instances": 451,
+    "crop_iou": 0.658434936253437,
+    "eligible_weed_candidates": 366,
+    "epoch": 36,
+    "feasible_mean_burden": 1,
+    "images": 26,
+    "mean_iou": 0.7636792583580375,
+    "minimum_area_pixels": 16,
+    "plant_role_mean_iou": 0.65821284682154,
+    "queued_crop_fraction_maximum": 1.0,
+    "queued_crop_fraction_median": 0.0,
+    "queued_crop_fraction_q75": 0.0,
+    "queued_crop_fraction_q95": 0.6842105263157895,
+    "threshold": 0.3,
+    "weed_instances": 1808,
+    "weed_iou": 0.657990757389643
+  },
+  "split_counts": {
+    "test": 26,
+    "train": 104,
+    "validation": 26
+  },
+  "status": "completed_reviewer_requested_post_test_diagnostic"
+}

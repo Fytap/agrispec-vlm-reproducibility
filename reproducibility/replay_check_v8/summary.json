@@ -1,0 +1,19 @@
+{
+  "inputs": {
+    "results/p2_development/P2_WEEDSGALORE_REVISION8_QUEUE_POLICY_TILE_AUDIT_20260810_v1/official_test_crop_exposure_severity.tsv": "9b3892cc19e44908c1c6d13ad2a12508430efee2f0ea9c35de4a4ea633d738c5",
+    "results/p2_development/P2_WEEDSGALORE_REVISION8_QUEUE_POLICY_TILE_AUDIT_20260810_v1/official_test_queue_policy_comparison.tsv": "f4c9b99f14aa81fc4edc48058597f42a339738973936b2bf295fb37de47c0fa6",
+    "results/p2_development/P2_WEEDSGALORE_REVISION8_QUEUE_POLICY_TILE_AUDIT_20260810_v1/official_test_queue_policy_per_tile.tsv": "22969b9959c9bd6dc44c9e3612884c864a07e5ebd310bb7b2d709ef49d8fa4fc",
+    "results/p2_development/P2_WEEDSGALORE_TARGET_SEMANTIC_QUEUE_BASELINE_20260810_v3/official_test_date_metrics.tsv": "6109a6f334127f1457673b4f0a8d8513418a763db7a4c853c122e785159731ec",
+    "results/p2_development/P2_WEEDSGALORE_TARGET_SEMANTIC_QUEUE_BASELINE_20260810_v3/official_test_tile_metrics.tsv": "15c763fe32514bee3e3a38a208419cd923d9d4bf70cb5853764a36869bdf9cf9",
+    "results/p2_development/P2_WEEDSGALORE_TARGET_SEMANTIC_QUEUE_BASELINE_20260810_v3/summary.json": "d929e5a537b45270885c0d9ce55f6cf067e201d21313f740ce6a56e9ed05c4a1"
+  },
+  "outputs": {
+    "revision8_crop_exposure_summary.tsv": "21da2edfcb0093fb5514bebba532fe16b63d646529d2bc4199ea3258e23d1c08",
+    "revision8_paired_tile_delta_summary.tsv": "9f6195558c81675210770b5c4a017673123d7cb78d2ec77668e00630f5cd4dd1",
+    "revision8_queue_policy_summary.tsv": "51faa68535947058d209afb195fc0cdc67119f07012497bee8246a6142843608",
+    "revision8_target_semantic_by_date.tsv": "6109a6f334127f1457673b4f0a8d8513418a763db7a4c853c122e785159731ec",
+    "revision8_target_semantic_summary.tsv": "30ac7252248191d9e6460d76e9b5535c72026394e02402722ea0919a49956ee7"
+  },
+  "revision7_core_summary_sha256": "a87e737a0f6777ef2597e35b7311194d718c62bd830645b0df90fdfc53faee87",
+  "status": "replayed_from_archived_revision8_tables"
+}

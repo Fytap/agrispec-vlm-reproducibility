@@ -1,0 +1,7 @@
+variant	instance_coverage_threshold	split_instances	merge_candidates
+original	0.1	224	735
+original	0.25	40	640
+original	0.5	0	473
+nested_commissioned	0.1	154	1136
+nested_commissioned	0.25	26	1065
+nested_commissioned	0.5	0	938

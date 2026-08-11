@@ -1,0 +1,10 @@
+model	k	stratum	minimum_instance_coverage	minimum_candidate_labeled_coverage	minimum_same_role_purity	selected_candidates	weed_truth_instances	many_to_one_recalled_instances	many_to_one_queued_recall	one_to_one_matches	one_to_one_queued_recall
+all_candidate_component_masked_dinov2_linear	20	ALL	0.5	0.25	0.5	520	1712	450	0.2628504672897196	289	0.1688084112149532
+all_candidate_component_masked_dinov2_linear	20	ALL	0.5	0.25	0.75	520	1712	450	0.2628504672897196	289	0.1688084112149532
+all_candidate_component_masked_dinov2_linear	20	ALL	0.5	0.25	0.9	520	1712	383	0.223714953271028	287	0.1676401869158878
+all_candidate_component_masked_dinov2_linear	20	ALL	0.5	0.5	0.5	520	1712	386	0.2254672897196261	232	0.1355140186915887
+all_candidate_component_masked_dinov2_linear	20	ALL	0.5	0.5	0.75	520	1712	386	0.2254672897196261	232	0.1355140186915887
+all_candidate_component_masked_dinov2_linear	20	ALL	0.5	0.5	0.9	520	1712	319	0.1863317757009346	230	0.1343457943925233
+all_candidate_component_masked_dinov2_linear	20	ALL	0.5	0.75	0.5	520	1712	195	0.1139018691588785	101	0.0589953271028037
+all_candidate_component_masked_dinov2_linear	20	ALL	0.5	0.75	0.75	520	1712	195	0.1139018691588785	101	0.0589953271028037
+all_candidate_component_masked_dinov2_linear	20	ALL	0.5	0.75	0.9	520	1712	128	0.0747663551401869	99	0.0578271028037383

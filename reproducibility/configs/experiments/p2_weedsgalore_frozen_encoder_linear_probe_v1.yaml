@@ -1,0 +1,26 @@
+schema_version: 1
+experiment_id: P2_WEEDSGALORE_FROZEN_ENCODER_LINEAR_PROBE_V1
+status: frozen_posthoc_major_revision_development
+scope:
+  public_data_only: true
+  sealed_test: prohibited
+  outer_test_truth: offline_scoring_only
+  gpu_devices: [2]
+comparison:
+  outer: leave_one_provisional_date_out
+  commissioned_candidate_setting: selected_on_training_dates_only
+  frozen_encoder_feature_dimension: 512
+  full_label_inner_l2_grid: [0.0001, 0.001, 0.01]
+  same_label_budget:
+    labels_per_training_date: 100
+    repeats: 10
+    fixed_l2: 0.001
+    shared_sample_ids_between_baselines: true
+baselines:
+  - frozen_encoder_linear_probe
+  - role_plus_local_linear_probe
+outputs:
+  directory: results/p2_development/P2_WEEDSGALORE_FROZEN_ENCODER_LINEAR_PROBE_20260810_v1
+preservation:
+  overwrite_existing_output: prohibited
+  failures: retain

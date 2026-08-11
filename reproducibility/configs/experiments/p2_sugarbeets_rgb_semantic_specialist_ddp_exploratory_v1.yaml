@@ -1,0 +1,43 @@
+schema_version: 1
+experiment_id: P2_SUGARBEETS_RGB_SEMANTIC_SPECIALIST_DDP_EXPLORATORY_V1
+status: frozen_nonsealed_specialist_training
+
+scope:
+  public_data_only: true
+  sealed_test: prohibited
+  data_role: specialist_train_only
+  specialist_val_read: prohibited
+  controller_policy_risk_read: prohibited
+  physical_gpu_ids: [0, 1, 2, 3, 4, 5, 6, 7]
+  model_input: RGB_only
+  iMap_use: supervised_patch_selection_and_semantic_targets_only
+  candidate_generation: prohibited
+  risk_certificate: prohibited
+
+inputs:
+  supervision_manifest: data/source-metadata/P2_SESSION_CLAIM_CHAINS_20260805/sugarbeets_paired_dev_manifest_v1/supervision_manifest.tsv
+  supervision_manifest_sha256: c155405c0e0ac91701f107f7c76ada7f4b970a55d4a10d72804428c166e5fc5f
+  specialist_train_rows: 7050
+
+model:
+  architecture: custom_resnet18_unet
+  encoder_weights: torchvision_ResNet18_ImageNet1K_V1_cached
+  classes: [soil, crop, weed]
+
+training:
+  seed: 20260808
+  epochs: 8
+  train_patches: 16384
+  patch_size: 128
+  batch_size_per_gpu: 64
+  learning_rate: 0.0008
+  sampling: balanced_crop_and_weed_centres
+  loss: weighted_cross_entropy_plus_foreground_dice
+
+outputs:
+  directory: results/p2_development/P2_SUGARBEETS_RGB_SEMANTIC_SPECIALIST_DDP_20260808_v1
+
+limitations:
+  - This creates a specialist semantic model, not a controller, a risk certificate or a test result.
+  - No controller, policy_select, risk_certify or sealed image/mask may be read.
+  - Any future use on fixed controller RGB candidates requires a separately registered inference step.

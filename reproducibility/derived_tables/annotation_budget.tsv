@@ -1,0 +1,5 @@
+held_out_date	source_dense_mask_images_global	target_training_date_dense_masks_for_setting_selection	target_held_out_dense_masks_offline_scoring_only	full_training_candidate_role_labels	sampled_training_candidate_role_labels	held_out_candidate_role_labels_offline_scoring_only	class_stratified_sampling_requires_roles_before_sampling
+2023-05-25	7050	108	48	3424	300	437	yes
+2023-05-30	7050	108	48	3124	300	737	yes
+2023-06-06	7050	108	48	1859	300	2347	yes
+2023-06-15	7050	144	12	3751	300	455	yes

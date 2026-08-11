@@ -1,0 +1,82 @@
+{
+  "config_sha256": "ba1739bd7fe0c1c09e8cc3e389d7533351de1b23589f157c58e06816d3491a7c",
+  "full_label_date_macro": {
+    "dinov2_frozen": {
+      "average_precision": 0.8762016473976235,
+      "roc_auc": 0.8836431691422815
+    },
+    "role_plus_local": {
+      "average_precision": 0.8524649166372221,
+      "roc_auc": 0.8603015920314301
+    },
+    "source_semantic_frozen": {
+      "average_precision": 0.7830127449450307,
+      "roc_auc": 0.726501898582909
+    }
+  },
+  "git_commit": "fb9c99c57799275f849e961ae6a52525bf4ea752",
+  "inputs": {
+    "archive_sha256": "5d8395c274d990cd8fbfa728445f65c398be2b5d777bd5145eb9ae5ca4d9b68c",
+    "commissioning_summary_sha256": "5eec446879ece81ee259cbe00ad344aa7f53aa133cbb033346847e279154d209",
+    "dinov2_embeddings_sha256": {
+      "T070_A032": "e470069e816644a3eefb86deb5b4e22082d042d96de3314ce8f1f4d31e9873d0",
+      "T080_A032": "2109f3746fbee162aaf63807467c84ca9cb161c446c7fa04deda87072bb980d9"
+    },
+    "manifest_sha256": "3a577a747934069d2f50f6d5732cea019b554d557c98a01e796b000ea4f2085e",
+    "source_embeddings_sha256": {
+      "T070_A032": "5a1d5d86818b528263bca3ab79efcd5f2df8e3163e7b6374e25303b165cdd612",
+      "T080_A032": "200615f0181d3f0a2b78c48347beb5fc81cb3d724aa621fbf72193f0a8728a5c"
+    }
+  },
+  "outputs": {
+    "full_label_sha256": "f39fbf328933a2eea9bfdb2bd49aa41c12b7f0a2886edcd122eda64f9e500464",
+    "paired_differences_sha256": "364788075310bda10e3d5f0bcf0671363a71adcd80e1e3730b620795deb30a88",
+    "same_label_budget_sha256": "7503d17e729aa759a398e6acfde2fba885763608d77999240c86deed0fae1847"
+  },
+  "paired_differences": {
+    "dinov2_minus_source_semantic": {
+      "mean": 0.1802858412604368,
+      "q0.025": 0.1561370595197926,
+      "q0.975": 0.20812488539703355
+    },
+    "role_plus_local_minus_dinov2": {
+      "mean": -0.013457885034300798,
+      "q0.025": -0.05340612793020338,
+      "q0.975": 0.015608638338823916
+    }
+  },
+  "run_id": "P2_WEEDSGALORE_MODERN_FROZEN_BASELINES_20260810_v1",
+  "runtime": {
+    "gpu_name": "NVIDIA H200",
+    "numpy": "2.2.6",
+    "physical_gpu_id": 1,
+    "python": "3.10.12 (main, Mar  3 2026, 11:56:32) [GCC 11.4.0]",
+    "torch": "2.7.1+cu126",
+    "wall_seconds": 38.272385905496776
+  },
+  "same_label_budget": {
+    "dinov2_frozen": {
+      "mean": 0.8806025157743951,
+      "q0.025": 0.8593639417989745,
+      "q0.975": 0.9181398799541505
+    },
+    "role_plus_local": {
+      "mean": 0.8671446307400943,
+      "q0.025": 0.854078690728741,
+      "q0.975": 0.8765786631454068
+    },
+    "source_semantic_frozen": {
+      "mean": 0.7003166745139583,
+      "q0.025": 0.6669236234470503,
+      "q0.975": 0.7278625457088225
+    }
+  },
+  "scope": {
+    "class_stratified_sampling_requires_known_training_candidate_roles": true,
+    "held_out_labels_used_for_scoring_only": true,
+    "public_data_only": true,
+    "sealed_test_read": false
+  },
+  "script_sha256": "211749beaa3bf62fbb4b3f339d75b4b31116e6e7b3f216f0f8dfbb6c4ab11e87",
+  "status": "completed_modern_frozen_baseline_comparison"
+}

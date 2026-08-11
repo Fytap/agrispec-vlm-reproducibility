@@ -1,0 +1,19 @@
+experiment:
+  id: P2_WEEDSGALORE_DINOV2_SCENE_EMBEDDINGS_20260810_v1
+  stage: SAT major-revision development
+  public_data_only: true
+  sealed_test_read: false
+  gpu_devices: [1]
+purpose: reconstruct repeated acquisition locations within each official spatial split for cluster-aware uncertainty
+model:
+  implementation: timm
+  identifier: vit_small_patch14_dinov2.lvd142m
+  pretraining: DINOv2 self-supervised LVD-142M
+  frozen: true
+input:
+  bands: [R, G, B]
+  crop: complete 600x600 tile
+  truth_access: prohibited
+matching_guardrail:
+  cross_official_split_matching: prohibited
+  test_labels_or_masks: prohibited

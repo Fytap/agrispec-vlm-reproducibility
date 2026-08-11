@@ -1,0 +1,21 @@
+schema_version: 1
+experiment_id: P2_WEEDSGALORE_DINOV2_COMPONENT_MASKED_EMBEDDINGS_V1
+status: frozen_posthoc_sat_reviewer_revision
+scope:
+  public_data_only: true
+  sealed_test: prohibited
+  target_truth_read: prohibited
+  gpu_devices: [0, 1, 2, 3, 4, 5, 6, 7]
+model:
+  backbone: vit_small_patch14_dinov2.lvd142m
+  weights: frozen
+input_contract:
+  crop: tight_candidate_bounding_box
+  mask: rgb_proposal_connected_component
+  outside_fill: per_image_rgb_median
+  padding_pixels: 0
+outputs:
+  filename: dinov2_component_masked_embeddings.npz
+preservation:
+  overwrite_existing_output: prohibited
+  failures: retain

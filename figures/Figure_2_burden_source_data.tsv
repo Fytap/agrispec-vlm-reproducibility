@@ -1,0 +1,3 @@
+variant	official_split	images	candidates	candidates_per_image_mean	candidates_per_image_median	candidates_per_image_q25	candidates_per_image_q75	candidates_per_image_max	images_with_fewer_than_20_candidates	fraction_images_with_fewer_than_20_candidates	eligible_weed_candidates	eligible_crop_candidates	ambiguous_or_background_candidates	eligible_weed_fraction	eligible_crop_fraction	ambiguous_or_background_fraction	short
+original_T095_A032	test	26	802	30.846153846153847	28.5	19.25	43.75	62	7	0.2692307692307692	453	148	201	0.5648379052369077	0.1845386533665835	0.2506234413965087	Original
+commissioned_T070_A032	test	26	2351	90.42307692307692	89.0	60.0	114.25	183	0	0.0	464	111	1776	0.1973628243300723	0.0472139515099957	0.7554232241599319	Commissioned

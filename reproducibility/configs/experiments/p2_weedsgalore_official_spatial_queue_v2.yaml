@@ -1,0 +1,22 @@
+experiment:
+  id: P2_WEEDSGALORE_OFFICIAL_SPATIAL_QUEUE_20260810_v2
+  stage: SAT major-revision development
+  public_data_only: true
+  sealed_test_read: false
+  compute: CPU-only
+  predecessor: P2_WEEDSGALORE_OFFICIAL_SPATIAL_QUEUE_20260810_v1
+  v2_changes:
+    - use all scored images rather than only images with an oracle-selected candidate as scene-frequency denominator
+    - use conservative two-patch capture-index proxies for primary cluster bootstrap
+    - retain embedding-linked location assignments as a non-inferential diagnostic because matching margins were weak
+split: {fit: official_train, hyperparameter_selection: official_validation, score_once: official_test}
+proposal: {setting: T070_A032, selection: official_training_only, maximum_training_candidates_per_image: 100}
+queue:
+  k: [1, 5, 10, 20, 50]
+  crop_overlap_thresholds: [0.0, 0.01, 0.10, 0.50]
+  controls: [random_1000_draws, exact_oracle, crop_constrained_exact_oracle]
+uncertainty:
+  primary_cluster: official-test capture-index patch proxy
+  cluster_count: 2
+  interpretation: descriptive_only
+label_selection: {budget: 300, repeats: 10, prospective: [uniform, DINOv2_coreset], retrospective_reference: class_stratified}

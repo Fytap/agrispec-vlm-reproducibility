@@ -1,0 +1,153 @@
+{
+  "config_sha256": "dcf5d8f7977cc1f1d3c902f830cd26c8e91fe89e9c03093e968ec2f76adca2c2",
+  "git_commit": "fb9c99c57799275f849e961ae6a52525bf4ea752",
+  "inputs": {
+    "archive_sha256": "5d8395c274d990cd8fbfa728445f65c398be2b5d777bd5145eb9ae5ca4d9b68c",
+    "commissioned_candidates_sha256": "be90fff3d380b6ca7e968e0652f5beff17905ff016a2f96da0ea6331a3f99a88",
+    "manifest_sha256": "3a577a747934069d2f50f6d5732cea019b554d557c98a01e796b000ea4f2085e",
+    "original_candidates_sha256": "e4474f3c469b153b3a79c731f00cf11d723fa0eae760ab162d02f734b0773c28",
+    "proposal_summary_sha256": "7594e72179c95388f010282ef51e5959502918b5ce87459383f29b63f9b4b743"
+  },
+  "outputs": {
+    "burden_sha256": "dedc2c3362c481e630143331b99548a6ef98725c345b4a3132997a3631a31a09",
+    "predictions_sha256": "03c78d8a7edd20f9b3199a7904e4256934711a85fba192298b0583badec50935",
+    "queue_sha256": "dd0e7589ed66004fcf1bd05f726cf42699d17b797ea9e7498fb4b880fb411fad",
+    "ranking_sha256": "6927e1e165eb866caa922f27ab7ae6c92ebe9919209da8d1044279795d9ababb"
+  },
+  "primary_k20": {
+    "commissioned_T070_A032": {
+      "accepted_candidates": 520,
+      "aggregation": "pooled_test",
+      "all_candidate_queue_precision": 0.475,
+      "crop_overlap_scene_frequency_0.00": 0.8846153846153846,
+      "crop_overlap_scene_frequency_0.01": 0.8846153846153846,
+      "crop_overlap_scene_frequency_0.10": 0.8846153846153846,
+      "crop_overlap_scene_frequency_0.50": 0.6153846153846154,
+      "crop_overlap_scene_numerator_0.00": 23,
+      "crop_overlap_scene_numerator_0.01": 23,
+      "crop_overlap_scene_numerator_0.10": 23,
+      "crop_overlap_scene_numerator_0.50": 16,
+      "images": 26,
+      "k": 20,
+      "one_to_one_role_qualified_matches": 201,
+      "one_to_one_role_qualified_recall": 0.11740654205607477,
+      "one_to_one_spatial_matches": 265,
+      "one_to_one_spatial_recall": 0.15478971962616822,
+      "queued_role_qualified_weed_instance_recall": 0.1594626168224299,
+      "queued_spatial_weed_instance_recall": 0.2727803738317757,
+      "ranker_weights": "identical",
+      "role_qualified_recalled_weed_instances": 273,
+      "spatial_recalled_weed_instances": 467,
+      "stratum": "ALL",
+      "variant": "commissioned_T070_A032",
+      "weed_candidates": 247,
+      "weed_truth_instances": 1712
+    },
+    "original_T095_A032": {
+      "accepted_candidates": 471,
+      "aggregation": "pooled_test",
+      "all_candidate_queue_precision": 0.5859872611464968,
+      "crop_overlap_scene_frequency_0.00": 0.8461538461538461,
+      "crop_overlap_scene_frequency_0.01": 0.8461538461538461,
+      "crop_overlap_scene_frequency_0.10": 0.8461538461538461,
+      "crop_overlap_scene_frequency_0.50": 0.7307692307692307,
+      "crop_overlap_scene_numerator_0.00": 22,
+      "crop_overlap_scene_numerator_0.01": 22,
+      "crop_overlap_scene_numerator_0.10": 22,
+      "crop_overlap_scene_numerator_0.50": 19,
+      "images": 26,
+      "k": 20,
+      "one_to_one_role_qualified_matches": 166,
+      "one_to_one_role_qualified_recall": 0.0969626168224299,
+      "one_to_one_spatial_matches": 182,
+      "one_to_one_spatial_recall": 0.10630841121495327,
+      "queued_role_qualified_weed_instance_recall": 0.11974299065420561,
+      "queued_spatial_weed_instance_recall": 0.1875,
+      "ranker_weights": "identical",
+      "role_qualified_recalled_weed_instances": 205,
+      "spatial_recalled_weed_instances": 321,
+      "stratum": "ALL",
+      "variant": "original_T095_A032",
+      "weed_candidates": 276,
+      "weed_truth_instances": 1712
+    }
+  },
+  "proposal_definitions": {
+    "commissioned_T070_A032": {
+      "foreground_threshold": 0.7,
+      "minimum_area_pixels": 32,
+      "selection_source": "official training split only; maximize role-qualified weed proposal recall under <=100 mean candidates/image"
+    },
+    "original_T095_A032": {
+      "foreground_threshold": 0.95,
+      "minimum_area_pixels": 32,
+      "selection_source": "fixed in the target-truth-free external-inference configuration; not optimized on WeedsGalore truth"
+    }
+  },
+  "ranker": {
+    "class_weight": "balanced",
+    "comparison": "same scaler and coefficient vector applied without refitting",
+    "features": [
+      "role_logit",
+      "soil_probability_mean",
+      "log1p_area_pixels",
+      "mean_foreground_probability",
+      "max_foreground_probability",
+      "log_bbox_area",
+      "log_bbox_aspect",
+      "bbox_fill_fraction"
+    ],
+    "fit_pool": "commissioned official train+validation",
+    "selected_c": 100.0,
+    "target": "all-candidate weed versus rest",
+    "validation_sensitivity": [
+      {
+        "c": 0.001,
+        "validation_all_candidate_average_precision": 0.7270276306674313,
+        "validation_all_candidate_roc_auc": 0.9159994567819485
+      },
+      {
+        "c": 0.01,
+        "validation_all_candidate_average_precision": 0.7491577555860405,
+        "validation_all_candidate_roc_auc": 0.9219490822291369
+      },
+      {
+        "c": 0.1,
+        "validation_all_candidate_average_precision": 0.7549683128197175,
+        "validation_all_candidate_roc_auc": 0.923649116824593
+      },
+      {
+        "c": 1.0,
+        "validation_all_candidate_average_precision": 0.7594472328728746,
+        "validation_all_candidate_roc_auc": 0.9270749591347369
+      },
+      {
+        "c": 10.0,
+        "validation_all_candidate_average_precision": 0.7614151582854921,
+        "validation_all_candidate_roc_auc": 0.9299328015479732
+      },
+      {
+        "c": 100.0,
+        "validation_all_candidate_average_precision": 0.7617313448609583,
+        "validation_all_candidate_roc_auc": 0.9305354960284615
+      }
+    ]
+  },
+  "run_id": "P2_WEEDSGALORE_OFFICIAL_SPATIAL_MATCHED_PROPOSAL_QUEUE_20260810_v1",
+  "runtime": {
+    "numpy": "2.2.6",
+    "python": "3.10.12 (main, Mar  3 2026, 11:56:32) [GCC 11.4.0]",
+    "scikit_learn": "1.7.2",
+    "wall_seconds": 8.903386889956892
+  },
+  "scope": {
+    "identical_ranker_weights_across_proposal_pools": true,
+    "official_test_offline_scoring_only": true,
+    "official_train_fit": true,
+    "official_validation_regularization_selection": true,
+    "public_data_only": true,
+    "sealed_test_read": false
+  },
+  "script_sha256": "28853eddc4a90db934d46131b456051ac9e455133c82ec3790e794a9aaa3562b",
+  "status": "completed_official_spatial_matched_weight_proposal_queue_comparison"
+}

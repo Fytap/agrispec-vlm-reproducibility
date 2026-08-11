@@ -1,0 +1,25 @@
+schema_version: 1
+experiment_id: P2_WEEDSGALORE_MODERN_FROZEN_BASELINES_V1
+status: frozen_posthoc_sat_major_revision_development
+scope:
+  public_data_only: true
+  sealed_test: prohibited
+  held_out_date_labels_used_for_scoring_only: true
+  gpu_devices: [1]
+comparison:
+  outer: leave_one_provisional_date_out
+  commissioned_setting_selected_on_training_dates_only: true
+  feature_sets:
+    - dinov2_vits14_LVD142M_frozen
+    - source_semantic_resnet18_frozen
+    - role_plus_local
+  full_label_inner_l2_grid: [0.0001, 0.001, 0.01]
+  same_label_budget:
+    labels_per_training_date: 100
+    repeats: 10
+    class_stratified_sampling_requires_known_candidate_roles: true
+outputs:
+  directory: results/p2_development/P2_WEEDSGALORE_MODERN_FROZEN_BASELINES_20260810_v1
+preservation:
+  overwrite_existing_output: prohibited
+  failures: retain

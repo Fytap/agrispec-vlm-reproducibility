@@ -1,0 +1,11 @@
+{
+  "images": 26,
+  "candidates": 2351,
+  "mean_candidates_per_image": 90.42307692307692,
+  "median_candidates_per_image": 89.0,
+  "q25_candidates_per_image": 60.0,
+  "q75_candidates_per_image": 114.25,
+  "minimum_candidates_per_image": 22,
+  "maximum_candidates_per_image": 183,
+  "images_above_100_candidates": 10
+}

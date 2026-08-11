@@ -1,0 +1,5 @@
+policy	accepted_candidates	crop_truth_instances	crop_instances_covered_at_0.50	crop_instance_coverage_rate_at_0.50_recomputed	crop_fraction_q95	crop_fraction_maximum
+fixed_K20_per_image	520	256	32	0.125	0.5910384331116038	0.972972972972973
+global_top_N520	520	256	10	0.0390625	0.0036174284242257524	0.9583333333333334
+bounded_global_min5_max50_N520	520	256	12	0.046875	0.11477424096274527	0.918918918918919
+validation_score_threshold_transferred	426	256	5	0.01953125	0.0	0.918918918918919

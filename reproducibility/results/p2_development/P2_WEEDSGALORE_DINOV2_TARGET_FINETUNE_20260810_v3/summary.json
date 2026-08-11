@@ -1,0 +1,84 @@
+{
+  "config_sha256": "5b32508d2d31e9d754cee4496b47460efe1bc8336c884786afc0b6f8e3ad4209",
+  "date_macro_roc_auc_by_repeat": [
+    0.8930402591577737,
+    0.8999052462496524,
+    0.9060129371850307
+  ],
+  "git_commit": "fb9c99c57799275f849e961ae6a52525bf4ea752",
+  "inputs": {
+    "archive_sha256": "5d8395c274d990cd8fbfa728445f65c398be2b5d777bd5145eb9ae5ca4d9b68c",
+    "commissioning_summary_sha256": "5eec446879ece81ee259cbe00ad344aa7f53aa133cbb033346847e279154d209",
+    "manifest_sha256": "3a577a747934069d2f50f6d5732cea019b554d557c98a01e796b000ea4f2085e"
+  },
+  "mean_date_macro_roc_auc": 0.8996528141974857,
+  "method": {
+    "backbone": "vit_small_patch14_dinov2.lvd142m",
+    "epochs": 8,
+    "labels_per_training_date": 100,
+    "repeats": 3,
+    "trainable": [
+      "last_transformer_block",
+      "final_norm",
+      "binary_head"
+    ]
+  },
+  "outputs": {
+    "checkpoint_sha256": {
+      "2023-05-25_repeat0.pt": "745281e3fe40e419f5e41b474a1939b3e30572abf08ed9fefae798a0a3604a2d",
+      "2023-05-25_repeat1.pt": "6913dba4e207dca78112df107f4ea658a6b142920b63267171a84c6554cbdb41",
+      "2023-05-25_repeat2.pt": "65c9d24dba9fdbbe8fd938fd80a41da93b6f96c9e3a589d52599d28566a71eef",
+      "2023-05-30_repeat0.pt": "b94341fc2ac89cd7040b96e24b29ee31fc6f2f852eefdc6a982544b3920cb7f1",
+      "2023-05-30_repeat1.pt": "4975c81f96841d22d31e664fe6f4966a2f9fb619e2ba361af53a7469f3c63aa5",
+      "2023-05-30_repeat2.pt": "d1160646e2ded28a046e37cb7cd74734877b8cc6d184d7a026a6fb2488f237ae",
+      "2023-06-06_repeat0.pt": "c87af581ccae1a34101fe154463690e87d5b91a7c9af572421c409e3ce5ceab6",
+      "2023-06-06_repeat1.pt": "02404fffc83ec2c3fbdb0801fcb2f2f409dcdfa2ff160b2c388073e2d48504fb",
+      "2023-06-06_repeat2.pt": "3ab1d549d8d3e1696a1e799be7846da02183adffdd0c0d1ddd36e21523941cb8",
+      "2023-06-15_repeat0.pt": "126e411c8bc8875201c1a8f44ab39de2af8aeb509f26cff7fa0b046270b5ee8f",
+      "2023-06-15_repeat1.pt": "7bb48c139fcc206fd59a54900fab789c33c181f206f98daab731781fe2954ea2",
+      "2023-06-15_repeat2.pt": "3f2efb5993a02698c01810c707a29338892b9f6a181fdbcfa1d5a35a62724c70"
+    },
+    "outer_predictions_sha256": "cac5f8020b42a22a0c4b69722400e94da006626f21cf0575f87fe3ce4664ad51",
+    "results_tsv_sha256": "a0825fb32e89682a5b12e2ba71586929c3fb0c9418ad0dbb5346e7e083d54126"
+  },
+  "per_date_mean": {
+    "2023-05-25": {
+      "average_precision": 0.6035380453532971,
+      "roc_auc": 0.8961854690775682
+    },
+    "2023-05-30": {
+      "average_precision": 0.9891737213010142,
+      "roc_auc": 0.972225624902173
+    },
+    "2023-06-06": {
+      "average_precision": 0.9929936744602691,
+      "roc_auc": 0.9628090278098119
+    },
+    "2023-06-15": {
+      "average_precision": 0.9465634893492912,
+      "roc_auc": 0.7673911350003895
+    }
+  },
+  "range_date_macro_roc_auc": [
+    0.8930402591577737,
+    0.9060129371850307
+  ],
+  "run_id": "P2_WEEDSGALORE_DINOV2_TARGET_FINETUNE_20260810_v3",
+  "runtime": {
+    "gpu_name": "NVIDIA H200",
+    "numpy": "2.2.6",
+    "physical_gpu_id": 2,
+    "python": "3.10.12 (main, Mar  3 2026, 11:56:32) [GCC 11.4.0]",
+    "timm": "1.0.28",
+    "torch": "2.7.1+cu126",
+    "wall_seconds": 148.95542385615408
+  },
+  "scope": {
+    "held_out_date_labels_used_for_scoring_only": true,
+    "public_data_only": true,
+    "sealed_test_read": false,
+    "training_date_candidate_roles_used_for_stratified_sampling_and_training": true
+  },
+  "script_sha256": "6e730123a2330ad8cbad316093d2fee1b4f182ed6d1bd2424481834bd4e69bb0",
+  "status": "completed_dinov2_last_block_target_finetune"
+}

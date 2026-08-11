@@ -1,0 +1,30 @@
+{
+  "analysis_class": "reviewer_requested_post_test_diagnostic",
+  "post_test_registered_before_this_run": {
+    "config": "configs/experiments/p2_weedsgalore_target_semantic_queue_baseline_v3.yaml",
+    "config_sha256": "89fb0d08a804c705ccffedc6201ac27b24c307fd07c31aa4ad7830fb61cd2641",
+    "epochs": 40,
+    "minimum_areas": [
+      16,
+      32,
+      64
+    ],
+    "selection_metric": "K20 one-to-one role-qualified weed-instance recall",
+    "selection_role": "official validation only",
+    "thresholds": [
+      0.3,
+      0.5,
+      0.7
+    ]
+  },
+  "pre_test_frozen_items": [],
+  "reason": "equal-target-supervision semantic segmentation baseline requested after review",
+  "test_labels_not_used_for": [
+    "epoch selection",
+    "foreground threshold selection",
+    "minimum component area selection",
+    "candidate-ID selection",
+    "training updates"
+  ],
+  "test_use": "offline scoring after validation-only selection"
+}

@@ -1,0 +1,3 @@
+comparator_minus_fixed	metric	tiles	median_delta	q25_delta	q75_delta	minimum_delta	maximum_delta	improved_tiles	unchanged_tiles	worsened_tiles
+global_top_N520	queued_role_qualified_weed_instance_recall	26	0.0	0.0	0.10000000000000002	-0.11764705882352941	0.39189189189189183	9	12	5
+global_top_N520	one_to_one_role_qualified_recall	26	0.0	0.0	0.0763157894736842	-0.11764705882352941	0.2027027027027027	9	12	5

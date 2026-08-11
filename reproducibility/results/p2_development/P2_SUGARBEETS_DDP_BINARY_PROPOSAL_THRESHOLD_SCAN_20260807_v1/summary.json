@@ -1,0 +1,170 @@
+{
+  "run_id": "P2_SUGARBEETS_DDP_BINARY_PROPOSAL_THRESHOLD_SCAN_20260807_V1",
+  "status": "completed_specialist_val_threshold_diagnostic_not_policy_selection",
+  "scope": {
+    "public_data_only": true,
+    "exploratory": true,
+    "sealed_test_read": false,
+    "evaluation_split": "specialist_val_only",
+    "policy_or_risk_certificate": false,
+    "RGB_grid_fixed_before_iMap_scoring": true
+  },
+  "inputs": {
+    "grid_manifest": "results/p2_development/P2_SUGARBEETS_RGB_BINARY_PROPOSAL_SMOKE_20260807_v1/val_rgb_fixed_grid.tsv",
+    "grid_manifest_sha256": "0b2ae614b8dea2d3e8b3b2050daabd74d57fd1c02a21eb60de8a1b95a6337d27",
+    "val_source_manifest": "results/p2_development/P2_SUGARBEETS_RGB_BINARY_PROPOSAL_SMOKE_20260807_v1/val_source_subset.tsv",
+    "val_source_manifest_sha256": "62cdae7a1db80746c6fdb6f8076da6ec57a0a41ee89888c9c0f15fd6ddfe3bab",
+    "checkpoint": "results/p2_development/P2_SUGARBEETS_RGB_BINARY_PROPOSAL_DDP_20260807_v1/last.pt",
+    "checkpoint_sha256": "b4e2aa00c55ae941663e136481f0b3df1b2a420dce00e8a129527f00c668780a",
+    "config": "configs/experiments/p2_sugarbeets_ddp_binary_proposal_threshold_scan_exploratory_v1.yaml",
+    "config_sha256": "3dd0195a399c193fc89463ee0b6f9f56087a59cab4ec781e65d05014780f051d"
+  },
+  "threshold_metrics": [
+    {
+      "tp": 16859,
+      "fp": 531163,
+      "fn": 340,
+      "tn": 39513590,
+      "threshold": 0.5,
+      "predicted_foreground_pixels": 548022,
+      "precision": 0.030763363514603428,
+      "recall": 0.9802314088028373,
+      "foreground_iou": 0.03074428935630113
+    },
+    {
+      "tp": 16733,
+      "fp": 426861,
+      "fn": 466,
+      "tn": 39617892,
+      "threshold": 0.6,
+      "predicted_foreground_pixels": 443594,
+      "precision": 0.03772142995622123,
+      "recall": 0.97290540147683,
+      "foreground_iou": 0.03768184479574832
+    },
+    {
+      "tp": 16565,
+      "fp": 329354,
+      "fn": 634,
+      "tn": 39715399,
+      "threshold": 0.7,
+      "predicted_foreground_pixels": 345919,
+      "precision": 0.04788693306814601,
+      "recall": 0.9631373917088203,
+      "foreground_iou": 0.0477993265099422
+    },
+    {
+      "tp": 16286,
+      "fp": 232782,
+      "fn": 913,
+      "tn": 39811971,
+      "threshold": 0.8,
+      "predicted_foreground_pixels": 249068,
+      "precision": 0.06538776559011997,
+      "recall": 0.9469155183440898,
+      "foreground_iou": 0.06514895132030034
+    },
+    {
+      "tp": 16036,
+      "fp": 181218,
+      "fn": 1163,
+      "tn": 39863535,
+      "threshold": 0.85,
+      "predicted_foreground_pixels": 197254,
+      "precision": 0.08129619678181431,
+      "recall": 0.9323797895226467,
+      "foreground_iou": 0.08081968782916786
+    },
+    {
+      "tp": 15583,
+      "fp": 123971,
+      "fn": 1616,
+      "tn": 39920782,
+      "threshold": 0.9,
+      "predicted_foreground_pixels": 139554,
+      "precision": 0.11166286885363372,
+      "recall": 0.9060410488981917,
+      "foreground_iou": 0.11038464262945386
+    },
+    {
+      "tp": 14361,
+      "fp": 59432,
+      "fn": 2838,
+      "tn": 39985321,
+      "threshold": 0.95,
+      "predicted_foreground_pixels": 73793,
+      "precision": 0.1946119550634884,
+      "recall": 0.8349904064189778,
+      "foreground_iou": 0.18740457517192782
+    },
+    {
+      "tp": 12977,
+      "fp": 31416,
+      "fn": 4222,
+      "tn": 40013337,
+      "threshold": 0.97,
+      "predicted_foreground_pixels": 44393,
+      "precision": 0.2923208613970671,
+      "recall": 0.7545206116634688,
+      "foreground_iou": 0.2669340738455209
+    },
+    {
+      "tp": 9103,
+      "fp": 6624,
+      "fn": 8096,
+      "tn": 40038129,
+      "threshold": 0.99,
+      "predicted_foreground_pixels": 15727,
+      "precision": 0.5788135054365104,
+      "recall": 0.5292749578463865,
+      "foreground_iou": 0.38210972589514336
+    },
+    {
+      "tp": 6622,
+      "fp": 2587,
+      "fn": 10577,
+      "tn": 40042166,
+      "threshold": 0.995,
+      "predicted_foreground_pixels": 9209,
+      "precision": 0.7190791616896515,
+      "recall": 0.385022385022385,
+      "foreground_iou": 0.33468108763772364
+    },
+    {
+      "tp": 2688,
+      "fp": 319,
+      "fn": 14511,
+      "tn": 40044434,
+      "threshold": 0.999,
+      "predicted_foreground_pixels": 3007,
+      "precision": 0.8939142001995344,
+      "recall": 0.1562881562881563,
+      "foreground_iou": 0.15344217376412833
+    }
+  ],
+  "score_distribution": {
+    "quantile_method": "10k_bin_streaming_histogram",
+    "positive_pixel_quantiles": {
+      "0.01": 0.28515,
+      "0.1": 0.90695,
+      "0.5": 0.99115,
+      "0.9": 0.99945,
+      "0.99": 0.99995
+    },
+    "negative_pixel_quantiles": {
+      "0.01": 5e-05,
+      "0.1": 5e-05,
+      "0.5": 0.00055,
+      "0.9": 0.02315,
+      "0.99": 0.62695
+    }
+  },
+  "limitations": [
+    "This sweep is a model diagnostic on specialist_val, not a policy-selection or certification result.",
+    "A selected threshold must be chosen independently before controller/policy/risk evaluation.",
+    "Binary foreground metrics do not establish crop/weed role correctness.",
+    "Probability quantiles are reported through a 10k-bin streaming histogram to bound memory."
+  ],
+  "script_sha256": "ba5907d285f758529d383d7df23e8ea050c0d67b91ec29af6139a0b667ccf3df",
+  "git_commit": "bae12e5680d6cdb7192ac62e6ff4e66c36bac2c6"
+}

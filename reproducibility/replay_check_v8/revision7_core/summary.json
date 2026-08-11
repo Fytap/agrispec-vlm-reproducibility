@@ -1,0 +1,21 @@
+{
+  "inputs": {
+    "results/p2_development/P2_WEEDSGALORE_OFFICIAL_QUEUE_CONTRACT_SENSITIVITY_20260810_v1/queued_matching_contract_sensitivity.tsv": "c5fbb6c8b2e7785536f1752638ba83cfabfa1a3505bdfedca26816fa1f360029",
+    "results/p2_development/P2_WEEDSGALORE_OFFICIAL_SPATIAL_DINOV2_FINETUNE_20260810_v1/paired_frozen_finetuned_differences.tsv": "4b5c67407be8f7a0f25c8d7e781fb47b63e171490779f786d349644a0b79cd1d",
+    "results/p2_development/P2_WEEDSGALORE_OFFICIAL_SPATIAL_MATCHED_PROPOSAL_QUEUE_20260810_v1/matched_weight_queue_curves.tsv": "dd0e7589ed66004fcf1bd05f726cf42699d17b797ea9e7498fb4b880fb411fad",
+    "results/p2_development/P2_WEEDSGALORE_OFFICIAL_SPATIAL_PROPOSAL_AUDIT_20260810_v1/official_split_proposal_layers.tsv": "47136c7bef45a34d266bd20c3660a4773e2e684946b4b24293516fb265557035",
+    "results/p2_development/P2_WEEDSGALORE_OFFICIAL_SPATIAL_QUEUE_20260810_v2/official_test_candidate_ranking.tsv": "7afa8dd2e83704c8ff2489d18157efd4afdd91c3e17691ef1a7965b012487d0b",
+    "results/p2_development/P2_WEEDSGALORE_OFFICIAL_SPATIAL_QUEUE_20260810_v2/official_test_queue_curves.tsv": "e19b614a1dced8eca439dbc960f70bd126ab19524cc2a3addb43cc642a625c35",
+    "results/p2_development/P2_WEEDSGALORE_OFFICIAL_SPATIAL_QUEUE_20260810_v2/prospective_label_selection_results.tsv": "54e01e73bc2152f19ff5a0da7a6a8fa5ee1fdb671955e3cdf1d8bdaa9ac05329"
+  },
+  "outputs": {
+    "all_candidate_ranking.tsv": "8a828d434c2d34979b962d6487f70aaade52901c118b40b3dda2e05d7cdd7465",
+    "contract_sensitivity_range.tsv": "6d040ec09fa57cd041e587857e2c7f10a258c865a3ae6c32b0ad96c78aac04e7",
+    "finetune_paired_summary.tsv": "2083131fea493119360cfdef9143c7fc1c05b57d860d3a067f50a399c09df868",
+    "label_strategy_summary.tsv": "0e32e39091c958844f9b4ab905328ed2bea318845fbacacef5225177cfcae194",
+    "masked_dinov2_k20_by_date.tsv": "79a838e1a6677e9e8f39a75b30d123bbfd235d140754524bd251962be6e2d7cc",
+    "matched_weight_k20.tsv": "7c373767339f585c036cafdc4b96cda7ed734e9921fa92472d9ba519853cc15e",
+    "official_test_proposal_summary.tsv": "d9084afc9cbd3923ac5d5d160668c37e67659ececee0de95157a7aa36ffedb12"
+  },
+  "status": "replayed_from_archived_revision7_tables"
+}

@@ -1,0 +1,51 @@
+{
+  "config_sha256": "8bb41f362a16584f0dd4826a40056f075e2d119b0cdf7173fdb45e47b451b52f",
+  "crop_contract": {
+    "box": "tight proposal bounding box without padding",
+    "inside": "RGB pixels inside the proposal component",
+    "outside_fill": "per-image RGB median"
+  },
+  "embedding": {
+    "candidates": 14674,
+    "dimension": 384,
+    "dtype": "float32"
+  },
+  "git_commit": "fb9c99c57799275f849e961ae6a52525bf4ea752",
+  "inputs": {
+    "candidates_sha256": "be90fff3d380b6ca7e968e0652f5beff17905ff016a2f96da0ea6331a3f99a88",
+    "component_maps_sha256": "0f0dbe1d20e11b6c7e8185d74b6cf480caa55b3808459db21b46185fae56684b",
+    "manifest_sha256": "3a577a747934069d2f50f6d5732cea019b554d557c98a01e796b000ea4f2085e"
+  },
+  "model": {
+    "input_size": [
+      224,
+      224
+    ],
+    "pretraining": "DINOv2 self-supervised LVD-142M",
+    "state_dict_sha256": "8eb9c9b3a65e7889cf9744bf093f8980d0a91e9c0697ba3a5ae048798617fbf9",
+    "timm_identifier": "vit_small_patch14_dinov2.lvd142m"
+  },
+  "outputs": {
+    "embedding_npz_sha256": "892c77fae76f8e763308f5af9be42a5142bbb7fcb63278b8b30b90e9295f2957"
+  },
+  "run_id": "P2_WEEDSGALORE_DINOV2_COMPONENT_MASKED_EMBEDDINGS_20260810_v1",
+  "runtime": {
+    "gpu_name": "NVIDIA H200",
+    "numpy": "2.2.6",
+    "peak_cuda_memory_allocated_bytes": 601890304,
+    "physical_gpu_id": 0,
+    "python": "3.10.12 (main, Mar  3 2026, 11:56:32) [GCC 11.4.0]",
+    "timm": "1.0.28",
+    "torch": "2.7.1+cu126",
+    "wall_seconds": 32.52072436269373
+  },
+  "scope": {
+    "encoder_weights_frozen": true,
+    "mask_source": "RGB proposal connected-component map",
+    "public_data_only": true,
+    "sealed_test_read": false,
+    "truth_or_target_labels_read": false
+  },
+  "script_sha256": "e069ed496dca959ef8b39aa88e12d01c710139541ab33a0e07a51f223a261ea0",
+  "status": "completed_label_free_dinov2_component_masked_embedding_extraction"
+}

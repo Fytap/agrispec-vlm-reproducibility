@@ -1,0 +1,27 @@
+patch_proxy_id	sample_id	capture_index	group_min_capture_index	group_max_capture_index	group_size	method
+test_capture_index_patch_proxy_0	weedsgalore_official_dataset:2023-05-30:2023-05-30_0039	39	39	231	13	largest capture-index gap within the official test split
+test_capture_index_patch_proxy_0	weedsgalore_official_dataset:2023-05-30:2023-05-30_0044	44	39	231	13	largest capture-index gap within the official test split
+test_capture_index_patch_proxy_0	weedsgalore_official_dataset:2023-05-30:2023-05-30_0099	99	39	231	13	largest capture-index gap within the official test split
+test_capture_index_patch_proxy_0	weedsgalore_official_dataset:2023-05-25:2023-05-25_0109	109	39	231	13	largest capture-index gap within the official test split
+test_capture_index_patch_proxy_0	weedsgalore_official_dataset:2023-05-25:2023-05-25_0114	114	39	231	13	largest capture-index gap within the official test split
+test_capture_index_patch_proxy_0	weedsgalore_official_dataset:2023-05-30:2023-05-30_0114	114	39	231	13	largest capture-index gap within the official test split
+test_capture_index_patch_proxy_0	weedsgalore_official_dataset:2023-06-06:2023-06-06_0161	161	39	231	13	largest capture-index gap within the official test split
+test_capture_index_patch_proxy_0	weedsgalore_official_dataset:2023-06-06:2023-06-06_0166	166	39	231	13	largest capture-index gap within the official test split
+test_capture_index_patch_proxy_0	weedsgalore_official_dataset:2023-06-15:2023-06-15_0169	169	39	231	13	largest capture-index gap within the official test split
+test_capture_index_patch_proxy_0	weedsgalore_official_dataset:2023-05-25:2023-05-25_0170	170	39	231	13	largest capture-index gap within the official test split
+test_capture_index_patch_proxy_0	weedsgalore_official_dataset:2023-06-06:2023-06-06_0176	176	39	231	13	largest capture-index gap within the official test split
+test_capture_index_patch_proxy_0	weedsgalore_official_dataset:2023-05-25:2023-05-25_0183	183	39	231	13	largest capture-index gap within the official test split
+test_capture_index_patch_proxy_0	weedsgalore_official_dataset:2023-06-06:2023-06-06_0231	231	39	231	13	largest capture-index gap within the official test split
+test_capture_index_patch_proxy_1	weedsgalore_official_dataset:2023-05-30:2023-05-30_0649	649	649	786	13	largest capture-index gap within the official test split
+test_capture_index_patch_proxy_1	weedsgalore_official_dataset:2023-05-30:2023-05-30_0652	652	649	786	13	largest capture-index gap within the official test split
+test_capture_index_patch_proxy_1	weedsgalore_official_dataset:2023-06-06:2023-06-06_0667	667	649	786	13	largest capture-index gap within the official test split
+test_capture_index_patch_proxy_1	weedsgalore_official_dataset:2023-06-06:2023-06-06_0670	670	649	786	13	largest capture-index gap within the official test split
+test_capture_index_patch_proxy_1	weedsgalore_official_dataset:2023-05-25:2023-05-25_0681	681	649	786	13	largest capture-index gap within the official test split
+test_capture_index_patch_proxy_1	weedsgalore_official_dataset:2023-05-25:2023-05-25_0685	685	649	786	13	largest capture-index gap within the official test split
+test_capture_index_patch_proxy_1	weedsgalore_official_dataset:2023-05-30:2023-05-30_0720	720	649	786	13	largest capture-index gap within the official test split
+test_capture_index_patch_proxy_1	weedsgalore_official_dataset:2023-06-15:2023-06-15_0735	735	649	786	13	largest capture-index gap within the official test split
+test_capture_index_patch_proxy_1	weedsgalore_official_dataset:2023-06-06:2023-06-06_0736	736	649	786	13	largest capture-index gap within the official test split
+test_capture_index_patch_proxy_1	weedsgalore_official_dataset:2023-05-25:2023-05-25_0750	750	649	786	13	largest capture-index gap within the official test split
+test_capture_index_patch_proxy_1	weedsgalore_official_dataset:2023-05-30:2023-05-30_0750	750	649	786	13	largest capture-index gap within the official test split
+test_capture_index_patch_proxy_1	weedsgalore_official_dataset:2023-06-06:2023-06-06_0770	770	649	786	13	largest capture-index gap within the official test split
+test_capture_index_patch_proxy_1	weedsgalore_official_dataset:2023-05-25:2023-05-25_0786	786	649	786	13	largest capture-index gap within the official test split

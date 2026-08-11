@@ -1,0 +1,58 @@
+experiment:
+  id: P2_WEEDSGALORE_REVISION8_QUEUE_POLICY_TILE_AUDIT_20260810_v1
+  stage: SAT revision-8 reviewer-requested diagnostic
+  public_data_only: true
+  compute: CPU-only
+  post_test_analysis: true
+
+ranker:
+  representation: component-masked frozen DINOv2
+  target: all-candidate role-qualified weed versus rest
+  regularization_grid: [0.001, 0.01, 0.1, 1, 10, 100]
+  selection_role: official validation only
+  selection_metric:
+    - fixed-K20 one-to-one role-qualified recall
+    - fixed-K20 many-to-one role-qualified recall
+    - fixed-K20 precision
+    - smaller absolute log10 regularization
+  refit: official train plus validation
+  test_labels_for_selection: false
+
+queue_policies:
+  equal_budget_candidates: 520
+  policies:
+    - fixed_K20_per_image
+    - global_top_N
+    - bounded_global_allocation_min5_max50
+  transferred_score_threshold:
+    selection_role: validation
+    maximum_validation_candidates: 520
+    note: test accepted count is allowed to differ
+  tie_break: descending score then lexical candidate ID
+
+matching:
+  instance_coverage: 0.50
+  candidate_labeled_coverage: 0.50
+  same_role_purity: 0.90
+  one_to_one_primary: true
+  many_to_one_coprimary: true
+
+uncertainty:
+  independent_population_CI: prohibited
+  reason: only two official test spatial patches from one field
+  reporting:
+    - per-tile paired deltas
+    - per-date descriptive metrics
+    - two-patch-proxy descriptive metrics
+    - median_IQR_range_and_improved_unchanged_worse_counts
+
+crop_exposure:
+  candidate_crop_fraction_quantiles: [0.50, 0.75, 0.95, 1.00]
+  crop_instance_coverage_thresholds: [0.10, 0.25, 0.50]
+  scene_frequency_alpha: 0.01
+  integer_rule: floor(alpha_times_number_of_test_scenes)
+
+reporting:
+  preserve_failures: true
+  test_governance_record: true
+  raw_numerators_denominators: true

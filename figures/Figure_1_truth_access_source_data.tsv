@@ -1,0 +1,5 @@
+stage	rgb_or_model_outputs	train_truth	validation_truth	test_truth
+proposal_search	1	1	0	0
+model_selection	1	1	1	0
+queue_formation	1	0	0	0
+offline_scoring	0	0	0	1

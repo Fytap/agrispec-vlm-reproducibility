@@ -1,0 +1,2 @@
+model	k	contract_cells	many_to_one_min	many_to_one_max	one_to_one_min	one_to_one_max
+all_candidate_component_masked_dinov2_linear	20	27	0.04848130841121495	0.2885514018691589	0.037383177570093455	0.18808411214953272

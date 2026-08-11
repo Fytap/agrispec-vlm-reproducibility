@@ -1,0 +1,48 @@
+schema_version: 1
+experiment_id: P2_SUGARBEETS_RGB_BINARY_PROPOSAL_DDP_EXPLORATORY_V1
+status: frozen_exploratory_training_config_not_primary_protocol
+
+scope:
+  public_data_only: true
+  exploratory: true
+  primary_p2_protocol: false
+  sealed_test: prohibited
+  specialist_val_read: prohibited
+  controller_policy_risk_read: prohibited
+  risk_certificate: prohibited
+  task: RGB_binary_foreground_proposal_training
+
+data_contract:
+  contract: configs/datasets.p2_sugarbeets_paired_development_v1.yaml
+  supervision_manifest: data/source-metadata/P2_SESSION_CLAIM_CHAINS_20260805/sugarbeets_paired_dev_manifest_v1/supervision_manifest.tsv
+  permitted_input_split: specialist_train
+  prohibited_splits: [specialist_val, controller_train, policy_select, risk_certify, sealed_test]
+  truth_separation:
+    supervised_patch_centres_and_targets: specialist_train_iMap_only
+    inference_candidates: future_RGB_only_component_proposals
+    iMap_connected_components: prohibited_as_candidate_geometry
+
+model:
+  architecture: custom_resnet18_unet
+  encoder_weights: torchvision_ResNet18_Weights.IMAGENET1K_V1_cached
+  encoder_weight_sha256: f37072fd47e89c5e827621c5baffa7500819f7896bbacec160b1a16c560e07ec
+  classes: [background, foreground]
+  patch_size: 128
+  loss: binary_cross_entropy_pos_weight_30_plus_dice
+
+run:
+  seed: 31415
+  train_patches: 32768
+  epochs: 10
+  batch_size_per_gpu: 64
+  num_workers_per_gpu: 2
+  optimizer: AdamW
+  learning_rate: 0.0008
+  distributed_launcher: torchrun_standalone
+  physical_gpu_ids: [0, 1, 2, 3, 4, 5, 6, 7]
+  cuda_visible_devices: "0,1,2,3,4,5,6,7"
+
+outputs:
+  directory: results/p2_development/P2_SUGARBEETS_RGB_BINARY_PROPOSAL_DDP_20260807_v1
+  checkpoint_policy: last_only
+  required: [summary.json, train_source_manifest.tsv, train_foreground_patch_specs.tsv, last.pt, external_log]

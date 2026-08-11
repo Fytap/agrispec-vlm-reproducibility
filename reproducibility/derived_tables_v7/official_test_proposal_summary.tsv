@@ -1,0 +1,3 @@
+variant	truth_instances	spatial_recalled_instances	spatial_proposal_recall	role_qualified_recalled_instances	role_qualified_proposal_recall
+original_T095_A032	1712	509	0.2973130841121495	330	0.1927570093457944
+training_selected_commissioned	1712	978	0.5712616822429907	518	0.30257009345794394

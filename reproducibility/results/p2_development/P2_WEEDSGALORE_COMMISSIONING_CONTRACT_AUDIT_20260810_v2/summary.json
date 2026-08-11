@@ -1,0 +1,74 @@
+{
+  "config_sha256": "def96a4ec69a4d019b9f3c10c205d413bb5c31146c7a3cbb88aa91c3263d3445",
+  "definitions": {
+    "queued_instance_recall": "truth instance has a qualifying candidate within the fixed per-image prefix",
+    "role_qualified_proposal_recall": "spatial rule plus >=50% candidate labeled coverage and >=90% same-role purity",
+    "spatial_proposal_recall": "one candidate covers >=50% of a truth instance; candidate role is ignored"
+  },
+  "git_commit": "fb9c99c57799275f849e961ae6a52525bf4ea752",
+  "input_artifact_hashes": {
+    "commissioned": {
+      "T070_A032": {
+        "candidates": "be90fff3d380b6ca7e968e0652f5beff17905ff016a2f96da0ea6331a3f99a88",
+        "component_maps": "0f0dbe1d20e11b6c7e8185d74b6cf480caa55b3808459db21b46185fae56684b",
+        "semantic_scores": "c56f84fea754323a4b5f30575e0f17935d8cfa02eac2cf0dc4e0fffaace6ba76"
+      },
+      "T080_A032": {
+        "candidates": "a22eae56eea3171372b9a086fcb55b4c6e4b769053aad9a5f46cdeb08f994aae",
+        "component_maps": "1168795dc7903c61004e1685ddcbf16165258d5f91164e7d1f8ea520a235b01a",
+        "semantic_scores": "2f62daf4e8033cd2cf5eec2006a69332cbdb635c42ca0a300af0bcdc4dddabbf"
+      }
+    },
+    "original": {
+      "candidates": "e4474f3c469b153b3a79c731f00cf11d723fa0eae760ab162d02f734b0773c28",
+      "component_maps": "1c4f7d87e4781cde80029cf0fa24b101e8966b0de72de7c16d616427c413b0d1",
+      "semantic_scores": "3c0658053328ffa0012508e87b0a0fd01eb8c7f366e05a50d001ce37de3ea6a6"
+    }
+  },
+  "outputs": {
+    "contract_sha256": "2f7466673d548f7dcf3703137086aafe6e447a91f272aa3eb61af245daa314ed",
+    "predictions_sha256": "87a6f9f371b26b28eb0d7450c7945b2682fbc7f10afc44b7c75d97f5b81cd28a",
+    "proposal_layers_sha256": "c7e2d43abb1ba0273ca2159dfd99e83a7cdfcfa8e8e95b819ed74635de5c1e0f",
+    "queue_sha256": "82893a78f2cd02b7f8433e1a8323e64ada5690a1ca1c46a5c15cdff7c9fc4833",
+    "ranking_sha256": "8cf1b9e117c643fe217695c352c49ada9bfe158b743a8ceb7fb66552a0915d54",
+    "split_merge_sha256": "4964ad5860ca59529708ed85503845cd7c7f1eececc4c1c21a0a8cdd836b462f"
+  },
+  "primary_k20_date_macro": {
+    "nested_commissioned": {
+      "all_candidate_precision": 0.3548985854210206,
+      "crop_overlap_scene_frequency_0.00": 0.5364583333333333,
+      "pure_crop_scene_frequency": 0.359375,
+      "queued_role_qualified_weed_instance_recall": 0.05196798191347796,
+      "queued_spatial_weed_instance_recall": 0.13896797330505123
+    },
+    "original": {
+      "all_candidate_precision": 0.48323427182704093,
+      "crop_overlap_scene_frequency_0.00": 0.8645833333333334,
+      "pure_crop_scene_frequency": 0.7083333333333334,
+      "queued_role_qualified_weed_instance_recall": 0.06731570801463335,
+      "queued_spatial_weed_instance_recall": 0.11906760501721184
+    }
+  },
+  "run_id": "P2_WEEDSGALORE_COMMISSIONING_CONTRACT_AUDIT_20260810_v2",
+  "runtime": {
+    "numpy": "2.2.6",
+    "python": "3.10.12 (main, Mar  3 2026, 11:56:32) [GCC 11.4.0]",
+    "wall_seconds": 16.292386590503156
+  },
+  "scope": {
+    "formal_risk_certificate": false,
+    "held_out_date_used_only_for_offline_scoring": true,
+    "proposal_generation_reads_target_truth": false,
+    "public_data_only": true,
+    "sealed_test_read": false,
+    "training_date_dense_masks_used_for_setting_selection": true
+  },
+  "script_sha256": "650b86d66e28cffe37c40d71bee601d902f047a740e4a044b1c9e44a334da018",
+  "selected_commissioned_settings": {
+    "2023-05-25": "T070_A032",
+    "2023-05-30": "T070_A032",
+    "2023-06-06": "T080_A032",
+    "2023-06-15": "T080_A032"
+  },
+  "status": "completed_sat_major_revision_contract_audit"
+}

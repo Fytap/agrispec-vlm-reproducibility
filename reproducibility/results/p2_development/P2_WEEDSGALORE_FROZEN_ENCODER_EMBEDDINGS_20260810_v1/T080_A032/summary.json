@@ -1,0 +1,40 @@
+{
+  "config_sha256": "1b342a503753f8f8c20404ea35693d9487d9de2b246dc9097043302161c929d6",
+  "embedding": {
+    "candidates": 11823,
+    "dimension": 512,
+    "dtype": "float32",
+    "roi_output_size": [
+      2,
+      2
+    ]
+  },
+  "git_commit": "fb9c99c57799275f849e961ae6a52525bf4ea752",
+  "inputs": {
+    "candidates_sha256": "a22eae56eea3171372b9a086fcb55b4c6e4b769053aad9a5f46cdeb08f994aae",
+    "manifest_sha256": "3a577a747934069d2f50f6d5732cea019b554d557c98a01e796b000ea4f2085e",
+    "semantic_checkpoint_sha256": "47aba78e0210e95b26a88c6f5932d5e8db799d2f8ebfe0f419787e13dfee7cfb"
+  },
+  "outputs": {
+    "embedding_npz_sha256": "200615f0181d3f0a2b78c48347beb5fc81cb3d724aa621fbf72193f0a8728a5c"
+  },
+  "run_id": "P2_WEEDSGALORE_FROZEN_ENCODER_EMBEDDINGS_20260810_V1_T080_A032",
+  "runtime": {
+    "gpu_name": "NVIDIA H200",
+    "numpy": "2.2.6",
+    "peak_cuda_memory_allocated_bytes": 102909440,
+    "physical_gpu_id": 1,
+    "python": "3.12.0 | packaged by Anaconda, Inc. | (main, Oct  2 2023, 17:29:18) [GCC 11.2.0]",
+    "torch": "2.10.0+cu128",
+    "wall_seconds": 9.612440754659474
+  },
+  "scope": {
+    "candidate_generation_reused_without_modification": true,
+    "encoder_weights_frozen": true,
+    "public_data_only": true,
+    "sealed_test_read": false,
+    "truth_or_labels_read": false
+  },
+  "script_sha256": "671e71f64d1edf814f74796ee1e643e51de5f597f6e85c7988b0999629e161f3",
+  "status": "completed_truth_free_frozen_encoder_embedding_extraction"
+}

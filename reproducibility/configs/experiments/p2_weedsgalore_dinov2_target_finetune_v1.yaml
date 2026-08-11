@@ -1,0 +1,28 @@
+schema_version: 1
+experiment_id: P2_WEEDSGALORE_DINOV2_TARGET_FINETUNE_V1
+status: frozen_posthoc_sat_major_revision_development
+scope:
+  public_data_only: true
+  sealed_test: prohibited
+  held_out_date_labels_used_for_scoring_only: true
+  gpu_devices: [2]
+model:
+  backbone: vit_small_patch14_dinov2.lvd142m
+  trainable: [last_transformer_block, final_norm, binary_head]
+  frozen: [patch_embed, blocks_0_to_penultimate]
+training:
+  labels_per_training_date: 100
+  sampling: class_stratified_equal_crop_weed
+  note: class-stratified sampling requires candidate roles before sampling
+  repeats: 3
+  epochs: 8
+  batch_size: 64
+  backbone_learning_rate: 0.00001
+  head_learning_rate: 0.001
+  weight_decay: 0.0001
+  input_size: [224, 224]
+outputs:
+  directory: results/p2_development/P2_WEEDSGALORE_DINOV2_TARGET_FINETUNE_20260810_v1
+preservation:
+  overwrite_existing_output: prohibited
+  failures: retain

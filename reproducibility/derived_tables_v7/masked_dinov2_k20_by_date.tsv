@@ -1,0 +1,6 @@
+aggregation	stratum	images	accepted_candidates	weed_candidates	all_candidate_queue_precision	weed_truth_instances	spatial_recalled_weed_instances	queued_spatial_weed_instance_recall	role_qualified_recalled_weed_instances	queued_role_qualified_weed_instance_recall	one_to_one_role_qualified_matches	one_to_one_role_qualified_recall	crop_overlap_scene_numerator_0.00	crop_overlap_scene_frequency_0.00
+pooled_test	ALL	26	520	278	0.5346153846153846	1712	459	0.26810747663551404	319	0.1863317757009346	230	0.13434579439252337	11	0.4230769230769231
+acquisition_date	2023-05-25	8	160	13	0.08125	392	32	0.08163265306122448	12	0.030612244897959183	11	0.02806122448979592	8	1.0
+acquisition_date	2023-05-30	8	160	89	0.55625	440	128	0.2909090909090909	84	0.19090909090909092	69	0.15681818181818183	2	0.25
+acquisition_date	2023-06-06	8	160	150	0.9375	726	220	0.30303030303030304	210	0.2892561983471074	139	0.19146005509641872	0	0.0
+acquisition_date	2023-06-15	2	40	26	0.65	154	79	0.512987012987013	13	0.08441558441558442	11	0.07142857142857142	1	0.5

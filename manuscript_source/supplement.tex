@@ -1,0 +1,532 @@
+\documentclass[preprint,12pt]{elsarticle}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage{lmodern}
+\usepackage{microtype}
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{tabularx}
+\usepackage{longtable}
+\usepackage{graphicx}
+\usepackage{amsmath}
+\usepackage{xurl}
+\usepackage[hidelinks]{hyperref}
+\setlength{\emergencystretch}{3em}
+\makeatletter
+\setlength{\@fptop}{0pt}
+\makeatother
+\journal{Smart Agricultural Technology}
+\setcounter{secnumdepth}{0}
+\input{author_metadata}
+
+\begin{document}
+\raggedbottom
+\begin{frontmatter}
+\title{Supplementary material: From Proposals to Review Queues: Support-Aware Commissioning for Crop--Weed Vision}
+\ifAuthorMetadataReady
+\AuthorFrontmatter
+\else
+\author{Anonymous manuscript}
+\fi
+\end{frontmatter}
+
+\section{S1. Public-data lineage and official spatial protocol}
+
+This study uses two public datasets. SugarBeets2016 supplies source-specialist supervision, and WeedsGalore supplies target development and evaluation data. CropAndWeed and PhenoBench formed preliminary data-lineage audits and remain outside the reported experiments.
+
+\begin{table}[htbp]
+\centering
+\caption{Official WeedsGalore split by acquisition date. Instance counts are from released raster enumeration.}
+\small
+\resizebox{\textwidth}{!}{%
+\begin{tabular}{lrrrrr}
+\toprule
+Date & Train tiles & Validation tiles & Test tiles & Test crop & Test weed \\
+\midrule
+25 May 2023 & 32 & 8 & 8 & 122 & 392 \\
+30 May 2023 & 32 & 8 & 8 & 55 & 440 \\
+6 June 2023 & 32 & 8 & 8 & 68 & 726 \\
+15 June 2023 & 8 & 2 & 2 & 11 & 154 \\
+\midrule
+Total & 104 & 26 & 26 & 256 & 1,712 \\
+\bottomrule
+\end{tabular}}
+\end{table}
+
+The public paper describes one field, 48 recorded locations, and an 8/2/2 spatial-patch allocation. The release supplies official split labels and capture indices. The manifest preserves this released spatial structure. Across all 156 rasters, enumeration yields 2,168 crop and 10,029 weed instances; the dataset paper reports 2,169 and 10,031. The consistency audit found zero role disagreements between instance and semantic rasters and zero excluded identifiers. Archive and manifest SHA-256 checksums are recorded in the reproducibility package.
+
+\section{S2. Annotation and information-flow ledger}
+
+\begin{table}[htbp]
+\centering
+\caption{Supervision ledger. ``Available'' distinguishes labels present in the public data from labels actually read by a stage.}
+\small
+\begin{tabularx}{\textwidth}{p{3.0cm}p{2.5cm}p{3.2cm}X}
+\toprule
+Information & Available & Read by & Purpose \\
+\midrule
+SugarBeets pixel masks & Public source & Specialist training & Train foreground and semantic specialists \\
+Target train dense masks & 104 tiles & Proposal audit; label derivation & Select the commissioned proposal setting and derive candidate roles \\
+Target validation dense masks & 26 tiles & Model/queue selection & Select $C$, fine-tuning epoch, semantic epoch, threshold or area, or queue-score threshold \\
+Target test dense masks & 26 tiles & Offline scorer after declared outputs & Compute proposal, queue, IoU, and crop-overlap metrics \\
+300 mask-derived candidate labels/draw & Simulated reveal from train pool & Label-budget ranker & Compare prospective acquisition policies \\
+Proposal-generation inputs & RGB and source model outputs & Proposal generator & Create connected-component candidates \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+The full-supervision linear rankers use 9,887 official-training and 2,436 validation candidate labels before refitting. The equal-supervision semantic baseline trains on all 104 target-training dense masks. The 300-label experiment is a separate simulation in which candidate labels are deterministically derived from those masks: candidates satisfying the role-qualified weed contract are positive and all remaining candidates are negative. Prospective uniform and DINOv2 coreset strategies select candidate IDs before revealing labels. Retrospective class stratification uses labels during selection and serves as a retrospective reference. No human annotation time or agreement was measured.
+
+The primary analysis prespecified the split, proposal grid, matching contract, feature definitions, and discrimination-selected rankers before official-test scoring. Exploratory analyses additionally covered queue allocation, target-semantic training, per-tile variation, crop-severity patterns, and date/patch robustness. Training and validation data selected regularization, thresholds, epochs, and candidate geometry. Each test policy formed its queue from images, scores, and tile identities before the offline scorer accessed labels. These analyses provide descriptive context without changing the primary results.
+
+\subsection*{Source specialist training and source-domain diagnostics}
+
+Both source specialists used a ResNet-18 U-Net initialized from torchvision ImageNet-1K V1 weights, ImageNet RGB normalization, AdamW, bfloat16 autocasting, gradient clipping at 5, and the 7,050-image SugarBeets source training partition. The foreground specialist used 32,768 deterministic $128\times128$ patches, BCE with positive weight 30 plus soft Dice, and 10 epochs. The three-class semantic specialist used 16,384 role-balanced patches, weighted cross-entropy $(0.2,1,1)$ plus plant-role Dice, and 8 epochs. Training used deterministic patches, and the final epoch supplied each checkpoint. The 901-image source validation partition subsequently provided operating-point diagnostics.
+
+On the later source validation diagnostic, the foreground model's maximum scanned pixel IoU was 0.3821 at threshold 0.99 (precision 0.5788, recall 0.5293); threshold 0.70 gave precision 0.0479 and recall 0.9631. The semantic model had raw three-class macro IoU 0.4425. Its independently selected role threshold produced balanced accuracy 0.7224, crop recall 0.5524, and weed recall 0.8924. These metrics document source behavior and checkpoint provenance; target queue conclusions use the official WeedsGalore split.
+
+\section{S3. Proposal selection, definitions, and burden}
+
+For truth instance $I$, candidate $C$, labeled pixels $L$, and pixels of role $R$, the audit records
+\[
+q_I=|I\cap C|/|I|,\qquad q_L=|C\cap L|/|C|,\qquad q_R=|C\cap R|/|C\cap L|.
+\]
+Spatial recall requires $q_I\ge0.50$. Role-qualified recall additionally requires $q_L\ge0.50$, $q_R\ge0.90$, and a role match. Queued recall restricts candidates to the selected queue. This 0.50/0.50/0.90 rule is an offline triage qualification contract, not an operator-acceptance, treatment, or actuation rule.
+
+\begin{table}[htbp]
+\centering
+\caption{Official-training proposal grid. Feasible settings have training-set mean burden at most 100 candidates/image, with tile-level counts unrestricted.}
+\small
+\resizebox{\textwidth}{!}{%
+\begin{tabular}{lrrrr}
+\toprule
+Threshold / minimum area (px) & Candidates/image & Spatial weed recall & Qualified weed recall & Feasible \\
+\midrule
+0.50 / 32 & 123.52 & 0.6190 & 0.2707 & No \\
+0.70 / 32 & 95.07 & 0.5271 & 0.2856 & Yes \\
+0.80 / 32 & 76.99 & 0.4672 & 0.2835 & Yes \\
+0.90 / 32 & 52.38 & 0.3587 & 0.2317 & Yes \\
+0.95 / 32 & 36.83 & 0.2366 & 0.1605 & Yes \\
+\bottomrule
+\end{tabular}}
+\end{table}
+
+The threshold 0.70, 32-pixel setting maximized training qualified recall among feasible settings. The deterministic tie order was qualified recall, lower mean burden, higher threshold, then larger minimum area. The earlier externally fixed setting used threshold 0.95 and the same minimum area and provides the shared-ranker-weight comparison.
+
+\begin{table}[htbp]
+\centering
+\caption{Official-test proposal layers by date. Numerators are weed instances.}
+\scriptsize
+\resizebox{\textwidth}{!}{%
+\begin{tabular}{llrrrr}
+\toprule
+Date & Setting & Weed $n$ & Spatial recalled & Qualified recalled & Candidates/image \\
+\midrule
+25 May & Original & 392 & 2 (0.0051) & 2 (0.0051) & 13.88 \\
+25 May & Commissioned & 392 & 51 (0.1301) & 13 (0.0332) & 102.75 \\
+30 May & Original & 440 & 106 (0.2409) & 84 (0.1909) & 35.75 \\
+30 May & Commissioned & 440 & 263 (0.5977) & 121 (0.2750) & 119.38 \\
+6 June & Original & 726 & 328 (0.4518) & 237 (0.3264) & 45.13 \\
+6 June & Commissioned & 726 & 566 (0.7796) & 369 (0.5083) & 64.63 \\
+15 June & Original & 154 & 73 (0.4740) & 7 (0.0455) & 22.00 \\
+15 June & Commissioned & 154 & 98 (0.6364) & 15 (0.0974) & 28.50 \\
+\midrule
+Pooled & Original & 1,712 & 509 (0.2973) & 330 (0.1928) & 30.85 \\
+Pooled & Commissioned & 1,712 & 978 (0.5713) & 518 (0.3026) & 90.42 \\
+\bottomrule
+\end{tabular}}
+\end{table}
+
+Candidate burden under the original setting had median 28.5, interquartile range 19.25--43.75, maximum 62, and 7/26 test images with fewer than 20 candidates. The commissioned setting had median 89, interquartile range 60--114.25, maximum 183, 10/26 images above 100, and no image with fewer than 20 candidates. Its 30 May mean was 130.38 on training and 119.38 on test. Candidate composition changed from 453 weed/148 crop/201 ambiguous (802 total) to 464/111/1,776 (2,351 total).
+
+\begin{table}[htbp]
+\centering
+\caption{Split/merge sensitivity across the complete 156-tile release. ``Merge'' counts candidates overlapping at least two instances at the stated instance-coverage threshold.}
+\small
+\begin{tabular}{lrrr}
+\toprule
+Setting & Threshold & Split instances & Merge candidates \\
+\midrule
+Original & 0.10 & 224 & 735 \\
+Original & 0.25 & 40 & 640 \\
+Original & 0.50 & 0 & 473 \\
+Commissioned & 0.10 & 154 & 1,136 \\
+Commissioned & 0.25 & 26 & 1,065 \\
+Commissioned & 0.50 & 0 & 938 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\section{S4. Fixed-weight proposal comparison}
+
+One all-candidate role-plus-local logistic ranker was fitted on commissioned train plus validation candidates. Its scaler and coefficients were then applied unchanged to both the original and commissioned test proposals. This isolates proposal-pool changes from ranker refitting.
+
+\begin{table}[htbp]
+\centering
+\caption{Shared-ranker-weight comparison at $K=20$. Ranker weights are identical, but workloads differ because seven original-setting tiles supply fewer than 20 candidates. Crop frequency uses all 26 test tiles as denominator.}
+\small
+\resizebox{\textwidth}{!}{%
+\begin{tabular}{lrrrrrr}
+\toprule
+Setting & Accepted & Precision & Spatial & Qualified & 1:1 qualified & Any crop \\
+\midrule
+Original & 471 & 276/471 & 321/1712 & 205/1712 & 166/1712 & 22/26 \\
+Commissioned & 520 & 247/520 & 467/1712 & 273/1712 & 201/1712 & 23/26 \\
+\bottomrule
+\end{tabular}}
+\end{table}
+
+The complete $K=1,5,10,20,50$ curves and per-date rows are supplied in the reproducibility archive. All ties are resolved by lexicographically ascending candidate ID.
+
+\section{S5. All-candidate ranking, per-date queue results, and ceilings}
+
+\begin{table}[htbp]
+\centering
+\caption{Candidate-ranking support audit on the 2,351 official-test candidates.}
+\scriptsize
+\begin{tabular}{lrr}
+\toprule
+Model and fitting support & AUC & AP \\
+\midrule
+Source ResNet score, all candidates & 0.4947 & 0.2877 \\
+Eligible role+local, all-candidate test & 0.4420 & 0.1640 \\
+All-candidate role+local & 0.9049 & 0.6960 \\
+All-candidate geometry & 0.8154 & 0.5418 \\
+Eligible frozen DINOv2, all-candidate test & 0.6321 & 0.3816 \\
+All-candidate frozen DINOv2 & 0.9630 & 0.8684 \\
+All-candidate masked DINOv2 & 0.9665 & 0.8813 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{table}[htbp]
+\centering
+\caption{Component-masked DINOv2 queue at $K=20$ by date.}
+\scriptsize
+\resizebox{\textwidth}{!}{%
+\begin{tabular}{lrrrrrr}
+\toprule
+Date & Accepted & Weed cand. & Precision & Spatial recall & Qualified recall & Any crop \\
+\midrule
+25 May & 160 & 13 & 0.0813 & 32/392 (0.0816) & 12/392 (0.0306) & 8/8 \\
+30 May & 160 & 89 & 0.5563 & 128/440 (0.2909) & 84/440 (0.1909) & 2/8 \\
+6 June & 160 & 150 & 0.9375 & 220/726 (0.3030) & 210/726 (0.2893) & 0/8 \\
+15 June & 40 & 26 & 0.6500 & 79/154 (0.5130) & 13/154 (0.0844) & 1/2 \\
+\midrule
+Pooled & 520 & 278 & 0.5346 & 459/1712 (0.2681) & 319/1712 (0.1863) & 11/26 \\
+\bottomrule
+\end{tabular}}
+\end{table}
+
+For frozen DINOv2 at $K=20$, the role-qualified proposal ceiling is 518/1,712, the exact unconstrained oracle is 426/1,712, and the discrimination-selected masked queue is 319/1,712. The corresponding ranking gap is 0.0625. For a maximum crop-overlap scene frequency of 0.01, $\lfloor0.01\times26\rfloor=0$ scenes are allowed. Crop-excluding optimization yields 418/1,712 recalled instances. Every ceiling uses exact integer optimization. The 1,000 archived random-ranking draws have $K=20$ 2.5/97.5 percentiles of 0.077/0.104.
+
+\subsection*{Validation-queue selection and allocation-policy analysis}
+
+The queue analysis selected logistic regularization by validation $K=20$ one-to-one qualified recall, followed by many-to-one recall, precision, and $C$ closest to 1 on the log scale. The selected value was $C=10$. The model was refitted on train plus validation before test scoring. The primary bounded policy maximized total score under a 520-candidate budget and 5--50 candidates/tile. Unconstrained global top-520 is a diagnostic upper bound. The validation threshold is the boundary score of the validation global top-520 queue; transferring that fixed score to test accepted 426 candidates.
+
+Candidate-level score discrimination was heterogeneous before allocation. Pooled AUC/AP were 0.9605/0.8617, whereas date-macro values were 0.8774/0.6901. Table~\ref{tab:dateauc} reports each date. Twenty-four of 26 tiles contained both classes and supported tile-level AUC/AP; their macro values were 0.9091/0.6869, with worst-tile values of 0.6667/0.0263. These values are descriptive and are not treated as independent population replicates.
+
+\begin{table}[htbp]
+\centering
+\caption{Candidate discrimination for the queue-selected ranker by acquisition date.}
+\label{tab:dateauc}
+\small
+\begin{tabular}{lrrr}
+\toprule
+Stratum & Candidates & AUC & Average precision \\
+\midrule
+25 May & 822 & 0.8798 & 0.2131 \\
+30 May & 955 & 0.9535 & 0.7492 \\
+6 June & 517 & 0.9381 & 0.9402 \\
+15 June & 57 & 0.7382 & 0.8577 \\
+\midrule
+Pooled & 2,351 & 0.9605 & 0.8617 \\
+Date macro & -- & 0.8774 & 0.6901 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{table}[htbp]
+\centering
+\caption{Queue allocation using the validation-queue-selected masked-DINOv2 ranker. Bounded 5--50/tile is primary; unconstrained global top-$N$ is diagnostic.}
+\scriptsize
+\resizebox{\textwidth}{!}{%
+\begin{tabular}{lrrrrrr}
+\toprule
+Policy & Accepted & Precision & Spatial & Qualified & 1:1 qualified & Any crop \\
+\midrule
+Fixed $K=20$ & 520 & 275/520 & 390/1712 & 324/1712 & 227/1712 & 13/26 \\
+Primary bounded, 5--50/tile & 520 & 382/520 & 533/1712 & 453/1712 & 315/1712 & 14/26 \\
+Diagnostic global top-$N$ & 520 & 388/520 & 547/1712 & 464/1712 & 320/1712 & 12/26 \\
+Validation threshold & 426 & 348/426 & 485/1712 & 424/1712 & 290/1712 & 8/26 \\
+\bottomrule
+\end{tabular}}
+\end{table}
+
+\begin{table}[htbp]
+\centering
+\caption{Per-date one-to-one qualified recall and accepted candidates for fixed, primary bounded, and diagnostic global allocation.}
+\scriptsize
+\resizebox{\textwidth}{!}{%
+\begin{tabular}{lrrrrrr}
+\toprule
+Date & Fixed $N$ & Fixed recall & Bounded $N$ & Bounded recall & Global $N$ & Global recall \\
+\midrule
+25 May & 160 & 10/392 (0.0255) & 51 & 6/392 (0.0153) & 38 & 6/392 (0.0153) \\
+30 May & 160 & 71/440 (0.1614) & 149 & 77/440 (0.1750) & 153 & 78/440 (0.1773) \\
+6 June & 160 & 135/726 (0.1860) & 285 & 221/726 (0.3044) & 293 & 225/726 (0.3099) \\
+15 June & 40 & 11/154 (0.0714) & 35 & 11/154 (0.0714) & 36 & 11/154 (0.0714) \\
+\bottomrule
+\end{tabular}}
+\end{table}
+
+For global minus fixed one-to-one qualified recall, the 26 paired tile differences had median 0, interquartile range 0--0.0763, and range $-0.1176$ to 0.2027. Nine tiles improved, 12 were unchanged, and 5 declined. Many-to-one differences had median 0, interquartile range 0--0.1000, and range $-0.1176$ to 0.3919, with the same 9/12/5 counts. Two capture-index proxy groups yielded global qualified recall of 0.2574 and 0.2806; corresponding fixed values were 0.1782 and 0.1970.
+
+\begin{table}[htbp]
+\centering
+\caption{Allocation concentration across 26 test tiles. The 6 June share is the fraction of each policy's accepted candidates assigned to that acquisition date.}
+\small
+\setlength{\tabcolsep}{4pt}
+\begin{tabular}{lrrrrr}
+\toprule
+Policy & Min/tile & Zero tiles & Tiles $<5$ & Tiles $<10$ & Max/tile \\
+\midrule
+Fixed $K=20$ & 20 & 0 & 0 & 0 & 20 \\
+Primary bounded & 5 & 0 & 0 & 8 & 50 \\
+Diagnostic global & 0 & 1 & 5 & 8 & 55 \\
+Validation threshold & 0 & 2 & 7 & 11 & 45 \\
+\bottomrule
+\end{tabular}
+
+\vspace{0.5em}
+\begin{tabular}{lrr}
+\toprule
+Policy & Allocation Gini & 6 June share \\
+\midrule
+Fixed $K=20$ & 0.0000 & 0.3077 \\
+Primary bounded & 0.3817 & 0.5481 \\
+Diagnostic global & 0.4220 & 0.5635 \\
+Validation threshold & 0.4648 & 0.5986 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{table}[htbp]
+\centering
+\caption{Date-macro and worst-date queue metrics. Worst denotes the minimum across the four dates.}
+\small
+\setlength{\tabcolsep}{4pt}
+\begin{tabular}{p{3.8cm}rrrrr}
+\toprule
+Policy & Macro P & Macro Q & Macro 1:1 & Worst Q & Worst 1:1 \\
+\midrule
+Fixed $K=20$ & 0.5516 & 0.1504 & 0.1111 & 0.0255 & 0.0255 \\
+Primary bounded & 0.6133 & 0.1959 & 0.1415 & 0.0153 & 0.0153 \\
+Diagnostic global & 0.6160 & 0.2001 & 0.1435 & 0.0153 & 0.0153 \\
+Validation threshold & 0.6876 & 0.1836 & 0.1311 & 0.0128 & 0.0128 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{table}[htbp]
+\centering
+\caption{Crop exposure severity. Crop-instance rows count 256 official-test crop instances.}
+\scriptsize
+\resizebox{\textwidth}{!}{%
+\begin{tabular}{lrrrrrr}
+\toprule
+Policy & Crop-overlap cand. & Crop frac. 95th & Crop frac. max & Crop inst. $\ge0.10$ & $\ge0.25$ & $\ge0.50$ \\
+\midrule
+Fixed $K=20$ & 57/520 & 0.5910 & 0.9730 & 52/256 & 50/256 & 32/256 \\
+Diagnostic global top-$N$ & 26/520 & 0.0036 & 0.9583 & 21/256 & 19/256 & 10/256 \\
+Primary bounded & 28/520 & 0.1148 & 0.9189 & 23/256 & 20/256 & 12/256 \\
+Validation threshold & 14/426 & 0 & 0.9189 & 12/256 & 10/256 & 5/256 \\
+\bottomrule
+\end{tabular}}
+\end{table}
+
+The intended review task is binary candidate triage with an optional mask-correction flag. For the 520-candidate policies, hypothetical rates of 1/2/3 seconds per candidate yield 8.67/17.33/26.00 minutes across 26 tiles; 426 candidates yield 7.10/14.20/21.30 minutes. These are arithmetic scenarios. The study did not measure operator time, inter-annotator agreement, correction quality, treatment selection, or actuation safety.
+
+\subsection*{Equal-target-supervision semantic baseline}
+
+One 40-epoch distributed run followed the registered split, optimizer, augmentation, threshold grid, area grid, and selection rule. Validation selected epoch 36, threshold 0.30, and 16-pixel minimum area. Validation three-class/plant-role mean IoU were 0.7637/0.6582; fixed-$K$ one-to-one qualified recall was 0.1908. Official-test semantic IoU was 0.9778 background, 0.6957 crop, and 0.7131 weed (three-class mean 0.7955; plant-role mean 0.7044). Training-seed variability is not estimated.
+
+\begin{table}[htbp]
+\centering
+\caption{Official-test equal-supervision target semantic queue. Components are ranked by their target-semantic weed score; validation alone selected epoch and component settings.}
+\small
+\resizebox{\textwidth}{!}{%
+\begin{tabular}{lrrrrrrrr}
+\toprule
+Model & Candidates & Accepted & Weed cand. & Precision & Spatial & Qualified & 1:1 qualified & Crop scenes \\
+\midrule
+Target semantic, fixed $K=20$ & 1,347 & 518 & 355 & 0.6853 & 520/1712 (0.3037) & 453/1712 (0.2646) & 348/1712 (0.2033) & 6/26 (0.2308) \\
+\bottomrule
+\end{tabular}}
+\end{table}
+
+IoU-only weed-instance recall at thresholds 0.25/0.50/0.75 was 429/1,712 (0.2506), 280/1,712 (0.1636), and 53/1,712 (0.0310). The median, 75th percentile, and 95th percentile queued crop fraction were all zero; the maximum was 0.9474. Two tiles contained fewer than 20 components, so the accepted total was 518 rather than 520.
+
+\begin{table}[htbp]
+\centering
+\caption{Target semantic fixed-$K$ queue by acquisition date. Every proportion is accompanied by an archived per-tile integer count.}
+\small
+\resizebox{\textwidth}{!}{%
+\begin{tabular}{lrrrrrrrr}
+\toprule
+Date & Tiles & Candidates & Accepted & Precision & Spatial & Qualified & 1:1 qualified & Crop scenes \\
+\midrule
+25 May & 8 & 304 & 158 & 70/158 (0.4430) & 88/392 (0.2245) & 68/392 (0.1735) & 63/392 (0.1607) & 6/8 \\
+30 May & 8 & 446 & 160 & 124/160 (0.7750) & 175/440 (0.3977) & 144/440 (0.3273) & 124/440 (0.2818) & 0/8 \\
+6 June & 8 & 534 & 160 & 143/160 (0.8938) & 226/726 (0.3113) & 211/726 (0.2906) & 143/726 (0.1970) & 0/8 \\
+15 June & 2 & 63 & 40 & 18/40 (0.4500) & 31/154 (0.2013) & 30/154 (0.1948) & 18/154 (0.1169) & 0/2 \\
+\bottomrule
+\end{tabular}}
+\end{table}
+
+Across the four dates, target-semantic macro precision, many-to-one spatial recall, many-to-one qualified recall, and one-to-one qualified recall were 0.6404, 0.2837, 0.2465, and 0.1891. The corresponding worst-date values were 0.4430, 0.2013, 0.1735, and 0.1169. Crop-overlap scene frequency had a date macro of 0.1875 and a worst-date value of 0.7500. These are descriptive strata from the single completed training run.
+
+The date pattern differs from the commissioned masked-DINO queue. Target semantic training improves the 25 and 30 May fixed queues, while the two-image 15 June stratum reaches 0.1169 one-to-one recall. These date strata describe temporal variation within the study field.
+
+\section{S6. Matching-contract, IoU, crop-exposure, and multiplicity sensitivity}
+
+The registered queue-contract table contains every combination of model, $K\in\{1,5,10,20,50\}$, date/pooled stratum, instance coverage $\{0.25,0.50,0.75\}$, labeled coverage $\{0.25,0.50,0.75\}$, and purity $\{0.50,0.75,0.90\}$. For component-masked DINOv2 at $K=20$, pooled many-to-one qualified recall ranges 0.0485--0.2886, and one-to-one recall ranges 0.0374--0.1881. At the main 0.50/0.50/0.90 contract, these values are 319/1,712 (0.1863) and 230/1,712 (0.1343). Under IoU-only matching at thresholds 0.25/0.50/0.75, many-to-one recall is 325/1,712, 163/1,712, and 24/1,712; one-to-one recall is 307/1,712, 163/1,712, and 24/1,712.
+
+\begin{table}[htbp]
+\centering
+\caption{Crop-overlap scene frequency at $K=20$. A scene is counted when at least one queued region has crop fraction greater than or equal to the listed threshold; for threshold zero, positive overlap is required in implementation.}
+\small
+\resizebox{\textwidth}{!}{%
+\begin{tabular}{lrrrr}
+\toprule
+Model & Any $>0$ & $\ge0.01$ & $\ge0.10$ & $\ge0.50$ \\
+\midrule
+Frozen DINOv2 & 10/26 & 10/26 & 10/26 & 9/26 \\
+Masked DINOv2 & 11/26 & 11/26 & 11/26 & 9/26 \\
+\bottomrule
+\end{tabular}}
+\end{table}
+
+The archive additionally reports queued candidate--instance multiplicity and IoU matching at 0.25, 0.50, and 0.75. These tables quantify candidates covering several small weeds and weeds fragmented across several candidates, complementing the main many-to-one metric.
+
+\section{S7. Simulated mask-derived candidate labels and fine-tuning}
+
+\begin{table}[htbp]
+\centering
+\caption{Mean official-test results over ten draws of 300 simulated candidate labels derived from dense masks.}
+\small
+\resizebox{\textwidth}{!}{%
+\begin{tabular}{lrrrr}
+\toprule
+Selection & AUC & AP & $K=20$ precision & $K=20$ qualified recall \\
+\midrule
+Prospective uniform & 0.9549 & 0.8544 & 0.5242 & 0.1724 \\
+Prospective DINOv2 coreset & 0.9543 & 0.8534 & 0.5217 & 0.1717 \\
+Retrospective stratified & 0.9547 & 0.8502 & 0.5231 & 0.1725 \\
+\bottomrule
+\end{tabular}}
+\end{table}
+
+All ten candidate-ID lists and their SHA-256 checksums are supplied in the reproducibility archive. Coreset selection is greedy farthest-first in frozen DINOv2 embedding space with a seeded initial point; uniform selection is seeded sampling without replacement. Training data determine candidate IDs, and official validation selects $C$ and epoch. The 2.5/97.5 draw percentiles reported below are descriptive empirical quantiles, not confidence intervals.
+
+\begin{table}[htbp]
+\centering
+\caption{Paired last-block fine-tuning differences (fine-tuned minus frozen) on identical coreset draws.}
+\small
+\begin{tabular}{lrrr}
+\toprule
+Metric & Mean difference & Empirical 2.5th & Empirical 97.5th \\
+\midrule
+AUC & $-0.0396$ & $-0.0525$ & $-0.0170$ \\
+$K=20$ precision & $-0.0373$ & $-0.0476$ & $-0.0169$ \\
+$K=20$ qualified recall & $-0.0115$ & $-0.0234$ & $-0.0001$ \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+The predefined fine-tuning configuration used DINOv2 ViT-S/14, tight unpadded crops, 8 epochs, batch 64, AdamW, and class-weighted binary cross-entropy. Weight decay was $10^{-4}$, the last-block/norm learning rate was $10^{-5}$, and the head learning rate was $10^{-3}$. Horizontal and vertical flips supplied augmentation. The final block, final normalization, and head were trainable, while earlier blocks remained frozen. Validation selected epoch 8 in every repeat. The paired estimates characterize this registered recipe.
+
+\section{S8. Statistical interpretation}
+
+The main tables report raw test numerators and denominators, pooled values, all four acquisition dates, and paired tile differences. The 15 June date contains two official-test images and consequently receives greater relative weight in an unweighted date macro. The archive supplies both date-macro and tile/instance-weighted summaries. Global-versus-fixed comparisons include the paired median, interquartile range, full range, and improved/unchanged/worsened counts. These statistics describe the official spatial split.
+
+The release supplies capture indices as its spatial coordinate proxy. A full-tile DINOv2 Hungarian linkage to nominal locations produced negative assignment margins for 12 of 18 test assignments. We therefore used the largest ordered-index gap to form two 13-image capture-index proxy groups. Their bootstrap summaries quantify sensitivity to this grouping. Repeat-wise 2.5th and 97.5th percentiles are empirical simulation quantiles.
+
+\section{S9. Development diagnostics}
+
+\begin{table}[htbp]
+\centering
+\caption{Registered date-grouped development diagnostics. The official spatial analysis remains the primary evaluation.}
+\small
+\resizebox{\textwidth}{!}{%
+\begin{tabular}{p{3.1cm}p{4.5cm}p{6.1cm}}
+\toprule
+Analysis & Result & Interpretation \\
+\midrule
+Nested Platt calibration & Date-macro Brier 0.2112 before, 0.2776 after; NLL 0.6338 before, 0.8239 after & Date transfer increased both calibration errors; queue analyses use ranking scores \\
+Empirical threshold controller & Accepted precision 0.1317, empty response 0.7448, crop-scene frequency 0.1042 & Training-date threshold transfer produced a sparse held-out queue with low precision \\
+Cost-sensitive ranker, $K=20$ & AUC 0.7301, AP 0.7272, precision 0.4327, instance recall 0.0842, crop-scene frequency 0.3542 & Crop weighting shifted recovery and exposure in opposite directions \\
+Role $\times$ support, $K=20$ & AUC 0.7151 versus 0.8542 role-only; recall 0.0910 versus 0.0520; crop frequency 0.3698 versus 0.1510 & Support multiplication raised recovery and crop exposure while weakening ranking \\
+Last-block DINOv2 fine-tuning & Mean paired AUC $-0.0396$ and qualified recall $-0.0115$ & Small target supervision favored frozen representations \\
+\bottomrule
+\end{tabular}}
+\end{table}
+
+The run registry retains every diagnostic, including unsuccessful executions, under its original identifier. Crop-overlap frequency is defined consistently across these records.
+
+\section{S10. Runtime, environment, and model provenance}
+
+\begin{table}[htbp]
+\centering
+\caption{Principal runtime and memory records.}
+\small
+\resizebox{\textwidth}{!}{%
+\begin{tabular}{lrrl}
+\toprule
+Component & Wall time & Peak CUDA memory & Device \\
+\midrule
+Unmasked DINOv2 embeddings & 93.94 s & 601.9 MB & H200, physical GPU 0 \\
+Masked DINOv2 embeddings & 32.52 s & 601.9 MB & H200, physical GPU 0 \\
+Official proposal audit & 35.46 s & CPU & -- \\
+Queue-policy and tile-level audit & 7.63 s & CPU & -- \\
+Target semantic training, validation, and finalization & 2.86 h & See run history & H200, physical GPUs 5--7 \\
+Target semantic test inference & 0.931 s (0.0358 s/tile) & 583.8 MB & H200, physical GPU 5 \\
+Ten fine-tuning repeats & 93.89 s elapsed & 660.1 MB/repeat & H200, physical GPUs 0--7 \\
+\bottomrule
+\end{tabular}}
+\end{table}
+
+The recorded GPU environment is Python 3.10.12, PyTorch 2.7.1+cu126, timm 1.0.28, and NumPy 2.2.6. The public DINOv2 ViT-S/14 LVD-142M weights were obtained through timm. Model, embedding, configuration, and output checksums are recorded in the archive manifest.
+
+\section{S11. Reproducibility and archive record}
+
+The versioned archive is available at \url{https://github.com/Fytap/agrispec-vlm-reproducibility/releases/tag/v1.0.0}. It preserves the executable directory structure, frozen configurations, declared inputs, source-data tables, environment specification, and run manifests. The archive README gives the exact clean-room replay command and expected output checksums; replay does not require redistribution of source imagery.
+
+\begingroup
+\footnotesize
+\setlength{\tabcolsep}{3pt}
+\renewcommand{\arraystretch}{0.94}
+\begin{longtable}{>{\raggedright\arraybackslash}p{2.5cm}>{\raggedright\arraybackslash}p{3.8cm}>{\raggedright\arraybackslash}p{6.5cm}}
+\caption{Computational provenance and audit controls.}\\
+\toprule
+Element & Verification & Archived record \\
+\midrule
+\endfirsthead
+\toprule
+Element & Verification & Archived record \\
+\midrule
+\endhead
+Metric layers & Separate spatial, role-qualified, and queued recall & Definitions, thresholds, and integer counts \\
+Split/merge & Sensitivity at 0.10, 0.25, and 0.50 instance overlap & Threshold grid and per-setting summaries \\
+Scene denominator & Crop-exposure frequencies use all 26 test tiles & Tile-level queue and overlap records \\
+Spatial grouping & Released capture indices define the spatial proxy & Date, patch, tile, and capture-index summaries \\
+Candidate support & Rankers use the complete commissioned pool & Candidate predictions and support indicators \\
+DINOv2 context & Paired unmasked and component-masked crops & Embedding manifests and paired queue outputs \\
+Fine-tuning & Ten paired frozen versus last-block repeats & Seeds, checkpoints, logs, and paired differences \\
+Target semantic model & Registered split, selection rule, and hyperparameters & Successful and unsuccessful execution records \\
+Raster accounting & Released-mask and paper-reported totals & Consistency and exclusion audits \\
+\bottomrule
+\end{longtable}
+\endgroup
+
+\end{document}

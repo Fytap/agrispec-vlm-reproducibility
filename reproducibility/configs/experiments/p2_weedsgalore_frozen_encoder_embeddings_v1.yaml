@@ -1,0 +1,21 @@
+schema_version: 1
+experiment_id: P2_WEEDSGALORE_FROZEN_ENCODER_EMBEDDINGS_V1
+status: frozen_posthoc_major_revision_development
+scope:
+  public_data_only: true
+  sealed_test: prohibited
+  truth_or_label_access: prohibited
+  gpu_devices: [0, 1]
+inputs:
+  candidate_settings: [T070_A032, T080_A032]
+  semantic_encoder: frozen_source_semantic_resnet18
+embedding:
+  layer: encoder_layer4
+  roi_align_output: [2, 2]
+  pooling: spatial_average
+  dimension: 512
+outputs:
+  root: results/p2_development/P2_WEEDSGALORE_FROZEN_ENCODER_EMBEDDINGS_20260810_v1
+preservation:
+  overwrite_existing_output: prohibited
+  failures: retain

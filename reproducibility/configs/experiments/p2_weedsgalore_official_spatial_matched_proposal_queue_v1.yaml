@@ -1,0 +1,16 @@
+experiment:
+  id: P2_WEEDSGALORE_OFFICIAL_SPATIAL_MATCHED_PROPOSAL_QUEUE_20260810_v1
+  stage: SAT major-revision development
+  public_data_only: true
+  sealed_test_read: false
+  compute: CPU-only
+split: {fit: official_train, regularization_selection: official_validation, score_once: official_test}
+ranker:
+  target: all_candidate_weed_vs_rest
+  features: [source_role_logit, soil_probability, component_area, mean_foreground, max_foreground, bbox_area, bbox_aspect, bbox_fill]
+  weights_across_proposal_pools: identical
+  fit_pool: commissioned_train_plus_validation
+proposal_variants:
+  original: {threshold: 0.95, minimum_area: 32, target_truth_selection: prohibited}
+  commissioned: {threshold: 0.70, minimum_area: 32, selection: official_training_only}
+queue: {k: [1, 5, 10, 20, 50], tie_break: candidate_id_lexical_ascending}

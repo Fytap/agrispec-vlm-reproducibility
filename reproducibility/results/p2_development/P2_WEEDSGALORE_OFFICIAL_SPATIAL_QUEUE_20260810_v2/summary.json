@@ -1,0 +1,479 @@
+{
+  "cluster_reconstruction": {
+    "embedding_linked_location_diagnostic": {
+      "locations_total": 48,
+      "method": "within-official-split Hungarian assignment of frozen DINOv2 full-tile cosine similarity",
+      "reason": "assignment margins were insufficient for authoritative location identity",
+      "test_locations": 8,
+      "used_for_primary_interval": false
+    },
+    "exact_geocoordinates_available": false,
+    "patch_proxy_count": 2,
+    "primary_inference_cluster": "two 13-image official-test capture-index patch proxies split at the largest numeric gap"
+  },
+  "config_sha256": "a333288025e608bf42dc06853494fe908b72d79f90fd0c1cb17b3c86418621f6",
+  "git_commit": "fb9c99c57799275f849e961ae6a52525bf4ea752",
+  "inputs": {
+    "archive_sha256": "5d8395c274d990cd8fbfa728445f65c398be2b5d777bd5145eb9ae5ca4d9b68c",
+    "candidates_sha256": "be90fff3d380b6ca7e968e0652f5beff17905ff016a2f96da0ea6331a3f99a88",
+    "dino_embeddings_sha256": "e470069e816644a3eefb86deb5b4e22082d042d96de3314ce8f1f4d31e9873d0",
+    "manifest_sha256": "3a577a747934069d2f50f6d5732cea019b554d557c98a01e796b000ea4f2085e",
+    "masked_dino_embeddings_sha256": "892c77fae76f8e763308f5af9be42a5142bbb7fcb63278b8b30b90e9295f2957",
+    "proposal_summary_sha256": "7594e72179c95388f010282ef51e5959502918b5ce87459383f29b63f9b4b743",
+    "scene_embeddings_sha256": "98ff877a54a82083029c95cd71459ab8190b082c8fd2f0bab8834e423b354d92"
+  },
+  "label_selection": {
+    "budget": 300,
+    "prospective_strategies": [
+      "uniform",
+      "DINOv2 coreset"
+    ],
+    "repeats": 10,
+    "retrospective_reference": "class-stratified sampling uses labels for selection and is not a realizable prospective workflow"
+  },
+  "models": {
+    "all_candidate_component_masked_dinov2_linear": {
+      "refit_candidates": 12323,
+      "sampled_training_ids_sha256": null,
+      "selected_c": 0.01,
+      "target_contract": "all_candidate_weed_vs_rest",
+      "training_candidates": 9887,
+      "validation_candidates": 2436,
+      "validation_sensitivity": [
+        {
+          "c": 0.001,
+          "validation_average_precision": 0.9296353517657406,
+          "validation_roc_auc": 0.9776200110427904
+        },
+        {
+          "c": 0.01,
+          "validation_average_precision": 0.9369032961762855,
+          "validation_roc_auc": 0.9811439894607767
+        },
+        {
+          "c": 0.1,
+          "validation_average_precision": 0.9333783550283953,
+          "validation_roc_auc": 0.9801318988940358
+        },
+        {
+          "c": 1.0,
+          "validation_average_precision": 0.9301401621470792,
+          "validation_roc_auc": 0.9789582306951902
+        },
+        {
+          "c": 10.0,
+          "validation_average_precision": 0.9291711584431778,
+          "validation_roc_auc": 0.9786281365142651
+        },
+        {
+          "c": 100.0,
+          "validation_average_precision": 0.929093597287109,
+          "validation_roc_auc": 0.9786053372164832
+        }
+      ]
+    },
+    "all_candidate_frozen_dinov2_linear": {
+      "refit_candidates": 12323,
+      "sampled_training_ids_sha256": null,
+      "selected_c": 0.01,
+      "target_contract": "all_candidate_weed_vs_rest",
+      "training_candidates": 9887,
+      "validation_candidates": 2436,
+      "validation_sensitivity": [
+        {
+          "c": 0.001,
+          "validation_average_precision": 0.9180113997481715,
+          "validation_roc_auc": 0.9729134429616089
+        },
+        {
+          "c": 0.01,
+          "validation_average_precision": 0.9273890640341544,
+          "validation_roc_auc": 0.9785478433351209
+        },
+        {
+          "c": 0.1,
+          "validation_average_precision": 0.9241477852901523,
+          "validation_roc_auc": 0.9782613652021257
+        },
+        {
+          "c": 1.0,
+          "validation_average_precision": 0.918254026575102,
+          "validation_roc_auc": 0.9765573655114032
+        },
+        {
+          "c": 10.0,
+          "validation_average_precision": 0.9172714985657452,
+          "validation_roc_auc": 0.976148960698967
+        },
+        {
+          "c": 100.0,
+          "validation_average_precision": 0.917098011970402,
+          "validation_roc_auc": 0.9760825453532553
+        }
+      ]
+    },
+    "all_candidate_geometry_only_logistic": {
+      "refit_candidates": 12323,
+      "sampled_training_ids_sha256": null,
+      "selected_c": 100.0,
+      "target_contract": "all_candidate_weed_vs_rest",
+      "training_candidates": 9887,
+      "validation_candidates": 2436,
+      "validation_sensitivity": [
+        {
+          "c": 0.001,
+          "validation_average_precision": 0.6035611789836114,
+          "validation_roc_auc": 0.8614437110119617
+        },
+        {
+          "c": 0.01,
+          "validation_average_precision": 0.6136776166201239,
+          "validation_roc_auc": 0.8615339169292716
+        },
+        {
+          "c": 0.1,
+          "validation_average_precision": 0.61765173531149,
+          "validation_roc_auc": 0.8627333582473486
+        },
+        {
+          "c": 1.0,
+          "validation_average_precision": 0.6290756032828277,
+          "validation_roc_auc": 0.8681893293338739
+        },
+        {
+          "c": 10.0,
+          "validation_average_precision": 0.6348606948339524,
+          "validation_roc_auc": 0.871891737038847
+        },
+        {
+          "c": 100.0,
+          "validation_average_precision": 0.6355661096499304,
+          "validation_roc_auc": 0.8724726234953701
+        }
+      ]
+    },
+    "all_candidate_role_plus_local_logistic": {
+      "refit_candidates": 12323,
+      "sampled_training_ids_sha256": null,
+      "selected_c": 100.0,
+      "target_contract": "all_candidate_weed_vs_rest",
+      "training_candidates": 9887,
+      "validation_candidates": 2436,
+      "validation_sensitivity": [
+        {
+          "c": 0.001,
+          "validation_average_precision": 0.7270276306674313,
+          "validation_roc_auc": 0.9159994567819485
+        },
+        {
+          "c": 0.01,
+          "validation_average_precision": 0.7491577555860405,
+          "validation_roc_auc": 0.9219490822291369
+        },
+        {
+          "c": 0.1,
+          "validation_average_precision": 0.7549683128197175,
+          "validation_roc_auc": 0.923649116824593
+        },
+        {
+          "c": 1.0,
+          "validation_average_precision": 0.7594472328728746,
+          "validation_roc_auc": 0.9270749591347369
+        },
+        {
+          "c": 10.0,
+          "validation_average_precision": 0.7614151582854921,
+          "validation_roc_auc": 0.9299328015479732
+        },
+        {
+          "c": 100.0,
+          "validation_average_precision": 0.7617313448609583,
+          "validation_roc_auc": 0.9305354960284615
+        }
+      ]
+    },
+    "eligible_frozen_dinov2_linear": {
+      "refit_candidates": 3286,
+      "sampled_training_ids_sha256": null,
+      "selected_c": 0.1,
+      "target_contract": "eligible_crop_vs_weed",
+      "training_candidates": 2602,
+      "validation_candidates": 684,
+      "validation_sensitivity": [
+        {
+          "c": 0.001,
+          "validation_average_precision": 0.9950811249043328,
+          "validation_roc_auc": 0.9847063845356423
+        },
+        {
+          "c": 0.01,
+          "validation_average_precision": 0.9962064681031623,
+          "validation_roc_auc": 0.988609061528142
+        },
+        {
+          "c": 0.1,
+          "validation_average_precision": 0.9965368793866365,
+          "validation_roc_auc": 0.9897310811634855
+        },
+        {
+          "c": 1.0,
+          "validation_average_precision": 0.9947578245950957,
+          "validation_roc_auc": 0.9847551679980486
+        },
+        {
+          "c": 10.0,
+          "validation_average_precision": 0.9923669880715837,
+          "validation_roc_auc": 0.9779864625891823
+        },
+        {
+          "c": 100.0,
+          "validation_average_precision": 0.9904117061346767,
+          "validation_roc_auc": 0.9772669065186901
+        }
+      ]
+    },
+    "eligible_role_plus_local_logistic": {
+      "refit_candidates": 3286,
+      "sampled_training_ids_sha256": null,
+      "selected_c": 100.0,
+      "target_contract": "eligible_crop_vs_weed",
+      "training_candidates": 2602,
+      "validation_candidates": 684,
+      "validation_sensitivity": [
+        {
+          "c": 0.001,
+          "validation_average_precision": 0.9179939440503814,
+          "validation_roc_auc": 0.8391365327154096
+        },
+        {
+          "c": 0.01,
+          "validation_average_precision": 0.9363552701075486,
+          "validation_roc_auc": 0.8773217879138971
+        },
+        {
+          "c": 0.1,
+          "validation_average_precision": 0.9407645294563527,
+          "validation_roc_auc": 0.8804683212391
+        },
+        {
+          "c": 1.0,
+          "validation_average_precision": 0.9427897973549682,
+          "validation_roc_auc": 0.8801146411366547
+        },
+        {
+          "c": 10.0,
+          "validation_average_precision": 0.9472308628220294,
+          "validation_roc_auc": 0.881273248368803
+        },
+        {
+          "c": 100.0,
+          "validation_average_precision": 0.9494929371124622,
+          "validation_roc_auc": 0.8819928044392951
+        }
+      ]
+    },
+    "source_resnet18_role_score": {
+      "fit": "none",
+      "provenance": "SugarBeets source-trained custom ResNet-18 U-Net semantic specialist candidate mean probabilities"
+    }
+  },
+  "outputs": {
+    "bootstrap_sha256": "f96d2a6bce26c4d340df59fbf0767e0b7940762e5dcd0ed11122135b6be11fd4",
+    "ceiling_sha256": "a183309384e29a80d96ba18e5cf9cef0df7bb8a208a1c28632a049e2e24eab96",
+    "label_budget_sha256": "54e01e73bc2152f19ff5a0da7a6a8fa5ee1fdb671955e3cdf1d8bdaa9ac05329",
+    "label_ids_sha256": "b2ef7e34b865f24585c49293b61775918d5332b9401b5edc6e877f6fff8fc503",
+    "location_mapping_sha256": "f2270b4ec5aae4537746b77e9d761a49709e904e1286c877cc6aec592e9fb083",
+    "oracle_sha256": "989db3f6d87841b0304a3a47462b516d0eb870860026e0909cb2482bbfd561d0",
+    "patch_mapping_sha256": "383cf7a2e34d7dd3bc662a516ea9b40fa0f767a4379707464343b6c98b558892",
+    "per_location_sha256": "dcf00e912652ad3727064db6656ae4e6ce8af17d659b4f63d80617508d492899",
+    "per_patch_sha256": "91d26aa0e0ee0e412ad27f76bc57b8aa6c352452fd76db075f2e248869ef21a6",
+    "predictions_sha256": "e786496027c216cf3dc66b7e7e78f36653af9d34cc4aae21177ff5759ebf457d",
+    "queue_sha256": "e19b614a1dced8eca439dbc960f70bd126ab19524cc2a3addb43cc642a625c35",
+    "random_sha256": "93a4851d152e5d397c80aee1ff6737f49bee500c2af261a44fa6e2b97dc12f1a",
+    "ranking_sha256": "7afa8dd2e83704c8ff2489d18157efd4afdd91c3e17691ef1a7965b012487d0b"
+  },
+  "patch_cluster_bootstrap_k20": {
+    "clusters": 2,
+    "interpretation": "descriptive percentile interval; only two capture-index patch proxies, so no formal uncertainty claim",
+    "precision_percentiles_2.5_50_97.5": [
+      0.4576923076923077,
+      0.5307692307692308,
+      0.6038461538461538
+    ],
+    "repeats": 10000,
+    "role_qualified_recall_percentiles_2.5_50_97.5": [
+      0.157001414427157,
+      0.17815420560747663,
+      0.19303482587064677
+    ]
+  },
+  "primary_frozen_model": "all_candidate_frozen_dinov2_linear",
+  "primary_queue_by_k": {
+    "1": {
+      "accepted_candidates": 26,
+      "aggregation": "pooled_test",
+      "all_candidate_queue_precision": 0.6538461538461539,
+      "crop_overlap_scene_frequency_0.00": 0.15384615384615385,
+      "crop_overlap_scene_frequency_0.01": 0.15384615384615385,
+      "crop_overlap_scene_frequency_0.10": 0.15384615384615385,
+      "crop_overlap_scene_frequency_0.50": 0.11538461538461539,
+      "crop_overlap_scene_numerator_0.00": 4,
+      "crop_overlap_scene_numerator_0.01": 4,
+      "crop_overlap_scene_numerator_0.10": 4,
+      "crop_overlap_scene_numerator_0.50": 3,
+      "images": 26,
+      "k": 1,
+      "model": "all_candidate_frozen_dinov2_linear",
+      "one_to_one_role_qualified_matches": 16,
+      "one_to_one_role_qualified_recall": 0.009345794392523364,
+      "one_to_one_spatial_matches": 18,
+      "one_to_one_spatial_recall": 0.010514018691588784,
+      "queued_role_qualified_weed_instance_recall": 0.011682242990654205,
+      "queued_spatial_weed_instance_recall": 0.012850467289719626,
+      "role_qualified_recalled_weed_instances": 20,
+      "spatial_recalled_weed_instances": 22,
+      "stratum": "ALL",
+      "weed_candidates": 17,
+      "weed_truth_instances": 1712
+    },
+    "10": {
+      "accepted_candidates": 260,
+      "aggregation": "pooled_test",
+      "all_candidate_queue_precision": 0.5884615384615385,
+      "crop_overlap_scene_frequency_0.00": 0.38461538461538464,
+      "crop_overlap_scene_frequency_0.01": 0.38461538461538464,
+      "crop_overlap_scene_frequency_0.10": 0.38461538461538464,
+      "crop_overlap_scene_frequency_0.50": 0.34615384615384615,
+      "crop_overlap_scene_numerator_0.00": 10,
+      "crop_overlap_scene_numerator_0.01": 10,
+      "crop_overlap_scene_numerator_0.10": 10,
+      "crop_overlap_scene_numerator_0.50": 9,
+      "images": 26,
+      "k": 10,
+      "model": "all_candidate_frozen_dinov2_linear",
+      "one_to_one_role_qualified_matches": 131,
+      "one_to_one_role_qualified_recall": 0.07651869158878505,
+      "one_to_one_spatial_matches": 164,
+      "one_to_one_spatial_recall": 0.09579439252336448,
+      "queued_role_qualified_weed_instance_recall": 0.09988317757009346,
+      "queued_spatial_weed_instance_recall": 0.15771028037383178,
+      "role_qualified_recalled_weed_instances": 171,
+      "spatial_recalled_weed_instances": 270,
+      "stratum": "ALL",
+      "weed_candidates": 153,
+      "weed_truth_instances": 1712
+    },
+    "20": {
+      "accepted_candidates": 520,
+      "aggregation": "pooled_test",
+      "all_candidate_queue_precision": 0.5307692307692308,
+      "crop_overlap_scene_frequency_0.00": 0.38461538461538464,
+      "crop_overlap_scene_frequency_0.01": 0.38461538461538464,
+      "crop_overlap_scene_frequency_0.10": 0.38461538461538464,
+      "crop_overlap_scene_frequency_0.50": 0.34615384615384615,
+      "crop_overlap_scene_numerator_0.00": 10,
+      "crop_overlap_scene_numerator_0.01": 10,
+      "crop_overlap_scene_numerator_0.10": 10,
+      "crop_overlap_scene_numerator_0.50": 9,
+      "images": 26,
+      "k": 20,
+      "model": "all_candidate_frozen_dinov2_linear",
+      "one_to_one_role_qualified_matches": 225,
+      "one_to_one_role_qualified_recall": 0.1314252336448598,
+      "one_to_one_spatial_matches": 284,
+      "one_to_one_spatial_recall": 0.1658878504672897,
+      "queued_role_qualified_weed_instance_recall": 0.17815420560747663,
+      "queued_spatial_weed_instance_recall": 0.2517523364485981,
+      "role_qualified_recalled_weed_instances": 305,
+      "spatial_recalled_weed_instances": 431,
+      "stratum": "ALL",
+      "weed_candidates": 276,
+      "weed_truth_instances": 1712
+    },
+    "5": {
+      "accepted_candidates": 130,
+      "aggregation": "pooled_test",
+      "all_candidate_queue_precision": 0.6153846153846154,
+      "crop_overlap_scene_frequency_0.00": 0.34615384615384615,
+      "crop_overlap_scene_frequency_0.01": 0.34615384615384615,
+      "crop_overlap_scene_frequency_0.10": 0.34615384615384615,
+      "crop_overlap_scene_frequency_0.50": 0.2692307692307692,
+      "crop_overlap_scene_numerator_0.00": 9,
+      "crop_overlap_scene_numerator_0.01": 9,
+      "crop_overlap_scene_numerator_0.10": 9,
+      "crop_overlap_scene_numerator_0.50": 7,
+      "images": 26,
+      "k": 5,
+      "model": "all_candidate_frozen_dinov2_linear",
+      "one_to_one_role_qualified_matches": 71,
+      "one_to_one_role_qualified_recall": 0.04147196261682243,
+      "one_to_one_spatial_matches": 88,
+      "one_to_one_spatial_recall": 0.0514018691588785,
+      "queued_role_qualified_weed_instance_recall": 0.04848130841121495,
+      "queued_spatial_weed_instance_recall": 0.05841121495327103,
+      "role_qualified_recalled_weed_instances": 83,
+      "spatial_recalled_weed_instances": 100,
+      "stratum": "ALL",
+      "weed_candidates": 80,
+      "weed_truth_instances": 1712
+    },
+    "50": {
+      "accepted_candidates": 1237,
+      "aggregation": "pooled_test",
+      "all_candidate_queue_precision": 0.35731608730800324,
+      "crop_overlap_scene_frequency_0.00": 0.8846153846153846,
+      "crop_overlap_scene_frequency_0.01": 0.8846153846153846,
+      "crop_overlap_scene_frequency_0.10": 0.8846153846153846,
+      "crop_overlap_scene_frequency_0.50": 0.7307692307692307,
+      "crop_overlap_scene_numerator_0.00": 23,
+      "crop_overlap_scene_numerator_0.01": 23,
+      "crop_overlap_scene_numerator_0.10": 23,
+      "crop_overlap_scene_numerator_0.50": 19,
+      "images": 26,
+      "k": 50,
+      "model": "all_candidate_frozen_dinov2_linear",
+      "one_to_one_role_qualified_matches": 354,
+      "one_to_one_role_qualified_recall": 0.20677570093457945,
+      "one_to_one_spatial_matches": 528,
+      "one_to_one_spatial_recall": 0.308411214953271,
+      "queued_role_qualified_weed_instance_recall": 0.28796728971962615,
+      "queued_spatial_weed_instance_recall": 0.4842289719626168,
+      "role_qualified_recalled_weed_instances": 493,
+      "spatial_recalled_weed_instances": 829,
+      "stratum": "ALL",
+      "weed_candidates": 442,
+      "weed_truth_instances": 1712
+    }
+  },
+  "proposal_setting": "T070_A032 selected using official training split only",
+  "queue_contract": {
+    "crop_overlap_thresholds": [
+      0.0,
+      0.01,
+      0.1,
+      0.5
+    ],
+    "fewer_than_k": "all available candidates are returned and actual accepted count is the precision denominator",
+    "one_to_one": "maximum bipartite matching under the same spatial or role-qualified edge contract",
+    "ranking_tie_break": "descending score then candidate_id lexical ascending"
+  },
+  "run_id": "P2_WEEDSGALORE_OFFICIAL_SPATIAL_QUEUE_20260810_v2",
+  "runtime": {
+    "numpy": "2.2.6",
+    "python": "3.10.12 (main, Mar  3 2026, 11:56:32) [GCC 11.4.0]",
+    "scikit_learn": "1.7.2",
+    "scipy": "1.15.3",
+    "wall_seconds": 34.98440794274211
+  },
+  "scope": {
+    "formal_risk_certificate": false,
+    "official_test_offline_scoring_only": true,
+    "official_training_fit": true,
+    "official_validation_hyperparameter_selection": true,
+    "public_data_only": true,
+    "sealed_test_read": false,
+    "test_truth_used_as_feature": false
+  },
+  "script_sha256": "d9c729670a36b4398adcd04e1dd05efde6ddb11f304aeed92a9ced2f6e0dc460",
+  "status": "completed_official_spatial_queue_major_revision_evaluation"
+}

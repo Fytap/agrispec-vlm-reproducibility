@@ -1,0 +1,12 @@
+{
+  "run_id": "P2_WEEDSGALORE_TARGET_SEMANTIC_QUEUE_BASELINE_20260810_v2",
+  "status": "failed_preserved",
+  "failure_stage": "first distributed training forward pass",
+  "exception": "NameError: name 'torch' is not defined",
+  "source_location": "scripts/train_evaluate_p2_weedsgalore_target_semantic_queue_baseline.py:234",
+  "root_cause": "The model class was defined inside build_model(), but torch was not imported into that local closure before torch.cat was called.",
+  "correction_in_v3": "Added the missing local import. No split, model architecture, optimizer, epoch count, validation objective, threshold grid, component-area grid, seed, or GPU assignment was changed.",
+  "raw_log_lines": 149,
+  "raw_log_sha256": "e665cd2a5707c30f7318480b90477b4ab9a0878cd89aa6f4061af9a0b697d0b1",
+  "public_archive_note": "The verbatim execution log remains in the private run registry. This evidence record preserves the failure and raw-log hash while omitting machine and environment identifiers from the public archive."
+}

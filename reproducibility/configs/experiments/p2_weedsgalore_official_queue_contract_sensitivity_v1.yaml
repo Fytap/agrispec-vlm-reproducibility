@@ -1,0 +1,16 @@
+experiment:
+  id: P2_WEEDSGALORE_OFFICIAL_QUEUE_CONTRACT_SENSITIVITY_20260810_v1
+  stage: SAT major-revision development
+  public_data_only: true
+  sealed_test_read: false
+  compute: CPU-only
+predictions: frozen official-test scores from spatial queue v2
+models: [all_candidate_role_plus_local, all_candidate_frozen_DINOv2, all_candidate_component_masked_DINOv2]
+queue_k: [1, 5, 10, 20, 50]
+matching_grid:
+  instance_coverage: [0.25, 0.50, 0.75]
+  candidate_labeled_coverage: [0.25, 0.50, 0.75]
+  same_role_purity: [0.50, 0.75, 0.90]
+iou_grid: [0.25, 0.50, 0.75]
+matching_modes: [many_to_one, maximum_bipartite_one_to_one]
+multiplicity_thresholds: [0.10, 0.25, 0.50]

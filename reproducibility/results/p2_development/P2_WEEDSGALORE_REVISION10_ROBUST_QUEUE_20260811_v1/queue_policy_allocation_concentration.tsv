@@ -1,0 +1,5 @@
+policy	tiles	accepted_candidates	tiles_with_zero	tiles_below_5	tiles_below_10	minimum_per_tile	q25_per_tile	median_per_tile	q75_per_tile	maximum_per_tile	allocation_gini	allocation_coefficient_of_variation	maximum_date_share	maximum_date	interpretation
+bounded_global_min5_max50_N520	26	520	0	0	8	5	5.5	17.5	29.0	50	0.3816568047337278	0.6790830922308743	0.5480769230769231	2023-06-06	descriptive_batch_allocation_diagnostic
+fixed_K20_per_image	26	520	0	0	0	20	20.0	20.0	20.0	20	0.0	0.0	0.3076923076923077	2023-05-25	descriptive_batch_allocation_diagnostic
+global_top_N520	26	520	1	5	8	0	5.5	19.0	30.0	55	0.42204142011834317	0.7435621126608156	0.5634615384615385	2023-06-06	descriptive_batch_allocation_diagnostic
+validation_score_threshold_transferred	26	426	2	7	11	0	3.75	14.5	24.75	45	0.4647887323943662	0.8230436613171829	0.5985915492957746	2023-06-06	descriptive_batch_allocation_diagnostic

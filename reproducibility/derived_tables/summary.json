@@ -1,0 +1,59 @@
+{
+  "dinov2_finetune_date_macro_roc_auc": 0.8996528141974857,
+  "dinov2_finetune_k20": {
+    "all_candidate_precision": 0.45009522929352647,
+    "crop_overlap_scene_frequency_0.00": 0.3506944444444444,
+    "queued_role_qualified_weed_instance_recall": 0.08468325725310653,
+    "queued_spatial_weed_instance_recall": 0.13719492317517423
+  },
+  "inputs": {
+    "results/p2_development/P2_WEEDSGALORE_COMMISSIONING_CONTRACT_AUDIT_20260810_v2/candidate_ranking_by_date.tsv": "8cf1b9e117c643fe217695c352c49ada9bfe158b743a8ceb7fb66552a0915d54",
+    "results/p2_development/P2_WEEDSGALORE_COMMISSIONING_CONTRACT_AUDIT_20260810_v2/commissioning_queue_comparison.tsv": "82893a78f2cd02b7f8433e1a8323e64ada5690a1ca1c46a5c15cdff7c9fc4833",
+    "results/p2_development/P2_WEEDSGALORE_COMMISSIONING_CONTRACT_AUDIT_20260810_v2/proposal_recall_layers.tsv": "c7e2d43abb1ba0273ca2159dfd99e83a7cdfcfa8e8e95b819ed74635de5c1e0f",
+    "results/p2_development/P2_WEEDSGALORE_COMMISSIONING_CONTRACT_AUDIT_20260810_v2/split_merge_sensitivity.tsv": "4964ad5860ca59529708ed85503845cd7c7f1eececc4c1c21a0a8cdd836b462f",
+    "results/p2_development/P2_WEEDSGALORE_DINOV2_QUEUE_20260810_v2/dinov2_queue_by_date_repeat.tsv": "b2544568ee012474f9c330c41af7cebdcdf139b754bd1da58199dad8d50eff0b",
+    "results/p2_development/P2_WEEDSGALORE_DINOV2_TARGET_FINETUNE_20260810_v3/target_finetune_by_date_repeat.tsv": "a0825fb32e89682a5b12e2ba71586929c3fb0c9418ad0dbb5346e7e083d54126",
+    "results/p2_development/P2_WEEDSGALORE_MODERN_FROZEN_BASELINES_20260810_v1/full_label_baselines.tsv": "f39fbf328933a2eea9bfdb2bd49aa41c12b7f0a2886edcd122eda64f9e500464",
+    "results/p2_development/P2_WEEDSGALORE_MODERN_FROZEN_BASELINES_20260810_v1/paired_auc_differences.tsv": "364788075310bda10e3d5f0bcf0671363a71adcd80e1e3730b620795deb30a88",
+    "results/p2_development/P2_WEEDSGALORE_MODERN_FROZEN_BASELINES_20260810_v1/same_label_budget.tsv": "7503d17e729aa759a398e6acfde2fba885763608d77999240c86deed0fae1847"
+  },
+  "matched_role_plus_local_k20": {
+    "nested_commissioned": {
+      "all_candidate_precision": 0.35489858542102054,
+      "crop_overlap_scene_frequency_0.00": 0.5364583333333333,
+      "queued_role_qualified_weed_instance_recall": 0.051967981913477956,
+      "queued_spatial_weed_instance_recall": 0.1389679733050512
+    },
+    "original": {
+      "all_candidate_precision": 0.48323427182704093,
+      "crop_overlap_scene_frequency_0.00": 0.8645833333333334,
+      "queued_role_qualified_weed_instance_recall": 0.06731570801463335,
+      "queued_spatial_weed_instance_recall": 0.11906760501721184
+    }
+  },
+  "outputs": {
+    "annotation_budget.tsv": "d1c8260ac7095922979d7b0cccbe07443854efa4891e5fdfcd8b039e397f3569",
+    "matched_k20_queue.tsv": "75932fc3aff18439086eeb5560148af5ee0c8895be83c9b20eb5d4689e933d9b",
+    "modern_baselines_by_date.tsv": "1487d90f415f8db5df9ac262fd0e0b854ce2972a0221082091de2da3ae7d305b",
+    "paired_auc_differences.tsv": "364788075310bda10e3d5f0bcf0671363a71adcd80e1e3730b620795deb30a88",
+    "proposal_layers.tsv": "d7e5fd311143cd410430d0b1f63efc57a15ad21be7048cfc9bf91d0e5c20469b",
+    "split_merge_sensitivity.tsv": "030cba61896b3132b36d0fd6806b5ee02dc9ebfca4f85c8021285308192f20c7"
+  },
+  "proposal_date_macro": {
+    "nested_commissioned": {
+      "proposal_ar_iou_0.25": 0.2426948727024137,
+      "proposal_ar_iou_0.50": 0.10580482512082112,
+      "proposal_ar_iou_0.75": 0.010287781841992954,
+      "role_qualified_proposal_recall": 0.1952439721637727,
+      "spatial_proposal_recall": 0.4324710443261002
+    },
+    "original": {
+      "proposal_ar_iou_0.25": 0.15948424216804577,
+      "proposal_ar_iou_0.50": 0.06434668350096989,
+      "proposal_ar_iou_0.75": 0.004883504382833002,
+      "role_qualified_proposal_recall": 0.11568488143748724,
+      "spatial_proposal_recall": 0.20207100349160914
+    }
+  },
+  "python": "3.12.7"
+}

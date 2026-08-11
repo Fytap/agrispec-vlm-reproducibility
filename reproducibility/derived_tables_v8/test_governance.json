@@ -1,0 +1,15 @@
+{
+  "analysis_class": "reviewer_requested_post_test_diagnostic",
+  "test_labels_not_used_for": [
+    "regularization selection",
+    "score-threshold selection",
+    "equal-budget policy allocation",
+    "candidate-ID generation"
+  ],
+  "test_scores_and_image_IDs_used_for": [
+    "global top-N allocation",
+    "bounded min/max quota allocation"
+  ],
+  "test_labels_used_for": "offline scoring after all policy selections",
+  "population_confidence_interval": "not reported because only two test spatial patches from one field"
+}

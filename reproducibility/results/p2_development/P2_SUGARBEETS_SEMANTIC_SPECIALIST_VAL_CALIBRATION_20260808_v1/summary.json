@@ -1,0 +1,320 @@
+{
+  "git_commit": "b4b354a9f780412404c70f2209867db8187003fd",
+  "inputs": {
+    "checkpoint_sha256": "47aba78e0210e95b26a88c6f5932d5e8db799d2f8ebfe0f419787e13dfee7cfb",
+    "config_sha256": "ccdbd7934c31cd3f77489a5534c62cfe5091db251b19dbd59f7bc80051d61869",
+    "supervision_manifest_sha256": "c155405c0e0ac91701f107f7c76ada7f4b970a55d4a10d72804428c166e5fc5f"
+  },
+  "limitations": [
+    "This is specialist validation and class operating-point calibration, not controller policy selection, risk certification, or sealed evaluation.",
+    "Pixels within an acquisition session are correlated; pixel metrics are diagnostics and do not provide response-level guarantees.",
+    "The selected pixel operating point will require a separately registered, held-out controller diagnostic before any further use."
+  ],
+  "outputs": {
+    "role_score_histogram_sha256": "c2428c28bf4b46dfa427445091b451d6118c61732963155a1f9cf8001298ba72",
+    "source_manifest_sha256": "f72e36cd08f114a0b7fa85207ad95f3a3c7f038f8bda5253fbe861d684062b72"
+  },
+  "per_session_metrics": {
+    "CKA_160421": {
+      "raw_role_pixels": {
+        "balanced_recall_with_soil_predictions_counted_as_errors": 0.5,
+        "confusion_truth_crop_weed_by_prediction_soil_crop_weed": [
+          [
+            714,
+            0,
+            113052
+          ],
+          [
+            0,
+            0,
+            221
+          ]
+        ],
+        "crop_recall": 0.0,
+        "weed_recall": 1.0
+      },
+      "raw_three_class": {
+        "confusion_truth_by_prediction_soil_crop_weed": [
+          [
+            743287300,
+            8992,
+            7751321
+          ],
+          [
+            714,
+            0,
+            113052
+          ],
+          [
+            0,
+            0,
+            221
+          ]
+        ],
+        "macro_f1": 0.3316208564096693,
+        "macro_iou": 0.3298981695340569,
+        "per_class": {
+          "crop": {
+            "f1": 0.0,
+            "iou": 0.0,
+            "precision": 0.0,
+            "recall": 0.0,
+            "support_pixels": 113766
+          },
+          "soil": {
+            "f1": 0.9948063695599757,
+            "iou": 0.9896664079780315,
+            "precision": 0.999999039403318,
+            "recall": 0.9896673488262587,
+            "support_pixels": 751047613
+          },
+          "weed": {
+            "f1": 5.619966903226586e-05,
+            "iou": 2.8100624139021036e-05,
+            "precision": 2.8100624139021036e-05,
+            "recall": 1.0,
+            "support_pixels": 221
+          }
+        },
+        "pixel_accuracy": 0.9895174633527593
+      },
+      "selected_global_threshold_role_pixels": {
+        "balanced_accuracy": 0.5024743772304555,
+        "confusion_truth_crop_weed_by_prediction_crop_weed": [
+          [
+            563,
+            113203
+          ],
+          [
+            0,
+            221
+          ]
+        ],
+        "crop_recall": 0.004948754460910993,
+        "role_pixel_counts": {
+          "crop": 113766,
+          "weed": 221
+        },
+        "weed_recall": 1.0
+      }
+    },
+    "CKA_160504": {
+      "raw_role_pixels": {
+        "balanced_recall_with_soil_predictions_counted_as_errors": 0.6332664649194888,
+        "confusion_truth_crop_weed_by_prediction_soil_crop_weed": [
+          [
+            39333,
+            200017,
+            226950
+          ],
+          [
+            14382,
+            3050,
+            89900
+          ]
+        ],
+        "crop_recall": 0.4289448852669955,
+        "weed_recall": 0.8375880445719822
+      },
+      "raw_three_class": {
+        "confusion_truth_by_prediction_soil_crop_weed": [
+          [
+            375804996,
+            24597,
+            429511
+          ],
+          [
+            39333,
+            200017,
+            226950
+          ],
+          [
+            14382,
+            3050,
+            89900
+          ]
+        ],
+        "macro_f1": 0.5954623110680871,
+        "macro_iou": 0.5070962447633177,
+        "per_class": {
+          "crop": {
+            "f1": 0.5764477696249373,
+            "iou": 0.40493615711807135,
+            "precision": 0.8785622672007871,
+            "recall": 0.4289448852669955,
+            "support_pixels": 466300
+          },
+          "soil": {
+            "f1": 0.9993248092388292,
+            "iou": 0.9986505296275863,
+            "precision": 0.9998570872553224,
+            "recall": 0.9987930976415657,
+            "support_pixels": 376259104
+          },
+          "weed": {
+            "f1": 0.21061435434049475,
+            "iou": 0.11770204754429538,
+            "precision": 0.1204510953814575,
+            "recall": 0.8375880445719822,
+            "support_pixels": 107332
+          }
+        },
+        "pixel_accuracy": 0.9980420411245801
+      },
+      "selected_global_threshold_role_pixels": {
+        "balanced_accuracy": 0.7890627247126789,
+        "confusion_truth_crop_weed_by_prediction_crop_weed": [
+          [
+            319841,
+            146459
+          ],
+          [
+            11569,
+            95763
+          ]
+        ],
+        "crop_recall": 0.6859125026806777,
+        "role_pixel_counts": {
+          "crop": 466300,
+          "weed": 107332
+        },
+        "weed_recall": 0.8922129467446801
+      }
+    }
+  },
+  "raw_role_pixel_metrics": {
+    "balanced_recall_with_soil_predictions_counted_as_errors": 0.5913697137412885,
+    "confusion_truth_crop_weed_by_prediction_soil_crop_weed": [
+      [
+        40047,
+        200017,
+        340002
+      ],
+      [
+        14382,
+        3050,
+        90121
+      ]
+    ],
+    "crop_recall": 0.34481765868021913,
+    "weed_recall": 0.8379217688023579
+  },
+  "raw_three_class_metrics": {
+    "confusion_truth_by_prediction_soil_crop_weed": [
+      [
+        1119092296,
+        33589,
+        8180832
+      ],
+      [
+        40047,
+        200017,
+        340002
+      ],
+      [
+        14382,
+        3050,
+        90121
+      ]
+    ],
+    "macro_f1": 0.5022656697621112,
+    "macro_iou": 0.4424805819582826,
+    "per_class": {
+      "crop": {
+        "f1": 0.48980436427572654,
+        "iou": 0.3243317307302519,
+        "precision": 0.8451803461564464,
+        "recall": 0.34481765868021913,
+        "support_pixels": 580066
+      },
+      "soil": {
+        "f1": 0.9963191536288247,
+        "iou": 0.9926653051425989,
+        "precision": 0.9999513656263436,
+        "recall": 0.9927132333409133,
+        "support_pixels": 1127306717
+      },
+      "weed": {
+        "f1": 0.020673491381782292,
+        "iou": 0.010444710001996897,
+        "precision": 0.010465854251938373,
+        "recall": 0.8379217688023579,
+        "support_pixels": 107553
+      }
+    },
+    "pixel_accuracy": 0.9923652967704263
+  },
+  "run_id": "P2_SUGARBEETS_SEMANTIC_SPECIALIST_VAL_CALIBRATION_20260808_V1",
+  "runtime": {
+    "cuda": "12.8",
+    "gpu_names": [
+      "NVIDIA H200",
+      "NVIDIA H200",
+      "NVIDIA H200",
+      "NVIDIA H200",
+      "NVIDIA H200",
+      "NVIDIA H200",
+      "NVIDIA H200",
+      "NVIDIA H200"
+    ],
+    "python": "3.12.0 | packaged by Anaconda, Inc. | (main, Oct  2 2023, 17:29:18) [GCC 11.2.0]",
+    "torch": "2.10.0+cu128",
+    "torchvision": "0.25.0+cu128"
+  },
+  "scope": {
+    "controller_claim_policy_selection": false,
+    "controller_policy_risk_pixels_read": false,
+    "image_and_mask_pixels_read": "specialist_val_only",
+    "public_data_only": true,
+    "risk_certificate": false,
+    "sealed_test_read": false
+  },
+  "script_sha256": "c20b938159c375cc5c9caf06ae62a0cc9867644f644cac9bd846e7b6b2779ed2",
+  "selected_role_operating_point": {
+    "balanced_accuracy": 0.7223961314102073,
+    "confusion_truth_crop_weed_by_prediction_crop_weed": [
+      [
+        320404,
+        259662
+      ],
+      [
+        11569,
+        95984
+      ]
+    ],
+    "crop_recall": 0.5523578351428975,
+    "macro_f1": 0.5585249435826151,
+    "role_pixel_counts": {
+      "crop": 580066,
+      "weed": 107553
+    },
+    "threshold": 0.961,
+    "weed_recall": 0.8924344276775171
+  },
+  "status": "completed_nonsealed_specialist_val_semantic_calibration",
+  "validation_contract": {
+    "images": 901,
+    "physical_gpu_ids": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7
+    ],
+    "selection_objective": "maximum crop/weed pixel balanced accuracy",
+    "sessions": [
+      "CKA_160421",
+      "CKA_160504"
+    ],
+    "threshold_grid": {
+      "maximum": 1.0,
+      "minimum": 0.0,
+      "step": 0.001
+    },
+    "tie_break": "closest to 0.5 then lower threshold",
+    "world_size": 8
+  }
+}

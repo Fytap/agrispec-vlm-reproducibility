@@ -1,0 +1,38 @@
+schema_version: 1
+experiment_id: P2_WEEDSGALORE_COMMISSIONING_CONTRACT_AUDIT_V2
+status: frozen_posthoc_sat_major_revision_development
+scope:
+  public_data_only: true
+  sealed_test: prohibited
+  compute: CPU_only
+  proposal_generation_reads_target_truth: false
+  proposal_setting_selection_reads_training_date_dense_masks: true
+  held_out_date_used_for_fitting_or_setting_selection: false
+  formal_risk_certificate: false
+inputs:
+  archive_sha256: 5d8395c274d990cd8fbfa728445f65c398be2b5d777bd5145eb9ae5ca4d9b68c
+  manifest_sha256: 3a577a747934069d2f50f6d5732cea019b554d557c98a01e796b000ea4f2085e
+  original_candidates_sha256: e4474f3c469b153b3a79c731f00cf11d723fa0eae760ab162d02f734b0773c28
+  commissioned_summary_sha256: 5eec446879ece81ee259cbe00ad344aa7f53aa133cbb033346847e279154d209
+proposal_variants: [original, nested_commissioned]
+proposal_metrics:
+  spatial_instance_coverage: 0.50
+  role_qualified:
+    minimum_instance_coverage: 0.50
+    minimum_candidate_labeled_coverage: 0.50
+    minimum_same_role_purity: 0.90
+  iou_grid: [0.25, 0.50, 0.75]
+  split_merge_instance_coverage_grid: [0.10, 0.25, 0.50]
+  matching_sensitivity:
+    instance_coverage: [0.25, 0.50, 0.75]
+    candidate_labeled_coverage: [0.25, 0.50, 0.75]
+    same_role_purity: [0.50, 0.75, 0.90]
+queue:
+  models: [role_only, local_only, role_plus_local]
+  fixed_review_budgets: [1, 5, 10, 20]
+  crop_overlap_fraction_grid: [0.0, 0.01, 0.10, 0.50]
+outputs:
+  directory: results/p2_development/P2_WEEDSGALORE_COMMISSIONING_CONTRACT_AUDIT_20260810_v2
+preservation:
+  overwrite_existing_output: prohibited
+  failures: retain

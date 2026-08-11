@@ -1,0 +1,20 @@
+schema_version: 1
+experiment_id: P2_WEEDSGALORE_DINOV2_FROZEN_EMBEDDINGS_V1
+status: frozen_posthoc_sat_major_revision_development
+scope:
+  public_data_only: true
+  sealed_test: prohibited
+  truth_or_target_label_access: prohibited
+  gpu_devices: [0]
+model:
+  implementation: timm
+  identifier: vit_small_patch14_dinov2.lvd142m
+  pretraining: DINOv2_self_supervised_LVD142M
+  input_size: [224, 224]
+  encoder_weights_frozen: true
+candidate_settings: [T070_A032, T080_A032]
+outputs:
+  root: results/p2_development/P2_WEEDSGALORE_DINOV2_FROZEN_EMBEDDINGS_20260810_v1
+preservation:
+  overwrite_existing_output: prohibited
+  failures: retain

@@ -1,0 +1,15 @@
+model	test_subset	candidates	weed_candidates	nonweed_candidates	roc_auc	average_precision
+source_resnet18_role_score	all_candidates	2351	464	1887	0.49468573543117156	0.28772254005966524
+source_resnet18_role_score	eligible_crop_or_weed	575	464	111	0.39827974526250387	0.757229800173215
+eligible_role_plus_local_logistic	all_candidates	2351	464	1887	0.44200222027301134	0.16398478483399687
+eligible_role_plus_local_logistic	eligible_crop_or_weed	575	464	111	0.8002096924510717	0.9171762189330505
+all_candidate_role_plus_local_logistic	all_candidates	2351	464	1887	0.9049234325603494	0.6960461738094812
+all_candidate_role_plus_local_logistic	eligible_crop_or_weed	575	464	111	0.6269027648337993	0.8695858213043354
+all_candidate_geometry_only_logistic	all_candidates	2351	464	1887	0.8153929791860827	0.5418079164199874
+all_candidate_geometry_only_logistic	eligible_crop_or_weed	575	464	111	0.7755125815470643	0.9233137425195502
+eligible_frozen_dinov2_linear	all_candidates	2351	464	1887	0.6320708385870657	0.3816391942922531
+eligible_frozen_dinov2_linear	eligible_crop_or_weed	575	464	111	0.9717497670083877	0.9925672799727325
+all_candidate_frozen_dinov2_linear	all_candidates	2351	464	1887	0.9629908813478794	0.8684392923806428
+all_candidate_frozen_dinov2_linear	eligible_crop_or_weed	575	464	111	0.9087837837837838	0.9743803088968095
+all_candidate_component_masked_dinov2_linear	all_candidates	2351	464	1887	0.9664891818796484	0.8812854820842081
+all_candidate_component_masked_dinov2_linear	eligible_crop_or_weed	575	464	111	0.9333838148493322	0.9830084337055206

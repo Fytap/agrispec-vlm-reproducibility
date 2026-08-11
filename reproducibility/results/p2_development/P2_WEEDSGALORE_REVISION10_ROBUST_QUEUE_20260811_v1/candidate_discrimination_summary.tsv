@@ -1,0 +1,5 @@
+aggregation	metric	eligible_strata	total_strata	macro_mean	worst_stratum	best_stratum	interpretation
+acquisition_date	auc	4	4	0.8774064709835578	0.7382271468144044	0.9534776685444972	descriptive_post_test_no_population_inference
+acquisition_date	average_precision	4	4	0.690080227195418	0.2131164585456915	0.9402407439856626	descriptive_post_test_no_population_inference
+tile	auc	24	26	0.909124693646894	0.6666666666666667	1.0	descriptive_post_test_no_population_inference
+tile	average_precision	24	26	0.6868924188278257	0.02631578947368421	1.0	descriptive_post_test_no_population_inference

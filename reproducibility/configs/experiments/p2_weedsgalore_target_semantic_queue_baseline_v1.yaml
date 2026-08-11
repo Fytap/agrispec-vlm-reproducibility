@@ -1,0 +1,72 @@
+experiment:
+  id: P2_WEEDSGALORE_TARGET_SEMANTIC_QUEUE_BASELINE_20260810_v1
+  stage: SAT revision-8 reviewer-requested diagnostic
+  public_data_only: true
+  test_status: already_unsealed_official_test
+  post_test_analysis: true
+  purpose: equal-target-supervision semantic-segmentation queue baseline
+
+data:
+  dataset: WeedsGalore public RGB release
+  split_source: archived official train.txt, val.txt, and test.txt
+  counts: {train: 104, validation: 26, test: 26}
+  role_mapping: {0: background, 1: crop, greater_than_1: weed}
+  rgb_channels: [R, G, B]
+  target_training_masks: dense semantic masks for all 104 official-training tiles
+
+model:
+  architecture: ResNet18-UNet semantic segmentation baseline
+  encoder_initialization: ImageNet-1K ResNet18 public weights
+  classes: [background, crop, weed]
+  input_size_train: [512, 512]
+  input_size_evaluation: [600, 600]
+  loss: weighted_cross_entropy_plus_soft_dice_on_crop_and_weed
+  optimizer: AdamW
+  learning_rate: 0.0003
+  weight_decay: 0.0001
+  epochs: 40
+  batch_size_per_gpu: 2
+  physical_gpu_ids: [0, 1, 2, 5, 6, 7]
+  seed: 20260810
+
+candidate_generation:
+  foreground_probability: one_minus_background_probability
+  connectivity: 8
+  thresholds: [0.30, 0.50, 0.70]
+  minimum_component_areas_pixels: [16, 32, 64]
+  score: mean_weed_probability_divided_by_mean_plant_probability
+  burden_contract: validation-set mean candidates per image <= 100
+  per_image_cap: none
+
+selection:
+  role: validation only
+  primary: K20 one-to-one role-qualified weed-instance recall
+  tie_break:
+    - K20 many-to-one role-qualified weed-instance recall
+    - K20 all-candidate precision
+    - lower mean candidate burden
+    - higher foreground threshold
+    - larger minimum component area
+    - earlier epoch
+  test_labels_for_selection: false
+
+matching_contract:
+  primary_instance_coverage: 0.50
+  primary_candidate_labeled_coverage: 0.50
+  primary_same_role_purity: 0.90
+  iou_sensitivity: [0.25, 0.50, 0.75]
+  matching: [many_to_one, one_to_one]
+
+queue:
+  primary: fixed_K20_per_image
+  additional_policies_registered_separately: true
+
+reporting:
+  preserve_failures: true
+  raw_numerators_denominators: true
+  per_tile: true
+  per_date: true
+  pooled: true
+  runtime_and_peak_memory: true
+  test_governance_record: true
+  population_confidence_interval: prohibited_two_test_patches_only

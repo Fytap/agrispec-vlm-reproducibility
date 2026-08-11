@@ -1,0 +1,39 @@
+{
+  "config_sha256": "1ca32d0599085e02bbf29e8562fd7b908e912ade94f0550c571ef86d4fbb1db4",
+  "definitions": {
+    "iou": "candidate-component versus truth-instance pixel IoU",
+    "many_to_one": "one queued candidate may recover multiple truth weed instances",
+    "one_to_one": "maximum bipartite matching permits each candidate and truth instance at most one match"
+  },
+  "git_commit": "fb9c99c57799275f849e961ae6a52525bf4ea752",
+  "inputs": {
+    "archive_sha256": "5d8395c274d990cd8fbfa728445f65c398be2b5d777bd5145eb9ae5ca4d9b68c",
+    "candidates_sha256": "be90fff3d380b6ca7e968e0652f5beff17905ff016a2f96da0ea6331a3f99a88",
+    "manifest_sha256": "3a577a747934069d2f50f6d5732cea019b554d557c98a01e796b000ea4f2085e",
+    "predictions_sha256": "e786496027c216cf3dc66b7e7e78f36653af9d34cc4aae21177ff5759ebf457d"
+  },
+  "outputs": {
+    "contract_sha256": "c5fbb6c8b2e7785536f1752638ba83cfabfa1a3505bdfedca26816fa1f360029",
+    "iou_sha256": "56207d37a97f4289e2eb80ad4357b34ce0c6aaf8613bc83480a6064e386aadb6",
+    "multiplicity_sha256": "7fd52b1305f5033886d9ad1f48ed9d0dc05b9b6eb0f00583977548eb3bfa7cd6"
+  },
+  "primary_masked_dino_k20_range": {
+    "many_to_one_queued_recall_max": 0.2885514018691589,
+    "many_to_one_queued_recall_min": 0.04848130841121495,
+    "one_to_one_queued_recall_max": 0.18808411214953272,
+    "one_to_one_queued_recall_min": 0.037383177570093455
+  },
+  "run_id": "P2_WEEDSGALORE_OFFICIAL_QUEUE_CONTRACT_SENSITIVITY_20260810_v1",
+  "runtime": {
+    "python": "3.10.12 (main, Mar  3 2026, 11:56:32) [GCC 11.4.0]",
+    "wall_seconds": 7.83594776969403
+  },
+  "scope": {
+    "offline_test_scoring_only": true,
+    "prediction_scores_refit": false,
+    "public_data_only": true,
+    "sealed_test_read": false
+  },
+  "script_sha256": "a96efbb16e43d821cb295be957a3d4146465747e5fa2dfd7ec8aeca8cb07d2d1",
+  "status": "completed_official_queue_contract_sensitivity"
+}

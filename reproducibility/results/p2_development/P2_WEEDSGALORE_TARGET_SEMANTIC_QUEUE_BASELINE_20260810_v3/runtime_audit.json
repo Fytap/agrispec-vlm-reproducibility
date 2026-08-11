@@ -1,0 +1,15 @@
+{
+  "run_id": "P2_WEEDSGALORE_TARGET_SEMANTIC_QUEUE_BASELINE_20260810_v3",
+  "training_started_at": "2026-08-10T17:17:21+08:00",
+  "summary_written_at": "2026-08-10T20:09:02.6306924+08:00",
+  "training_and_finalization_wall_seconds": 10301.6306924,
+  "training_and_finalization_wall_hours": 2.8615640812,
+  "selected_epoch": 36,
+  "registered_epochs_completed": 40,
+  "physical_gpu_ids": [5, 6, 7],
+  "test_total_seconds": 0.9310354982,
+  "test_seconds_per_tile": 0.0358090576,
+  "test_peak_gpu_memory_bytes": 583768576,
+  "timestamp_basis": "remote run start record and completed summary file modification time",
+  "scope_note": "The wall interval includes distributed training, validation after every epoch, checkpoint serialization, final test inference, scoring, and result serialization."
+}

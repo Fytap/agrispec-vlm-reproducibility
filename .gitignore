@@ -1,0 +1,12 @@
+__pycache__/
+*.py[cod]
+.pytest_cache/
+replay_output*/
+figure_rebuild/
+*.aux
+*.bbl
+*.blg
+*.log
+*.out
+*.synctex.gz
+

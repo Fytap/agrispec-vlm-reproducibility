@@ -1,0 +1,120 @@
+{
+  "analysis_class": "reviewer_requested_post_test_diagnostic",
+  "git_commit": "UNCOMMITTED_NO_HEAD",
+  "governance": {
+    "changes_frozen_protocol": false,
+    "opens_new_test_data": false,
+    "population_p_values": false,
+    "test_use": "descriptive_post_test_diagnostic_only",
+    "uses_test_for_selection": false
+  },
+  "headline_allocation": {
+    "bounded_global_min5_max50_N520": {
+      "accepted_candidates": 520,
+      "allocation_coefficient_of_variation": 0.6790830922308743,
+      "allocation_gini": 0.3816568047337278,
+      "interpretation": "descriptive_batch_allocation_diagnostic",
+      "maximum_date": "2023-06-06",
+      "maximum_date_share": 0.5480769230769231,
+      "maximum_per_tile": 50,
+      "median_per_tile": 17.5,
+      "minimum_per_tile": 5,
+      "q25_per_tile": 5.5,
+      "q75_per_tile": 29.0,
+      "tiles": 26,
+      "tiles_below_10": 8,
+      "tiles_below_5": 0,
+      "tiles_with_zero": 0
+    },
+    "fixed_K20_per_image": {
+      "accepted_candidates": 520,
+      "allocation_coefficient_of_variation": 0.0,
+      "allocation_gini": 0.0,
+      "interpretation": "descriptive_batch_allocation_diagnostic",
+      "maximum_date": "2023-05-25",
+      "maximum_date_share": 0.3076923076923077,
+      "maximum_per_tile": 20,
+      "median_per_tile": 20.0,
+      "minimum_per_tile": 20,
+      "q25_per_tile": 20.0,
+      "q75_per_tile": 20.0,
+      "tiles": 26,
+      "tiles_below_10": 0,
+      "tiles_below_5": 0,
+      "tiles_with_zero": 0
+    },
+    "global_top_N520": {
+      "accepted_candidates": 520,
+      "allocation_coefficient_of_variation": 0.7435621126608156,
+      "allocation_gini": 0.42204142011834317,
+      "interpretation": "descriptive_batch_allocation_diagnostic",
+      "maximum_date": "2023-06-06",
+      "maximum_date_share": 0.5634615384615385,
+      "maximum_per_tile": 55,
+      "median_per_tile": 19.0,
+      "minimum_per_tile": 0,
+      "q25_per_tile": 5.5,
+      "q75_per_tile": 30.0,
+      "tiles": 26,
+      "tiles_below_10": 8,
+      "tiles_below_5": 5,
+      "tiles_with_zero": 1
+    },
+    "validation_score_threshold_transferred": {
+      "accepted_candidates": 426,
+      "allocation_coefficient_of_variation": 0.8230436613171829,
+      "allocation_gini": 0.4647887323943662,
+      "interpretation": "descriptive_batch_allocation_diagnostic",
+      "maximum_date": "2023-06-06",
+      "maximum_date_share": 0.5985915492957746,
+      "maximum_per_tile": 45,
+      "median_per_tile": 14.5,
+      "minimum_per_tile": 0,
+      "q25_per_tile": 3.75,
+      "q75_per_tile": 24.75,
+      "tiles": 26,
+      "tiles_below_10": 11,
+      "tiles_below_5": 7,
+      "tiles_with_zero": 2
+    }
+  },
+  "inputs": {
+    "config": {
+      "path": "configs/p2_weedsgalore_revision10_robust_queue_v1.yaml",
+      "sha256": "3b64f773c31df2a2fc893e9cd3302d5144456a535fabbaf7852f70ffb4be03c0"
+    },
+    "queue_comparison": {
+      "path": "results/p2_development/P2_WEEDSGALORE_REVISION8_QUEUE_POLICY_TILE_AUDIT_20260810_v1/official_test_queue_policy_comparison.tsv",
+      "sha256": "f4c9b99f14aa81fc4edc48058597f42a339738973936b2bf295fb37de47c0fa6"
+    },
+    "queue_date_patch": {
+      "path": "results/p2_development/P2_WEEDSGALORE_REVISION8_QUEUE_POLICY_TILE_AUDIT_20260810_v1/official_test_queue_policy_date_patch.tsv",
+      "sha256": "5d4bcf313c7dfad266281a6951bafca9802d7c93ba278593ba7edd15ed69a609"
+    },
+    "queue_per_tile": {
+      "path": "results/p2_development/P2_WEEDSGALORE_REVISION8_QUEUE_POLICY_TILE_AUDIT_20260810_v1/official_test_queue_policy_per_tile.tsv",
+      "sha256": "22969b9959c9bd6dc44c9e3612884c864a07e5ebd310bb7b2d709ef49d8fa4fc"
+    },
+    "queue_predictions": {
+      "path": "results/p2_development/P2_WEEDSGALORE_REVISION8_QUEUE_POLICY_TILE_AUDIT_20260810_v1/official_test_queue_selected_predictions.tsv",
+      "sha256": "19db8d6aa4ee06f9c7fdf5a817f7c6c29c7313ab07506fe535925c98025543df"
+    },
+    "semantic_date": {
+      "path": "results/p2_development/P2_WEEDSGALORE_TARGET_SEMANTIC_QUEUE_BASELINE_20260810_v3/official_test_date_metrics.tsv",
+      "sha256": "6109a6f334127f1457673b4f0a8d8513418a763db7a4c853c122e785159731ec"
+    },
+    "semantic_tile": {
+      "path": "results/p2_development/P2_WEEDSGALORE_TARGET_SEMANTIC_QUEUE_BASELINE_20260810_v3/official_test_tile_metrics.tsv",
+      "sha256": "15c763fe32514bee3e3a38a208419cd923d9d4bf70cb5853764a36869bdf9cf9"
+    }
+  },
+  "notes": [
+    "Macro and worst-stratum values are descriptive across four acquisition dates or two patch proxies.",
+    "Candidate AUC/AP are defined only for strata containing both weed and non-weed candidates.",
+    "The target-semantic baseline has one completed training run; training-seed variability is not estimated.",
+    "The official split contains one field and two held-out spatial patches."
+  ],
+  "primary_policy": "bounded_global_min5_max50_N520",
+  "run_id": "P2_WEEDSGALORE_REVISION10_ROBUST_QUEUE_20260811_V1",
+  "unconstrained_global_policy_role": "diagnostic_upper_bound_only"
+}

@@ -1,0 +1,55 @@
+{
+  "config_sha256": "6259ae87fc02d1a13f7a83f52a4ad50cf350ef773e8fc050e7cd988dd77ccf6d",
+  "git_commit": "fb9c99c57799275f849e961ae6a52525bf4ea752",
+  "inputs": {
+    "archive_sha256": "5d8395c274d990cd8fbfa728445f65c398be2b5d777bd5145eb9ae5ca4d9b68c",
+    "manifest_sha256": "3a577a747934069d2f50f6d5732cea019b554d557c98a01e796b000ea4f2085e",
+    "predictions_sha256": "cac5f8020b42a22a0c4b69722400e94da006626f21cf0575f87fe3ce4664ad51"
+  },
+  "k20_date_macro_by_repeat": {
+    "0": {
+      "all_candidate_precision": 0.45493891119766783,
+      "crop_overlap_scene_frequency_0.00": 0.359375,
+      "pure_crop_scene_frequency": 0.25,
+      "queued_role_qualified_weed_instance_recall": 0.08743722769358048,
+      "queued_spatial_weed_instance_recall": 0.14527706556191422
+    },
+    "1": {
+      "all_candidate_precision": 0.45104000668808897,
+      "crop_overlap_scene_frequency_0.00": 0.32291666666666663,
+      "pure_crop_scene_frequency": 0.22395833333333331,
+      "queued_role_qualified_weed_instance_recall": 0.0833371955050154,
+      "queued_spatial_weed_instance_recall": 0.11986661769224537
+    },
+    "2": {
+      "all_candidate_precision": 0.4443067699948226,
+      "crop_overlap_scene_frequency_0.00": 0.36979166666666663,
+      "pure_crop_scene_frequency": 0.25,
+      "queued_role_qualified_weed_instance_recall": 0.08327534856072374,
+      "queued_spatial_weed_instance_recall": 0.14644108627136315
+    }
+  },
+  "k20_mean_across_repeats": {
+    "all_candidate_precision": 0.45009522929352647,
+    "crop_overlap_scene_frequency_0.00": 0.3506944444444444,
+    "pure_crop_scene_frequency": 0.24131944444444442,
+    "queued_role_qualified_weed_instance_recall": 0.08468325725310655,
+    "queued_spatial_weed_instance_recall": 0.13719492317517426
+  },
+  "outputs": {
+    "queue_tsv_sha256": "b2544568ee012474f9c330c41af7cebdcdf139b754bd1da58199dad8d50eff0b"
+  },
+  "run_id": "P2_WEEDSGALORE_DINOV2_QUEUE_20260810_v2",
+  "runtime": {
+    "numpy": "2.2.6",
+    "python": "3.10.12 (main, Mar  3 2026, 11:56:32) [GCC 11.4.0]",
+    "wall_seconds": 10.497495107352734
+  },
+  "scope": {
+    "formal_risk_certificate": false,
+    "public_data_only": true,
+    "sealed_test_read": false
+  },
+  "script_sha256": "ec8296a1cc157064ae2fe042e9bd54f287f8feaa7f2a765e30d8048bd80673d0",
+  "status": "completed_dinov2_fixed_budget_queue"
+}
