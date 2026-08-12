@@ -1,0 +1,14 @@
+{
+  "analysis": "two-patch-proxy allocation effect audit",
+  "status": "completed",
+  "analysis_class": "descriptive post-test spatial-stratum audit",
+  "patches": [
+    "test_capture_index_patch_proxy_0",
+    "test_capture_index_patch_proxy_1"
+  ],
+  "boundary": "the two capture-index groups are official-test patch proxies, not independent fields or farms",
+  "inputs": {
+    "scene_metrics_sha256": "5772a2bc3f1a476e92f8f91acb48ae76a35ee4783dff26829cbe138e73daf816",
+    "patch_mapping_sha256": "383cf7a2e34d7dd3bc662a516ea9b40fa0f767a4379707464343b6c98b558892"
+  }
+}

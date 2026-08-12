@@ -1,0 +1,30 @@
+\documentclass[10pt]{letter}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage{lmodern}
+\usepackage{microtype}
+\usepackage[a4paper,margin=2.35cm]{geometry}
+\input{author_metadata}
+\ifAuthorMetadataReady
+\signature{\CorrespondingAuthor\\on behalf of all authors}
+\address{\CorrespondingAffiliation\\Email: \CorrespondingEmail}
+\else
+\signature{Corresponding author\\on behalf of all authors}
+\fi
+\begin{document}
+\begin{letter}{Editors-in-Chief\\Smart Agricultural Technology}
+\opening{Dear Editors,}
+
+Please consider the manuscript, ``Support-Aware Review Queues for Crop--Weed Vision: A Multitemporal Single-Field Case Study,'' for publication in \emph{Smart Agricultural Technology}.
+
+The study addresses a practical commissioning question for agricultural vision: which stage currently limits a crop--weed review queue, candidate generation, role qualification, rank ordering, or allocation of a finite review budget? We answer this question on the official WeedsGalore spatial split using instance-level denominators from proposal formation through final review selection.
+
+The framework separates spatial proposal recall, role-qualified recall, and queued recall under many-to-one and one-to-one matching. Shared-ranker-weight comparisons isolate proposal formation, while all-candidate fitting aligns ranker supervision with queue support. Candidate-level role-qualified AUC and average precision are linked to instance recovery, crop exposure, and the finite review budget rather than treated as end-to-end system metrics.
+
+A target-semantic baseline with equal target-mask access further distinguishes component formation from ranking. Across five independent H200 training seeds, fixed-$K$ precision and one-to-one recall were $0.7168\pm0.0260$ and $0.2027\pm0.0057$. Exploratory 5--50 candidates/tile allocation improved both metrics in every seed, to $0.8939\pm0.0249$ and $0.2578\pm0.0090$, while worst-date recall decreased in every seed. A complete 16-policy quota grid and date-balanced comparator show how pooled utility, weakest-date coverage, and spatial-block effects diverge. Validation selection retained fixed $K=20$ in four seeds and 0--30 allocation in one.
+
+The manuscript presents an application-focused queue evaluation as a multitemporal single-field case study. Its chronology distinguishes the archived core analysis from post-test exploratory extensions. The accompanying package includes editable figures, source-data tables, exact component-mask matching outputs, complete proposal and quota grids, versioned configurations, failure records, run hashes, runtime and memory records, and clean-room replay commands.
+
+\closing{Sincerely,}
+\end{letter}
+\end{document}

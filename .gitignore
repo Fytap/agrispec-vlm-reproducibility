@@ -2,6 +2,7 @@ __pycache__/
 *.py[cod]
 .pytest_cache/
 replay_output*/
+replay_check*/
 figure_rebuild/
 *.aux
 *.bbl
@@ -9,4 +10,8 @@ figure_rebuild/
 *.log
 *.out
 *.synctex.gz
-
+manuscript_source/main.pdf
+manuscript_source/main.spl
+manuscript_source/supplement.pdf
+manuscript_source/supplement.spl
+manuscript_source/cover_letter.pdf

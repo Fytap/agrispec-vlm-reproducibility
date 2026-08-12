@@ -1,19 +1,16 @@
-# v1.0.0 — Manuscript-linked reproducibility archive
+# v1.1.0 — Manuscript-linked reproducibility archive
 
-This immutable release accompanies *From Proposals to Review Queues: Support-Aware Commissioning for Crop--Weed Vision*.
+This release accompanies *Support-Aware Review Queues for Crop--Weed Vision: A Multitemporal Single-Field Case Study*.
 
 It includes:
 
-- frozen configurations and computational replay scripts;
-- archived derived tables, candidate-level outputs, run summaries, and preserved failure records;
-- environment, dataset-provenance, licence, and model-acquisition documentation;
-- manuscript and supplementary source/PDF files;
-- vector/editable figures, source-data tables, and layout audits;
-- SHA-256 manifests for both release assets.
+- manuscript, supplement, cover letter, and self-contained LaTeX source;
+- all seven figures in vector PDF, editable SVG, and PNG formats;
+- the complete 12-setting proposal audit and 4-by-4 quota analysis;
+- five H200 training-seed summaries and validation-selected policies;
+- date-balanced and patch-proxy robustness evidence;
+- an exact component-mask replay audit;
+- configurations, environment records, provenance documentation, negative-result records, and SHA-256 manifests;
+- a standard-library command that verifies the compact evidence package.
 
-The repository does not redistribute dataset imagery, masks, public model weights, or training checkpoints. These materials must be obtained from their official sources under their original licences.
-
-Release assets:
-
-- `SAT_revision10_submission_bundle_v12.zip`: complete submission and reproducibility archive.
-- `SAT_revision10_overleaf_v12.zip`: compact Overleaf-ready manuscript package.
+The release does not redistribute source imagery, dataset masks, public model weights, private records, credentials, internal addresses, or human-participant materials. Re-extraction and training require the cited public datasets and public model weights.
