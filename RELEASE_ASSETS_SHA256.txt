@@ -1,2 +1,2 @@
 fc40a856a8a82b9803db22fa0cd9860614c0df143e64904efefd57fac4be8721  SAT_Overleaf_Source_v1.1.0.zip
-5a8e9d84169098f478e2ad093dbd7f9c6e25bd220241658ae03c1d04880f27e7  SAT_H200_Checkpoints_v1.1.0.zip
+a42ff21d5ff435d63f2b845d53b09a88d4a45699a7000fe7e684292eed5fdce8  SAT_H200_Checkpoints_v1.1.0.zip
