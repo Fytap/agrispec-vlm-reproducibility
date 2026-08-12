@@ -35,9 +35,9 @@ SugarBeets2016, WeedsGalore, and CWFID must be obtained from their official publ
 
 ## Release
 
-Version `v1.2.0` is the manuscript-linked release:
+Version `v1.2.1` is the manuscript-linked release:
 
-<https://github.com/Fytap/agrispec-vlm-reproducibility/releases/tag/v1.2.0>
+<https://github.com/Fytap/agrispec-vlm-reproducibility/releases/tag/v1.2.1>
 
 Release-asset checksums are provided with the release and in `RELEASE_ASSETS_SHA256.txt`.
 

@@ -1,4 +1,4 @@
-# v1.2.0 evidence layer
+# v1.2.x evidence layer
 
 This directory supports the manuscript *From Candidate Scores to Plant Recovery in Finite Crop--Weed Review Queues*. It adds the matched-burden commissioning analysis, target-trained strong baselines, validation-selected semantic ranking, the locked CWFID transfer test, and the aggregate two-operator review analysis.
 
@@ -26,7 +26,7 @@ python reproducibility/v1_2_0/scripts/replay_sat_v1_2_evidence.py \
   --output replay_v1_2
 ```
 
-It verifies the public manifest, reloads the five evidence summaries, checks the registered denominators and primary endpoints, and writes `verification.json` plus `key_results.tsv`. A non-zero exit status indicates a missing file, checksum mismatch, or violated numerical invariant.
+It verifies 79 versioned files in the public manifest, reloads the five evidence summaries, checks the registered denominators and primary endpoints, and writes `verification.json` plus `key_results.tsv`. Text line endings are canonicalised across Git archives and checkouts; binary artifacts remain byte-exact. A non-zero exit status indicates a missing file, checksum mismatch, or violated numerical invariant.
 
 ## End-to-end entry points
 

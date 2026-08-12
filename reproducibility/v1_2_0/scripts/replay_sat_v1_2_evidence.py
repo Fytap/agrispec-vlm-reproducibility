@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Verify the v1.2.0 public evidence layer using the Python standard library."""
+"""Verify the v1.2.x public evidence layer using the Python standard library."""
 
 from __future__ import annotations
 
@@ -11,12 +11,31 @@ import math
 from pathlib import Path
 
 
-def sha256(path: Path) -> str:
-    digest = hashlib.sha256()
-    with path.open("rb") as handle:
-        for chunk in iter(lambda: handle.read(1024 * 1024), b""):
-            digest.update(chunk)
-    return digest.hexdigest()
+TEXT_SUFFIXES = {
+    ".bib",
+    ".cff",
+    ".csv",
+    ".json",
+    ".md",
+    ".py",
+    ".svg",
+    ".tex",
+    ".tsv",
+    ".txt",
+    ".yaml",
+    ".yml",
+}
+
+
+def sha256_bytes(content: bytes) -> str:
+    return hashlib.sha256(content).hexdigest()
+
+
+def canonical_manifest_bytes(path: Path, content: bytes) -> bytes:
+    """Normalise text line endings while leaving binary artifacts byte-exact."""
+    if path.suffix.lower() in TEXT_SUFFIXES and b"\x00" not in content:
+        return content.replace(b"\r\n", b"\n").replace(b"\r", b"\n")
+    return content
 
 
 def load_json(path: Path) -> dict:
@@ -36,11 +55,15 @@ def verify_manifest(root: Path) -> int:
         path = root / row["relative_path"]
         if not path.is_file():
             raise FileNotFoundError(path)
-        if path.stat().st_size != int(row["bytes"]):
-            raise AssertionError(f"size mismatch: {row['relative_path']}")
-        observed = sha256(path)
-        if observed != row["sha256"]:
-            raise AssertionError(f"checksum mismatch: {row['relative_path']}")
+        content = path.read_bytes()
+        expected_size = int(row["bytes"])
+        expected_sha256 = row["sha256"]
+        if len(content) == expected_size and sha256_bytes(content) == expected_sha256:
+            continue
+        canonical = canonical_manifest_bytes(path, content)
+        if len(canonical) == expected_size and sha256_bytes(canonical) == expected_sha256:
+            continue
+        raise AssertionError(f"size or checksum mismatch: {row['relative_path']}")
     return len(rows)
 
 

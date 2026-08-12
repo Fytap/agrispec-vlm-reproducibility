@@ -1,5 +1,12 @@
 # Changelog
 
+## v1.2.1 — 2026-08-12
+
+- Made the compact verifier invariant to LF/CRLF conversion for registered text artifacts while retaining byte-exact checks for binary files.
+- Removed five transient Python bytecode files from the public manifest; the tagged archive now verifies 79 versioned evidence files.
+- Added repository line-ending attributes and verified the tagged Git archive after short-path extraction.
+- No experiment, numerical result, manuscript claim, figure, or PDF content changed from v1.2.0.
+
 ## v1.2.0 — 2026-08-12
 
 - Reframed the manuscript around instance-support-aware evaluation and one-to-one plant recovery.

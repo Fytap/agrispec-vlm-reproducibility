@@ -10,7 +10,7 @@ From the repository root, run:
 python reproducibility/v1_2_0/scripts/replay_sat_v1_2_evidence.py --root reproducibility/v1_2_0 --output replay_v1_2
 ```
 
-The command verifies the v1.2.0 public manifest and registered numerical invariants. See [`v1_2_0/README.md`](v1_2_0/README.md) for the current evidence map and end-to-end entry points.
+The command verifies the v1.2.x public manifest and registered numerical invariants. Text line endings are canonicalised for cross-platform source archives; binary artifacts remain byte-exact. See [`v1_2_0/README.md`](v1_2_0/README.md) for the current evidence map and end-to-end entry points.
 
 ## v1.1.0 compact replay
 

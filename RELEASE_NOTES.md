@@ -1,4 +1,4 @@
-# v1.2.0 — Instance-support-aware queue evaluation
+# v1.2.1 — Instance-support-aware queue evaluation
 
 This release accompanies *From Candidate Scores to Plant Recovery in Finite Crop--Weed Review Queues*.
 
@@ -14,6 +14,8 @@ It includes:
 - the preserved zero-candidate external result and its non-destructive post-failure consolidation;
 - aggregate two-operator agreement for 518 queued regions, without identities or item-level responses;
 - frozen configurations, environment records, source-data tables, failure records, and SHA-256 manifests;
-- a standard-library verifier covering 84 public evidence files and the registered numerical invariants.
+- a standard-library verifier covering 79 versioned public evidence files and the registered numerical invariants.
+
+The verifier canonicalises line endings for registered text artifacts so that GitHub source archives and Windows checkouts reproduce the same manifest. Binary artifacts remain byte-exact. Scientific results and manuscript content are unchanged from v1.2.0.
 
 The release does not redistribute source imagery, dataset masks, public model weights, private infrastructure records, credentials, internal addresses, operator identities, or item-level operator responses. Re-extraction and training require the cited public datasets and public weights.

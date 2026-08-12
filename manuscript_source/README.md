@@ -12,9 +12,9 @@ The manuscript cites five vector PDF figures. Editable SVG, high-resolution TIFF
 
 The public reproducibility archive is maintained at:
 
-<https://github.com/Fytap/agrispec-vlm-reproducibility/releases/tag/v1.2.0>
+<https://github.com/Fytap/agrispec-vlm-reproducibility/releases/tag/v1.2.1>
 
-Release v1.2.0 contains the matched-burden analysis, strong-baseline runs, semantic-ranking diagnostics, locked CWFID protocol and outputs, aggregate two-operator analysis, frozen configurations, public-weight and checkpoint hashes, preserved failures, and clean-room replay checks. Public dataset imagery and upstream model weights remain at their original sources.
+Release v1.2.1 contains the matched-burden analysis, strong-baseline runs, semantic-ranking diagnostics, locked CWFID protocol and outputs, aggregate two-operator analysis, frozen configurations, public-weight and checkpoint hashes, preserved failures, and clean-room replay checks. Public dataset imagery and upstream model weights remain at their original sources.
 
 ## Submission metadata
 
