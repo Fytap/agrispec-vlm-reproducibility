@@ -1,0 +1,81 @@
+{
+  "run_id": "P2_WEEDSGALORE_INSTANCE_FAILURE_ATLAS_20260812_v4",
+  "status": "completed_deterministic_offline_visualization",
+  "case_selection_population": "26 official test images",
+  "truth_use": "offline visualization only",
+  "selected_cases": {
+    "split": {
+      "selection_key": [
+        -2,
+        -0.746031746031746,
+        "weedsgalore_official_dataset:2023-05-30:2023-05-30_0649",
+        52
+      ],
+      "sample_id": "weedsgalore_official_dataset:2023-05-30:2023-05-30_0649",
+      "truth_instance": 52,
+      "candidate_components": [
+        10,
+        12
+      ],
+      "overlap_count": 2,
+      "combined_coverage": 0.746031746031746
+    },
+    "merge": {
+      "selection_key": [
+        375,
+        -5,
+        -3.159698330745805,
+        "weedsgalore_official_dataset:2023-06-06:2023-06-06_0176",
+        55
+      ],
+      "sample_id": "weedsgalore_official_dataset:2023-06-06:2023-06-06_0176",
+      "component": 55,
+      "area": 375,
+      "weed_instances": [
+        115,
+        116,
+        117,
+        118,
+        119
+      ],
+      "overlap_count": 5
+    },
+    "background": {
+      "selection_key": [
+        -520,
+        0.0,
+        "weedsgalore_official_dataset:2023-05-25:2023-05-25_0109",
+        7
+      ],
+      "sample_id": "weedsgalore_official_dataset:2023-05-25:2023-05-25_0109",
+      "component": 7,
+      "area": 520,
+      "labeled_coverage": 0.0
+    },
+    "crop_contaminated": {
+      "selection_key": [
+        -0.4110169491525424,
+        -0.8919491525423728,
+        472,
+        "weedsgalore_official_dataset:2023-06-06:2023-06-06_0770",
+        21
+      ],
+      "sample_id": "weedsgalore_official_dataset:2023-06-06:2023-06-06_0770",
+      "component": 21,
+      "area": 472,
+      "crop_fraction": 0.4110169491525424,
+      "weed_fraction": 0.4809322033898305
+    }
+  },
+  "inputs": {
+    "manifest_sha256": "3a577a747934069d2f50f6d5732cea019b554d557c98a01e796b000ea4f2085e",
+    "candidate_maps_sha256": "1c4f7d87e4781cde80029cf0fa24b101e8966b0de72de7c16d616427c413b0d1",
+    "script_sha256": "412ff294fd2e4561aca247bf0c99e1aeaf4074e220857ce7c0ff231da05f0b98"
+  },
+  "outputs": {
+    "pdf": "5357bb8551ddd98b5b65510bc439ce266c16d6975ae601170cd3a656e76695b1",
+    "svg": "0e8af8280bea53afaeb43237cfc778db71af457c002797cce623bb72494ad116",
+    "png": "fb817bdcda76dd21281c5895b9045b00b0372246387fac36b879fe33b5545223",
+    "tiff": "65406a948c7d94757d4bcdecd0c90dcaee6b5d58fa9fcdccc8fa84e1d0ed063a"
+  }
+}

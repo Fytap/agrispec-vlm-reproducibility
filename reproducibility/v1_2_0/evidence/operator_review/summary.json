@@ -1,0 +1,98 @@
+{
+  "agreement": {
+    "crop_present": {
+      "agreement": 0.9459459459459459,
+      "cohen_kappa": 0.8491727587533667,
+      "paired_category_counts": {
+        "no|no": 394,
+        "no|uncertain": 16,
+        "uncertain|no": 11,
+        "uncertain|uncertain": 44,
+        "yes|uncertain": 1,
+        "yes|yes": 52
+      }
+    },
+    "localization_usability": {
+      "agreement": 0.9401544401544402,
+      "cohen_kappa": 0.9048798113945196,
+      "paired_category_counts": {
+        "adequate|adequate": 277,
+        "adequate|partial": 2,
+        "adequate|uncertain": 10,
+        "partial|partial": 73,
+        "partial|uncertain": 8,
+        "uncertain|adequate": 2,
+        "uncertain|partial": 8,
+        "uncertain|uncertain": 44,
+        "uncertain|unusable": 1,
+        "unusable|unusable": 93
+      }
+    },
+    "primary_content": {
+      "agreement": 0.9478764478764479,
+      "cohen_kappa": 0.9095471537038714,
+      "paired_category_counts": {
+        "background|background": 93,
+        "crop_dominant|crop_dominant": 52,
+        "crop_dominant|uncertain": 1,
+        "uncertain|background": 1,
+        "uncertain|uncertain": 44,
+        "uncertain|weed_dominant": 10,
+        "weed_dominant|uncertain": 15,
+        "weed_dominant|weed_dominant": 302
+      }
+    },
+    "weed_reviewable": {
+      "agreement": 0.9420849420849421,
+      "cohen_kappa": 0.8930105750165236,
+      "paired_category_counts": {
+        "no|no": 143,
+        "no|uncertain": 3,
+        "uncertain|no": 1,
+        "uncertain|uncertain": 44,
+        "uncertain|yes": 10,
+        "yes|uncertain": 16,
+        "yes|yes": 301
+      }
+    }
+  },
+  "analysis_excluded_fields": [
+    "elapsed_ms",
+    "submitted_at_utc"
+  ],
+  "analysis_revision": "v3_no_timing_outcome",
+  "inference_boundary": "two fixed pilot operators; no operator-population inference",
+  "items": 518,
+  "mask_contract_correspondence": {
+    "consensus_positive_and_mask_positive": 249,
+    "consensus_positive_candidates": 301,
+    "consensus_positive_mask_positive_fraction": 0.8272425249169435,
+    "mask_qualified_weed_candidates": 355
+  },
+  "privacy_boundary": "aggregate outputs only; no item-level response table exported",
+  "scene_cluster_bootstrap_95_percentile_intervals": {
+    "consensus_yes_fraction": [
+      0.42829457364341084,
+      0.583011583011583,
+      0.7258687258687259
+    ],
+    "weed_reviewable_agreement": [
+      0.9227799227799228,
+      0.9420849420849421,
+      0.9610894941634242
+    ],
+    "weed_reviewable_kappa": [
+      0.8474133752850634,
+      0.8916535726072571,
+      0.9249263571449032
+    ]
+  },
+  "scenes": 26,
+  "status": "completed_registered_two_operator_analysis",
+  "weed_reviewability": {
+    "both_no": 143,
+    "both_yes": 301,
+    "consensus_yes_fraction": 0.581081081081081,
+    "disputed_or_uncertain": 74
+  }
+}

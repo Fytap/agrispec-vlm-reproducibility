@@ -1,0 +1,99 @@
+experiment:
+  id: P2_CWFID_EXTERNAL_LOCKED_EVALUATION_FROZEN_20260812_V1
+  status: frozen_before_image_or_annotation_access
+  frozen_at: "2026-08-12T18:46:11+08:00"
+  analysis_class: locked_external_evaluation
+  public_data_only: true
+  overwrite_policy: never
+  preserve_failures: true
+  purpose: >-
+    Test whether the validation-selected target-semantic queue transfers from
+    WeedsGalore to a different public carrot-field dataset without external
+    tuning, and quantify uncertainty at the image level.
+
+governance:
+  external_images_or_annotations_seen_before_freeze: false
+  metadata_and_public_documentation_seen_before_freeze: true
+  external_labels_for_training: false
+  external_labels_for_model_or_policy_selection: false
+  external_labels_for_offline_scoring_only: true
+  test_open_count_limit: 1
+  policy_after_open: no_tuning_and_no_reopening_with_changed_policy
+  authorization_basis: >-
+    User directed autonomous completion of all experiments and the present
+    major-revision experiments, with prior explicit authorization to unseal a
+    frozen test; this protocol fixes the new external evaluation before access.
+
+data:
+  contract: configs/datasets.sat_cwfid_external_locked_v1.yaml
+  source_revision: 176612f3506c0ce70d85518cb82ddd938a6206c8
+  expected_images: 60
+  standardized_canvas: [600, 600]
+  preprocessing:
+    - decode RGB without colour remapping
+    - scale the longer image side to 600 pixels with bilinear interpolation
+    - symmetric reflection-pad the shorter side to 600 pixels
+    - apply ImageNet mean and standard deviation used in training
+    - transform annotations with nearest-neighbour interpolation and zero padding
+
+models:
+  family: ResNet18-UNet target-semantic baseline
+  training_data: WeedsGalore official 104-image training split only
+  checkpoints: five_existing_h200_seed_checkpoints
+  seeds: [20260810, 20260811, 20260812, 20260813, 20260814]
+  checkpoint_source: reproducibility_backups/H200_seed_stability_20260812_v3
+  external_finetuning: forbidden
+
+candidate_generation:
+  per_seed_setting: each checkpoint's WeedsGalore-validation-selected epoch_threshold_and_minimum_area
+  foreground_probability: one_minus_background_probability
+  connectivity: 8
+  ranking_score: mean_weed_probability_divided_by_mean_plant_probability
+  queue_policy: fixed_K20_per_image
+  allocation_policy_search_on_external_data: forbidden
+
+truth_contract:
+  component_proxy: 8_connected_components_of_public_weed_mask
+  primary_minimum_truth_component_area_on_standardized_canvas: 16
+  sensitivity_minimum_truth_component_areas: [1, 32, 64]
+  note: connected components are evaluation proxies, not persistent plant identities
+  primary_instance_coverage: 0.50
+  primary_candidate_labeled_coverage: 0.50
+  primary_same_role_purity: 0.90
+  matching: maximum_cardinality_one_to_one
+  deterministic_matching_tie_break: lexicographic_candidate_id_then_truth_component_id
+
+endpoints:
+  primary: fixed_K20_one_to_one_role_qualified_weed_component_recall
+  secondary:
+    - fixed_K20_one_to_one_spatial_weed_component_recall
+    - fixed_K20_many_to_one_role_qualified_weed_component_recall
+    - fixed_K20_all_candidate_precision
+    - crop_overlap_image_frequency_at_any_positive_overlap
+    - candidate_burden_per_image
+    - weed_pixel_IoU
+  diagnostic_only:
+    - candidate_AUC
+    - candidate_AP
+
+uncertainty:
+  cluster_unit: image
+  bootstrap_replicates: 10000
+  bootstrap_seed: 20260812
+  interval: percentile_95_percent
+  optimization_seed_reporting: per_seed_and_mean_sample_SD
+  do_not_interpret_seed_SD_as_field_uncertainty: true
+
+reporting:
+  report_all_60_images_or_every_exclusion_with_reason: true
+  report_raw_numerators_and_denominators: true
+  negative_transfer_must_be_retained: true
+  external_result_must_not_be_combined_with_post_test_WeedsGalore_policy_search: true
+  primary_manuscript_wording: locked_cross_dataset_evaluation
+
+execution:
+  authorized_physical_gpu_ids: [6, 7]
+  co_tenancy: share_without_killing_or_modifying_other_processes
+  inference_only_for_existing_checkpoints: true
+  credentials_and_internal_addresses_in_artifacts: forbidden
+

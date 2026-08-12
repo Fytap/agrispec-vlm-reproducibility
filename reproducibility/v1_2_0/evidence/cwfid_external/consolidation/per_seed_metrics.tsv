@@ -1,0 +1,6 @@
+seed	images	weed_components	candidates	accepted_candidates	all_candidate_precision	many_to_one_spatial_recall	many_to_one_role_qualified_recall	one_to_one_spatial_recall	one_to_one_role_qualified_recall	crop_overlap_image_frequency	background_iou	crop_iou	weed_iou	mean_iou
+20260810	60	331	0	0	0.0	0.0	0.0	0.0	0.0	0.0	0.9450411574074075	0.0	0.0	0.3150137191358025
+20260811	60	331	0	0	0.0	0.0	0.0	0.0	0.0	0.0	0.9450411574074075	0.0	0.0	0.3150137191358025
+20260812	60	331	0	0	0.0	0.0	0.0	0.0	0.0	0.0	0.9450411574074075	0.0	0.0	0.3150137191358025
+20260813	60	331	0	0	0.0	0.0	0.0	0.0	0.0	0.0	0.9450411574074075	0.0	0.0	0.3150137191358025
+20260814	60	331	0	0	0.0	0.0	0.0	0.0	0.0	0.0	0.9450411574074075	0.0	0.0	0.3150137191358025

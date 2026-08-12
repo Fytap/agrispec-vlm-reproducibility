@@ -1,8 +1,8 @@
 cff-version: 1.2.0
 message: "If you use this archive, please cite the associated manuscript and this software release."
-title: "Support-Aware Review Queues for Crop--Weed Vision: Reproducibility Archive"
+title: "From Candidate Scores to Plant Recovery in Finite Crop--Weed Review Queues: Reproducibility Archive"
 type: software
-version: 1.1.0
+version: 1.2.0
 date-released: 2026-08-12
 authors:
   - family-names: Liu
@@ -20,4 +20,4 @@ authors:
   - family-names: Kuang
     given-names: Ziyi
 repository-code: "https://github.com/Fytap/agrispec-vlm-reproducibility"
-url: "https://github.com/Fytap/agrispec-vlm-reproducibility/releases/tag/v1.1.0"
+url: "https://github.com/Fytap/agrispec-vlm-reproducibility/releases/tag/v1.2.0"

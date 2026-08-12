@@ -1,0 +1,41 @@
+{
+  "run_id": "P2_CWFID_EXTERNAL_LOCKED_ZERO_CANDIDATE_CONSOLIDATION_20260812_v1",
+  "status": "completed_post_failure_consolidation_without_data_reopen",
+  "source_failed_run": "P2_CWFID_EXTERNAL_LOCKED_EVALUATION_20260812_v1",
+  "external_data_or_annotations_reopened": false,
+  "source_failure": "zero candidates caused the original TSV writer to reject an empty table",
+  "images": 60,
+  "training_seeds": [
+    20260810,
+    20260811,
+    20260812,
+    20260813,
+    20260814
+  ],
+  "seed_image_rows": 300,
+  "unique_weed_components": 331,
+  "candidate_count_all_seeds": 0,
+  "accepted_candidate_count_all_seeds": 0,
+  "primary_endpoint_mean": 0.0,
+  "primary_endpoint_image_cluster_ci95": [
+    0.0,
+    0.0
+  ],
+  "per_seed_metrics_identical": true,
+  "semantic_iou": {
+    "background": 0.9450411574074075,
+    "crop": 0.0,
+    "weed": 0.0,
+    "mean": 0.3150137191358025
+  },
+  "governance": {
+    "external_open_count_increment": 0,
+    "policy_or_threshold_changed": false,
+    "model_inference_repeated": false,
+    "inputs_restricted_to_existing_tabular_outputs": true
+  },
+  "software": {
+    "python": "3.10.12",
+    "numpy": "2.2.6"
+  }
+}

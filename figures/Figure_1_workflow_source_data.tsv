@@ -1,7 +1,0 @@
-panel	node_id	label	function	analysis_tier
-a	target_rgb	Target RGB	inference input	core
-a	candidate_formation	Candidate formation	connected components	core
-a	role_qualification	Role qualification	coverage and purity	core
-a	candidate_ranking	Candidate ranking	masked DINOv2	core
-a	review_allocation	Review allocation	fixed K and bounded allocation	core and secondary
-a	target_semantic	Target-semantic baseline	alternative component formation	secondary

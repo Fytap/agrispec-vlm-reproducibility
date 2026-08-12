@@ -1,0 +1,9 @@
+panel	stage	detail
+a	Target RGB	model input
+a	Candidate formation	components
+a	Role qualification	coverage + purity
+a	Ranking	model score
+a	Fixed queue	$K=20$ regions
+b	SugarBeets	source specialist training
+b	WeedsGalore	104 train, 26 validation, 26 test
+b	CWFID	60 images, locked scoring only

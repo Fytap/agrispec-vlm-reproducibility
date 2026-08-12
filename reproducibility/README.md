@@ -1,8 +1,18 @@
-# v1.1.0 reproducibility archive
+# Reproducibility archive
 
-This archive supports the official-spatial WeedsGalore analysis reported in the manuscript. It does not redistribute dataset imagery, masks, public model weights, human-participant material, or private infrastructure records.
+The current manuscript-linked evidence layer is [`v1_2_0/`](v1_2_0/). It covers matched review burden, target-trained strong baselines, semantic ranking, a locked CWFID transfer test, and aggregate two-operator technical review. It does not redistribute dataset imagery, masks, public model weights, operator identities, item-level responses, or private infrastructure records.
 
-## Compact evidence replay
+## Current verification
+
+From the repository root, run:
+
+```text
+python reproducibility/v1_2_0/scripts/replay_sat_v1_2_evidence.py --root reproducibility/v1_2_0 --output replay_v1_2
+```
+
+The command verifies the v1.2.0 public manifest and registered numerical invariants. See [`v1_2_0/README.md`](v1_2_0/README.md) for the current evidence map and end-to-end entry points.
+
+## v1.1.0 compact replay
 
 From the repository root, run:
 

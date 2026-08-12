@@ -1,0 +1,20 @@
+{
+  "run_id": "P2_WEEDSGALORE_MATCHED_BURDEN_UNCERTAINTY_20260812_v1",
+  "status": "completed",
+  "paired_clusters": 26,
+  "bootstrap_replicates": 10000,
+  "bootstrap_seed": 20260812,
+  "primary_endpoint": {
+    "contrast": "commissioned_minus_original",
+    "metric": "one_to_one_role_qualified_recall",
+    "estimate": 0.01869158878504673,
+    "ci95_low": 0.003162531917690525,
+    "ci95_high": 0.03465950401667682,
+    "cluster_unit": "image",
+    "clusters": 26,
+    "bootstrap_replicates": 10000
+  },
+  "input_sha256": "62ab06ba5626bf115b594109db6297f8896c8193306cb5eb6d244a4b7f29ec3e",
+  "config_sha256": "f1d28c719547be446e641e079c6936b7c38cc4712a08ca43a71a6f0225893cba",
+  "script_sha256": "fb1cc39848b6462f1fd43f04f9dc0431aab295a897745b4563c4fcc83e2c3427"
+}

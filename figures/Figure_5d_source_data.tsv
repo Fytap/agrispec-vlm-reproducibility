@@ -1,5 +1,0 @@
-policy	accepted_candidates	candidates_with_any_crop_overlap	crop_fraction_median	crop_fraction_q75	crop_fraction_q95	crop_fraction_maximum	crop_overlap_pixels_median	crop_overlap_pixels_q95	crop_overlap_pixels_maximum	crop_truth_instances	crop_instances_covered_at_0.10	crop_instance_coverage_rate_at_0.10	crop_instances_covered_at_0.25	crop_instance_coverage_rate_at_0.25	crop_instances_covered_at_0.50	crop_instance_coverage_rate_at_0.50
-fixed_K20_per_image	520	57	0.0	0.0	0.5910384331116038	0.972972972972973	0.0	81.19999999999983	983.0000000000006	256	52	0.203125	50	0.1953125	32	0.125
-global_top_N520	520	26	0.0	0.0	0.0036174284242257	0.9583333333333334	0.0	0.2999999999997272	983.0000000000006	256	21	0.08203125	19	0.07421875	10	0.0390625
-bounded_global_min5_max50_N520	520	28	0.0	0.0	0.1147742409627452	0.918918918918919	0.0	11.44999999999959	983.0000000000006	256	23	0.08984375	20	0.078125	12	0.046875
-validation_score_threshold_transferred	426	14	0.0	0.0	0.0	0.918918918918919	0.0	0.0	983.0000000000006	256	12	0.046875	10	0.0390625	5	0.01953125

@@ -1,5 +1,14 @@
 # Changelog
 
+## v1.2.0 — 2026-08-12
+
+- Reframed the manuscript around instance-support-aware evaluation and one-to-one plant recovery.
+- Added paired common-capacity and global equal-count commissioning comparisons, recall--burden curves, and image-cluster bootstrap intervals.
+- Added U-Net, DeepLabV3+, Mask R-CNN, semantic-probability, and entropy ranking under the same fixed queue contract.
+- Added a locked 60-image CWFID transfer test, including the zero-candidate result and preserved writer failure.
+- Added aggregate two-operator agreement and mask-contract correspondence for a frozen 518-region queue.
+- Added Figures 1--5, full source-data tables, clean LaTeX source, executable entry-point checks, and the standard-library v1.2.0 verifier.
+
 ## v1.1.0 — 2026-08-12
 
 - Added the complete 4-by-4 quota grid, date-balanced comparator, five-seed H200 stability analysis, and patch-proxy heterogeneity audit.

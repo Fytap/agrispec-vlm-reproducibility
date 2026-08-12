@@ -1,0 +1,88 @@
+experiment:
+  id: P2_WEEDSGALORE_TARGET_SEMANTIC_H200_SEED_STABILITY_20260812_v2
+  stage: post-test descriptive stability analysis of the target-semantic queue
+  public_data_only: true
+  test_status: already_unsealed_official_test
+  post_test_analysis: true
+  purpose: five independent H200 training seeds and four registered queue-allocation policies
+  predecessor_run: P2_WEEDSGALORE_TARGET_SEMANTIC_QUEUE_BASELINE_20260810_v3
+
+data:
+  dataset: WeedsGalore official public RGB release
+  archive_sha256: 5d8395c274d990cd8fbfa728445f65c398be2b5d777bd5145eb9ae5ca4d9b68c
+  split_source: official train.txt, val.txt, and test.txt
+  counts: {train: 104, validation: 26, test: 26}
+  role_mapping: {0: background, 1: crop, greater_than_1: weed}
+  rgb_channels: [R, G, B]
+  target_training_masks: dense semantic masks for all 104 official-training tiles
+
+model:
+  architecture: ResNet18-UNet semantic segmentation baseline
+  encoder_initialization: ImageNet-1K ResNet18 public weights
+  classes: [background, crop, weed]
+  input_size_train: [512, 512]
+  input_size_evaluation: [600, 600]
+  loss: weighted_cross_entropy_plus_soft_dice_on_crop_and_weed
+  optimizer: AdamW
+  learning_rate: 0.0003
+  weight_decay: 0.0001
+  epochs: 40
+  batch_size_per_seed: 6
+  seeds: [20260810, 20260811, 20260812, 20260813, 20260814]
+
+execution:
+  accelerator_required: NVIDIA H200
+  authorized_physical_gpu_pool: [6, 7]
+  topology: five concurrent independent single-device training runs
+  maximum_new_processes_per_gpu: 3
+  parallel_seed_workers: 5
+  gpu6_seeds: [20260810, 20260812, 20260814]
+  gpu7_seeds: [20260811, 20260813]
+  co_tenancy: share_without_terminating_or_modifying_existing_processes
+  cpu_threads_per_seed: 4
+  process_niceness: 10
+  excluded_hardware: [NVIDIA GeForce RTX 2060]
+
+candidate_generation:
+  foreground_probability: one_minus_background_probability
+  connectivity: 8
+  thresholds: [0.30, 0.50, 0.70]
+  minimum_component_areas_pixels: [16, 32, 64]
+  score: mean_weed_probability_divided_by_mean_plant_probability
+  burden_contract: validation-set mean candidates per image <= 100
+
+selection:
+  role: validation only within each seed
+  primary: K20 one-to-one role-qualified weed-instance recall
+  tie_break:
+    - K20 many-to-one role-qualified weed-instance recall
+    - K20 all-candidate precision
+    - lower mean candidate burden
+    - higher foreground threshold
+    - larger minimum component area
+    - earlier epoch
+  test_labels_for_selection: false
+
+matching_contract:
+  primary_instance_coverage: 0.50
+  primary_candidate_labeled_coverage: 0.50
+  primary_same_role_purity: 0.90
+  iou_sensitivity: [0.25, 0.50, 0.75]
+  matching: [many_to_one, one_to_one]
+
+queue_policies:
+  - fixed_K20_per_tile
+  - bounded_global_min5_max50
+  - global_top_equal_fixed_budget
+  - validation_global_top520_score_threshold
+
+reporting:
+  independent_unit: training_seed
+  descriptive_statistics: [mean, sample_sd, minimum, maximum, per_seed]
+  preserve_failures: true
+  raw_numerators_denominators: true
+  per_tile: true
+  per_date: true
+  pooled: true
+  runtime_and_peak_memory: true
+  publication_hardware_filter: NVIDIA H200 only

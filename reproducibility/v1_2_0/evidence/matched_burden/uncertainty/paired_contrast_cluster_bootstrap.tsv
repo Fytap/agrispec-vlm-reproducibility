@@ -1,0 +1,6 @@
+contrast	metric	estimate	ci95_low	ci95_high	cluster_unit	clusters	bootstrap_replicates
+commissioned_minus_original	all_candidate_precision	-0.06794055201698512	-0.13839377951593856	0.006425370338681285	image	26	10000
+commissioned_minus_original	many_to_one_spatial_recall	0.08177570093457942	0.05601306759188835	0.10981318130219103	image	26	10000
+commissioned_minus_original	many_to_one_role_qualified_recall	0.03738317757009345	0.01656020839921097	0.0580363434127879	image	26	10000
+commissioned_minus_original	one_to_one_role_qualified_recall	0.01869158878504673	0.003162531917690525	0.03465950401667682	image	26	10000
+commissioned_minus_original	crop_overlap_scene_frequency	0.038461538461538436	0.0	0.11538461538461542	image	26	10000

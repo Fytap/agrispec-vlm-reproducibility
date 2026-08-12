@@ -1,0 +1,5 @@
+case	sample_id	selection_rule	detail	x0	x1	y0	y1
+split	weedsgalore_official_dataset:2023-05-30:2023-05-30_0649	max fragments then max combined coverage	2 candidate fragments; combined coverage 0.75	53	189	90	226
+merge	weedsgalore_official_dataset:2023-06-06:2023-06-06_0176	smallest-area candidate among candidates merging at least five weeds	5 weed components at 10% or greater coverage	288	424	464	600
+background	weedsgalore_official_dataset:2023-05-25:2023-05-25_0109	largest candidate with less than 5% labelled coverage	520 px; labelled coverage 0.0%	464	600	74	210
+crop_contaminated	weedsgalore_official_dataset:2023-06-06:2023-06-06_0770	most balanced crop/weed fractions among candidates of at least 300 pixels	crop 41.1%; weed 48.1%	0	136	168	304

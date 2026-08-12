@@ -1,5 +1,5 @@
-- The queue audit separates proposal, qualification, ranking and allocation.
-- Commissioning doubles spatial recall with a 2.93-fold candidate burden.
-- Five H200 seeds reveal a pooled-recovery versus weakest-date trade-off.
-- A complete quota grid tests minimum and maximum candidates per tile.
-- Exact mask replay and spatial-group summaries make losses auditable.
+- Instance-support accounting separates proposal, ranking and plant recovery.
+- Matched review burden reveals a 1.87-point one-to-one recall gain.
+- Mask R-CNN leads internal queues; probability ranking remains competitive.
+- Two operators agree on weed reviewability for 94.2% of queued regions.
+- Locked CWFID transfer exposes complete threshold-transfer failure.

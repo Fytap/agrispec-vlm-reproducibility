@@ -1,0 +1,123 @@
+{
+  "run_id": "P2_WEEDSGALORE_MATCHED_BURDEN_ANALYSIS_20260812_v3",
+  "status": "completed_post_test_matched_burden_audit",
+  "common_files": 26,
+  "fixed_K20_available_totals": {
+    "original_T095_A032": 471,
+    "commissioned_T070_A032": 520
+  },
+  "global_equal_N": 471,
+  "paired_common_K20": {
+    "original_T095_A032": {
+      "variant": "original_T095_A032",
+      "requested_k": 20,
+      "images": 26,
+      "weed_instances": 1712,
+      "accepted_candidates": 471,
+      "mean_candidates_per_image": 18.115384615384617,
+      "all_candidate_precision": 0.5859872611464968,
+      "many_to_one_spatial_recall": 0.1875,
+      "many_to_one_role_qualified_recall": 0.11974299065420561,
+      "one_to_one_role_qualified_recall": 0.0969626168224299,
+      "crop_overlap_scene_frequency": 0.8461538461538461
+    },
+    "commissioned_T070_A032": {
+      "variant": "commissioned_T070_A032",
+      "requested_k": 20,
+      "images": 26,
+      "weed_instances": 1712,
+      "accepted_candidates": 471,
+      "mean_candidates_per_image": 18.115384615384617,
+      "all_candidate_precision": 0.5180467091295117,
+      "many_to_one_spatial_recall": 0.2692757009345794,
+      "many_to_one_role_qualified_recall": 0.15712616822429906,
+      "one_to_one_role_qualified_recall": 0.11565420560747663,
+      "crop_overlap_scene_frequency": 0.8846153846153846
+    }
+  },
+  "global_equal_N_metrics": {
+    "original_T095_A032": {
+      "variant": "original_T095_A032",
+      "global_N": 471,
+      "images": 26,
+      "weed_instances": 1712,
+      "accepted_candidates": 471,
+      "mean_candidates_per_image": 18.115384615384617,
+      "all_candidate_precision": 0.5859872611464968,
+      "many_to_one_spatial_recall": 0.1875,
+      "many_to_one_role_qualified_recall": 0.11974299065420561,
+      "one_to_one_role_qualified_recall": 0.0969626168224299,
+      "crop_overlap_scene_frequency": 0.8461538461538461
+    },
+    "commissioned_T070_A032": {
+      "variant": "commissioned_T070_A032",
+      "global_N": 471,
+      "images": 26,
+      "weed_instances": 1712,
+      "accepted_candidates": 471,
+      "mean_candidates_per_image": 18.115384615384617,
+      "all_candidate_precision": 0.524416135881104,
+      "many_to_one_spatial_recall": 0.27102803738317754,
+      "many_to_one_role_qualified_recall": 0.1594626168224299,
+      "one_to_one_role_qualified_recall": 0.11740654205607477,
+      "crop_overlap_scene_frequency": 0.8846153846153846
+    }
+  },
+  "paired_common_K_AURBC": {
+    "original_T095_A032": 0.046998085203484335,
+    "commissioned_T070_A032": 0.05780105958688017
+  },
+  "global_equal_N_AURBC": {
+    "original_T095_A032": 0.059812588050876046,
+    "commissioned_T070_A032": 0.0749554785007044
+  },
+  "selected_commissioned_setting": "T070_A032",
+  "shared_ranker": {
+    "selected_C": 100.0,
+    "validation_sensitivity": [
+      {
+        "c": 0.001,
+        "validation_auc": 0.9159994567819485,
+        "validation_ap": 0.7270276306674313
+      },
+      {
+        "c": 0.01,
+        "validation_auc": 0.9219490822291369,
+        "validation_ap": 0.7491577555860405
+      },
+      {
+        "c": 0.1,
+        "validation_auc": 0.923649116824593,
+        "validation_ap": 0.7549683128197175
+      },
+      {
+        "c": 1.0,
+        "validation_auc": 0.9270749591347369,
+        "validation_ap": 0.7594472328728746
+      },
+      {
+        "c": 10.0,
+        "validation_auc": 0.9299328015479732,
+        "validation_ap": 0.7614151582854921
+      },
+      {
+        "c": 100.0,
+        "validation_auc": 0.9305354960284615,
+        "validation_ap": 0.7617313448609583
+      }
+    ]
+  },
+  "inputs": {
+    "archive_sha256": "5d8395c274d990cd8fbfa728445f65c398be2b5d777bd5145eb9ae5ca4d9b68c",
+    "manifest_sha256": "3a577a747934069d2f50f6d5732cea019b554d557c98a01e796b000ea4f2085e",
+    "original_candidates_sha256": "e4474f3c469b153b3a79c731f00cf11d723fa0eae760ab162d02f734b0773c28",
+    "proposal_summary_sha256": "7594e72179c95388f010282ef51e5959502918b5ce87459383f29b63f9b4b743",
+    "config_sha256": "f509d973c44249e73a78481ea39c0ae46baa92f70a30714c2e72ef28cd58ec9e",
+    "script_sha256": "d2cd33ccca6205a22ca7fd8ecba78e0dbba11e50f3f2ee698a308b7e98220240"
+  },
+  "governance": {
+    "analysis_class": "post_test_matched_burden_audit",
+    "test_labels_for_fitting_or_selection": false,
+    "negative_results_preserved": true
+  }
+}

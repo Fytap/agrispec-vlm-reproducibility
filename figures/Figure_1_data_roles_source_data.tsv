@@ -1,5 +1,0 @@
-role	dataset	use	tiles	notes
-source	SugarBeets2016	specialist training		RGB and masks
-target_train	WeedsGalore	proposal and model development	104	official spatial split
-target_validation	WeedsGalore	selection	26	official spatial split
-target_test	WeedsGalore	offline scoring	26	two held-out patches; 1,712 raster weed instances
