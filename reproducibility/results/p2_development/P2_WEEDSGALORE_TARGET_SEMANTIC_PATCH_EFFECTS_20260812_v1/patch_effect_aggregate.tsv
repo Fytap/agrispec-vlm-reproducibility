@@ -1,0 +1,13 @@
+policy	patch_proxy	metric	n_training_seeds	mean	sample_sd	minimum	maximum	positive_seeds	zero_seeds	negative_seeds
+date_balanced_global	test_capture_index_patch_proxy_0	precision_difference_vs_fixed	5	0.056988853769566375	0.032034854062544964	0.02590039301591396	0.11002890902388385	5	0	0
+date_balanced_global	test_capture_index_patch_proxy_0	one_to_one_recall_difference_vs_fixed	5	-0.04582743988684583	0.025491101162249077	-0.08203677510608204	-0.014144271570014133	0	0	5
+date_balanced_global	test_capture_index_patch_proxy_0	crop_scene_frequency_difference_vs_fixed	5	-0.046153846153846156	0.06880209161537815	-0.15384615384615385	0.0	0	3	2
+date_balanced_global	test_capture_index_patch_proxy_1	precision_difference_vs_fixed	5	0.00756573318485747	0.015692659358455235	-0.013572790845518101	0.023607427055702845	3	0	2
+date_balanced_global	test_capture_index_patch_proxy_1	one_to_one_recall_difference_vs_fixed	5	0.06029850746268657	0.015067318393207482	0.04676616915422885	0.08557213930348262	5	0	0
+date_balanced_global	test_capture_index_patch_proxy_1	crop_scene_frequency_difference_vs_fixed	5	0.07692307692307693	0.12162606385262999	-0.07692307692307693	0.23076923076923078	3	1	1
+min5_max50	test_capture_index_patch_proxy_0	precision_difference_vs_fixed	5	0.2124956624402185	0.01987502723603961	0.1854205814082016	0.2356357568221975	5	0	0
+min5_max50	test_capture_index_patch_proxy_0	one_to_one_recall_difference_vs_fixed	5	0.04045261669024046	0.013588810324724705	0.0297029702970297	0.06082036775106084	5	0	0
+min5_max50	test_capture_index_patch_proxy_0	crop_scene_frequency_difference_vs_fixed	5	-0.2	0.08770580193070293	-0.3076923076923077	-0.07692307692307693	0	0	5
+min5_max50	test_capture_index_patch_proxy_1	precision_difference_vs_fixed	5	0.1276385642534294	0.03651286599157469	0.08744939271255059	0.17710101286613744	5	0	0
+min5_max50	test_capture_index_patch_proxy_1	one_to_one_recall_difference_vs_fixed	5	0.06547263681592039	0.008599916591574892	0.05472636815920398	0.0756218905472637	5	0	0
+min5_max50	test_capture_index_patch_proxy_1	crop_scene_frequency_difference_vs_fixed	5	-0.16923076923076924	0.1002954216185023	-0.3076923076923077	-0.07692307692307693	0	0	5

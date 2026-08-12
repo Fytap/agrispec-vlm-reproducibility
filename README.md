@@ -1,60 +1,55 @@
-# Support-Aware Commissioning for Crop--Weed Vision
+# Support-Aware Review Queues for Crop--Weed Vision
 
-Versioned computational archive for the manuscript **“From Proposals to Review Queues: Support-Aware Commissioning for Crop--Weed Vision.”**
+Versioned computational archive for the manuscript **“Support-Aware Review Queues for Crop--Weed Vision: A Multitemporal Single-Field Case Study.”**
 
-This repository records the official-spatial WeedsGalore proposal, ranking, allocation, and target-semantic analyses. It separates spatial proposal recall, role-qualified recall, and queued instance recall, and preserves both successful and unsuccessful registered runs.
+This repository records the official-spatial WeedsGalore proposal, ranking, allocation, target-semantic, and robustness analyses. The evaluation separates spatial proposal recall, role-qualified proposal recall, and queued one-to-one instance recall. Successful runs, negative results, frozen configurations, and provenance records are retained.
 
 ## Repository contents
 
-- `reproducibility/`: frozen configurations, analysis and replay scripts, environment records, derived tables, run summaries, checksums, and failure records.
-- `manuscript_source/`: compilable LaTeX source for the manuscript and supplementary material.
-- `manuscript_pdfs/`: final manuscript and supplementary PDF.
-- `figures/`: vector PDF, editable SVG, PNG previews, source-data tables, and layout-audit records.
-- `release_manifests/`: SHA-256 manifests for the complete submission and Overleaf archives.
+- `reproducibility/`: configurations, analysis and replay scripts, environment records, derived evidence tables, run summaries, checksums, and preserved failure records.
+- `manuscript_source/`: self-contained pdfLaTeX/BibTeX source for the manuscript and supplementary material.
+- `manuscript_pdfs/`: submission PDFs.
+- `figures/`: vector PDF, editable SVG, and PNG previews for Figures 1--7.
+- `release_manifests/`: SHA-256 manifests for versioned release assets.
 
-The GitHub Release assets contain the complete submission archive, including the high-resolution TIFF figures omitted from Git history.
+Source imagery, private records, and human-participant materials are not distributed.
 
 ## Fast replay
 
-The evidence-table replay uses only Python’s standard library:
+The compact v1.1.0 evidence replay uses only Python's standard library:
+
+```bash
+python reproducibility/scripts/replay_sat_v1_1_tables.py \
+  --project-root reproducibility \
+  --output-dir reproducibility/replay_check_v11
+```
+
+It verifies the 12-setting proposal grid, complete 4-by-4 quota grid, five H200 seed-specific validation selections, patch-proxy heterogeneity, and exact component-mask replay invariants. It then writes publication-facing TSV/JSON files and their SHA-256 manifest.
+
+The earlier table replay remains available:
 
 ```bash
 cd reproducibility
 python scripts/replay_sat_revision8_tables.py --project-root . --output-dir replay_output_v8
 ```
 
-The robust allocation analysis is reproduced with:
-
-```bash
-python scripts/analyze_p2_weedsgalore_revision10_robust_queue.py \
-  --config configs/p2_weedsgalore_revision10_robust_queue_v1.yaml \
-  --queue-run results/p2_development/P2_WEEDSGALORE_REVISION8_QUEUE_POLICY_TILE_AUDIT_20260810_v1 \
-  --semantic-run results/p2_development/P2_WEEDSGALORE_TARGET_SEMANTIC_QUEUE_BASELINE_20260810_v3 \
-  --output replay_output_v10
-```
-
-See [`reproducibility/README.md`](reproducibility/README.md) for figure rebuilding, environment details, expected checksums, and model acquisition boundaries.
+See [`reproducibility/README.md`](reproducibility/README.md) for the full replay map, figure rebuilding, environment information, and model-acquisition boundaries.
 
 ## Data and model acquisition
 
-Source imagery is not redistributed. SugarBeets2016 and WeedsGalore must be obtained from their official public sources under their original licences. Public model identifiers, dataset versions, download boundaries, and licence records are documented in:
+SugarBeets2016 and WeedsGalore must be obtained from their official public sources under their original licences. Source imagery and model weights are not redistributed. Dataset versions, acquisition boundaries, licences, and model identifiers are recorded in:
 
 - [`reproducibility/DATASET_PROVENANCE_LICENSES.md`](reproducibility/DATASET_PROVENANCE_LICENSES.md)
 - [`reproducibility/MODEL_ACQUISITION.md`](reproducibility/MODEL_ACQUISITION.md)
 
 ## Release
 
-Version `v1.0.0` is the manuscript-linked immutable release:
+Version `v1.1.0` is the manuscript-linked release:
 
-<https://github.com/Fytap/agrispec-vlm-reproducibility/releases/tag/v1.0.0>
+<https://github.com/Fytap/agrispec-vlm-reproducibility/releases/tag/v1.1.0>
 
-Release-asset checksums are listed in [`RELEASE_ASSETS_SHA256.txt`](RELEASE_ASSETS_SHA256.txt).
+Release-asset checksums are provided with the release and in [`RELEASE_ASSETS_SHA256.txt`](RELEASE_ASSETS_SHA256.txt).
 
-## Citation
+## Citation and scope
 
-Citation metadata are provided in [`CITATION.cff`](CITATION.cff). A repository DOI can be added to a later metadata-only release after archival deposition.
-
-## Scope
-
-The archive supports computational replay of the reported tables and figures. Re-extraction and model training require the cited public datasets and model weights. No credentials, internal addresses, private logs, or source imagery are included.
-
+Citation metadata are provided in [`CITATION.cff`](CITATION.cff). The archive supports computational replay of the reported evidence tables and figures. Re-extraction and model training require the cited public datasets and public model weights. No credentials, internal addresses, private logs, source imagery, or personal data are included.

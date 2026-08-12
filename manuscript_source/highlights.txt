@@ -1,5 +1,5 @@
-- Commissioning separates proposal, ranking and review-allocation losses.
-- Bounded allocation improves pooled and date-macro recovery at N=520.
-- Worst-date recall reveals the limit of batch-global candidate scores.
-- A single-run target-semantic queue reaches 0.2033 one-to-one recall.
-- Versioned tile/date diagnostics make allocation evidence auditable.
+- The queue audit separates proposal, qualification, ranking and allocation.
+- Commissioning doubles spatial recall with a 2.93-fold candidate burden.
+- Five H200 seeds reveal a pooled-recovery versus weakest-date trade-off.
+- A complete quota grid tests minimum and maximum candidates per tile.
+- Exact mask replay and spatial-group summaries make losses auditable.

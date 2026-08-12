@@ -1,0 +1,58 @@
+{
+  "analysis": "target-semantic independent-seed and allocation-policy stability",
+  "status": "completed",
+  "independent_unit": "training seed",
+  "n_seeds": 5,
+  "seeds": [20260810, 20260811, 20260812, 20260813, 20260814],
+  "seed_identifier_note": "numeric values are random-seed identifiers, not execution dates",
+  "policies": [
+    "fixed_K20_per_tile",
+    "bounded_global_min5_max50",
+    "global_top_equal_fixed_budget",
+    "validation_global_top520_score_threshold"
+  ],
+  "validation_threshold_contract": {
+    "budget": 520,
+    "selection_split": "official validation",
+    "application": "the validation global-budget boundary score is transferred unchanged to official test"
+  },
+  "matching_reconstruction": "component masks and exact qualified candidate-instance edges are regenerated from each archived H200 checkpoint; candidate IDs and fixed-K precision, many-to-one, one-to-one, and crop-exposure counts are verified exactly for every seed and scene",
+  "inputs": [
+    {
+      "run_id": "P2_WEEDSGALORE_TARGET_SEMANTIC_H200_SEED_20260810_20260812_v1",
+      "summary_sha256": "b9ae325f40970be2d37d73ac337cadcc8713cbbe5bef55121717ef40e3b4119d",
+      "candidates_sha256": "fe80fa42b34bf56782143f47ad8e109c1db673a6127be14dd4a3ac657546f1d2",
+      "checkpoint_sha256": "f21d828d6bb49fbfd8f91e55dfce95e3d704bbd6860c0ec718119eba37c061fb"
+    },
+    {
+      "run_id": "P2_WEEDSGALORE_TARGET_SEMANTIC_H200_SEED_20260811_20260812_v1",
+      "summary_sha256": "d98d48a472f325e99ae1b1483e257dd9ddc39bdedb5bdcbe8fe5967c6151af8c",
+      "candidates_sha256": "e97a7d9d9d2fac1814aaba5c12ef952d2f18a35538411a2db4dffa775eac5e71",
+      "checkpoint_sha256": "4c40277a53bffdac818d4347a0d6afa76c00dfe350f2dcdbbdd014905110628f"
+    },
+    {
+      "run_id": "P2_WEEDSGALORE_TARGET_SEMANTIC_H200_SEED_20260812_20260812_v1",
+      "summary_sha256": "a883f216142b9dc2ca9feebef7b98b35f2fe965242baa1af3d95ff755b0a2eeb",
+      "candidates_sha256": "e4a2342d953a5f7dffd6c7ea3f8fddd3bfc0590814b3312983f0d4595c786b59",
+      "checkpoint_sha256": "a8f73b22c27f5e1b2429c2d03fd0891e2d6cc572c70716029140745b0392053b"
+    },
+    {
+      "run_id": "P2_WEEDSGALORE_TARGET_SEMANTIC_H200_SEED_20260813_20260812_v1",
+      "summary_sha256": "e7ec93a1254304a4d77f8df181caeca5eec4295ba7f37c96ef5113b61446c8c1",
+      "candidates_sha256": "31207dcbd9043030be2d468de49ccdfbd5512f15e31d4632117b27888667d918",
+      "checkpoint_sha256": "3e5e949b27c2e69a8262a11e4fc0c5a0a2892b1a4c8c894a410c5fd498c24943"
+    },
+    {
+      "run_id": "P2_WEEDSGALORE_TARGET_SEMANTIC_H200_SEED_20260814_20260812_v1",
+      "summary_sha256": "248c066517d36dc2e8a6568e0d157d68a98f858b0185f51dce0ee50478a0f4bf",
+      "candidates_sha256": "bcb4f0ca7e204aff77c53017e7dc91ac71f03570f3a5ea79a82f4dd7674f6b64",
+      "checkpoint_sha256": "40008b291a61424edc26e0aa165de20f49dbfbaf8e1f85d2de646b97e6244b10"
+    }
+  ],
+  "analysis_script": "analyze_target_semantic_seed_policies_exact_v2.py",
+  "analysis_script_sha256": "24f444e90438647608f7d8526f018d73037601b732b62ec3d3bc1f95b375ca2f",
+  "trainer": "train_evaluate_p2_weedsgalore_target_semantic_seed_stability_h200.py",
+  "trainer_sha256": "9e8cbefe6196863dbffb906bf77ab0ee928effb0c7c890784e0f9a403f33b3f1",
+  "dataset_id": "P2_WEEDSGALORE_TARGET_SEMANTIC_BASELINE_CACHE_20260810_v1",
+  "runtime_seconds": 34.246988917700946
+}

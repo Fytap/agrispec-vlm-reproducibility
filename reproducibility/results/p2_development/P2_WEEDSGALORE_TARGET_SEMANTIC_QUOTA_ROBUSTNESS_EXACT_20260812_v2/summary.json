@@ -1,0 +1,52 @@
+{
+  "analysis": "exact-mask quota-grid and date-balanced allocation audit",
+  "status": "completed",
+  "analysis_class": "post-test exploratory robustness analysis",
+  "seeds": [20260810, 20260811, 20260812, 20260813, 20260814],
+  "seed_identifier_note": "numeric values are random-seed identifiers, not execution dates",
+  "quota_grid": {
+    "minimum": [0, 5, 10, 20],
+    "maximum": [20, 30, 50, "unrestricted"]
+  },
+  "validation_selection_rule": "among quota policies with validation candidate-level role-qualified precision no lower than fixed K=20, maximize validation worst-date one-to-one recall, then pooled one-to-one recall and precision",
+  "date_balanced_baseline": "preserve fixed-K candidate count within each acquisition date and rank globally inside each date",
+  "matching": "binary component masks and exact qualified candidate-instance edges regenerated from every checkpoint",
+  "inputs": [
+    {
+      "seed": 20260810,
+      "run_id": "P2_WEEDSGALORE_TARGET_SEMANTIC_H200_SEED_20260810_20260812_v1",
+      "summary_sha256": "b9ae325f40970be2d37d73ac337cadcc8713cbbe5bef55121717ef40e3b4119d",
+      "checkpoint_sha256": "f21d828d6bb49fbfd8f91e55dfce95e3d704bbd6860c0ec718119eba37c061fb",
+      "candidate_sha256": "fe80fa42b34bf56782143f47ad8e109c1db673a6127be14dd4a3ac657546f1d2"
+    },
+    {
+      "seed": 20260811,
+      "run_id": "P2_WEEDSGALORE_TARGET_SEMANTIC_H200_SEED_20260811_20260812_v1",
+      "summary_sha256": "d98d48a472f325e99ae1b1483e257dd9ddc39bdedb5bdcbe8fe5967c6151af8c",
+      "checkpoint_sha256": "4c40277a53bffdac818d4347a0d6afa76c00dfe350f2dcdbbdd014905110628f",
+      "candidate_sha256": "e97a7d9d9d2fac1814aaba5c12ef952d2f18a35538411a2db4dffa775eac5e71"
+    },
+    {
+      "seed": 20260812,
+      "run_id": "P2_WEEDSGALORE_TARGET_SEMANTIC_H200_SEED_20260812_20260812_v1",
+      "summary_sha256": "a883f216142b9dc2ca9feebef7b98b35f2fe965242baa1af3d95ff755b0a2eeb",
+      "checkpoint_sha256": "a8f73b22c27f5e1b2429c2d03fd0891e2d6cc572c70716029140745b0392053b",
+      "candidate_sha256": "e4a2342d953a5f7dffd6c7ea3f8fddd3bfc0590814b3312983f0d4595c786b59"
+    },
+    {
+      "seed": 20260813,
+      "run_id": "P2_WEEDSGALORE_TARGET_SEMANTIC_H200_SEED_20260813_20260812_v1",
+      "summary_sha256": "e7ec93a1254304a4d77f8df181caeca5eec4295ba7f37c96ef5113b61446c8c1",
+      "checkpoint_sha256": "3e5e949b27c2e69a8262a11e4fc0c5a0a2892b1a4c8c894a410c5fd498c24943",
+      "candidate_sha256": "31207dcbd9043030be2d468de49ccdfbd5512f15e31d4632117b27888667d918"
+    },
+    {
+      "seed": 20260814,
+      "run_id": "P2_WEEDSGALORE_TARGET_SEMANTIC_H200_SEED_20260814_20260812_v1",
+      "summary_sha256": "248c066517d36dc2e8a6568e0d157d68a98f858b0185f51dce0ee50478a0f4bf",
+      "checkpoint_sha256": "40008b291a61424edc26e0aa165de20f49dbfbaf8e1f85d2de646b97e6244b10",
+      "candidate_sha256": "bcb4f0ca7e204aff77c53017e7dc91ac71f03570f3a5ea79a82f4dd7674f6b64"
+    }
+  ],
+  "runtime_seconds": 34.354950801469386
+}

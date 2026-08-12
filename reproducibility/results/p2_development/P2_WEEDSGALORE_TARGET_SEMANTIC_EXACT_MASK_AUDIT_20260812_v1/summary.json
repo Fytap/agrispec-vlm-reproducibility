@@ -1,0 +1,27 @@
+{
+  "analysis": "target-semantic exact component-mask consistency audit",
+  "status": "completed",
+  "analysis_class": "post-test exploratory technical audit",
+  "matching_boundary": "Reported target-semantic matching uses regenerated connected-component masks; bounding-box reconstruction is retained only as a sensitivity comparator.",
+  "counts": {
+    "test_scenes": 26,
+    "test_weed_instances": 1712,
+    "archived_candidates": 1347,
+    "regenerated_candidates": 1347,
+    "fixed_queue_candidates": 518,
+    "role_qualified_candidates": 355,
+    "exact_one_to_one_recovered_instances": 348
+  },
+  "exact_replay": {
+    "checkpoint_sha256": "1c41cc81893ddb31fb208074cd36d9a6ca0591f93b01659fda845aaf3bf8bf43",
+    "candidate_id_sets_identical": true,
+    "fixed_scene_metrics_identical": true,
+    "exact_edge_pairs": 453,
+    "box_reconstruction_edge_pairs": 457,
+    "edge_pair_intersection": 453,
+    "exact_only_edge_pairs": 0,
+    "box_only_edge_pairs": 4,
+    "candidate_edge_sets_identical": 351,
+    "candidate_edge_sets_compared": 355
+  }
+}

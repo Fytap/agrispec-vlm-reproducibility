@@ -1,9 +1,12 @@
-# Revision 8 code QA
+# Code and document QA
 
-The revision-specific training, queue-audit, replay, figure, and bundle scripts all completed `--help` without module-resolution errors.
+Verification completed on 2026-08-12:
 
-The first full local test run produced 16 passes and one provenance-only failure because the source copy did not contain a resolvable Git `HEAD`. The failed run was retained. The provenance helper was changed to write `UNAVAILABLE_SOURCE_ARCHIVE` when an exported source archive intentionally lacks `.git` metadata; it continues to record the exact commit whenever Git metadata is present. The subsequent full test run completed with 17/17 tests passing.
+- all 40 Python entry points under `reproducibility/scripts/` completed `--help` without import or module-resolution errors;
+- `replay_sat_v1_1_tables.py` completed from the packaged evidence and verified every encoded numerical invariant;
+- the earlier `replay_sat_revision8_tables.py` completed from the packaged evidence;
+- the self-contained manuscript source compiled with pdfLaTeX/BibTeX to a 27-page manuscript, a 16-page supplement, and a one-page cover letter;
+- LaTeX logs contained no undefined citation, undefined reference, or overfull-box warning;
+- output directories carry per-directory SHA-256 manifests.
 
-The fallback does not alter model fitting, candidate generation, policy selection, scoring, or any reported metric.
-
-An initial document-build instruction incorrectly called BibTeX on `supplement.tex`, which has no independent bibliography. The PDF itself compiled, but BibTeX correctly returned a missing-bibliography error. The README was corrected to compile the supplement with two pdfLaTeX passes only.
+An earlier full local source test produced 16 passes and one provenance-only failure because an exported source copy did not contain a resolvable Git `HEAD`. That failure remains documented. The provenance helper records `UNAVAILABLE_SOURCE_ARCHIVE` when an exported archive intentionally lacks `.git` metadata and records the exact commit whenever Git metadata is present. The subsequent source test completed with 17/17 tests passing. This provenance fallback does not alter model fitting, candidate generation, policy selection, scoring, or any reported metric.

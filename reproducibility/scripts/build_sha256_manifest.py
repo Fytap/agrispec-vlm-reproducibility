@@ -4,6 +4,7 @@
 from __future__ import annotations
 
 import argparse
+import fnmatch
 import hashlib
 from pathlib import Path
 
@@ -12,6 +13,12 @@ def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--base", type=Path, required=True)
     parser.add_argument("--output-name", required=True)
+    parser.add_argument(
+        "--exclude",
+        action="append",
+        default=[],
+        help="Glob matched against POSIX relative paths; may be repeated.",
+    )
     return parser.parse_args()
 
 
@@ -27,8 +34,16 @@ def main() -> None:
     args = parse_args()
     base = args.base.resolve(strict=True)
     output = base / args.output_name
+    def included(path: Path) -> bool:
+        if path == output:
+            return False
+        relative = path.relative_to(base).as_posix()
+        if ".git" in path.relative_to(base).parts:
+            return False
+        return not any(fnmatch.fnmatch(relative, pattern) for pattern in args.exclude)
+
     files = sorted(
-        (path for path in base.rglob("*") if path.is_file() and path != output),
+        (path for path in base.rglob("*") if path.is_file() and included(path)),
         key=lambda path: path.relative_to(base).as_posix(),
     )
     rows = ['"relative_path"\t"bytes"\t"sha256"']
