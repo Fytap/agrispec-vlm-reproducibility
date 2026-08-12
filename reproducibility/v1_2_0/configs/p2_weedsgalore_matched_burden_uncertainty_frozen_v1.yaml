@@ -1,0 +1,31 @@
+experiment:
+  id: P2_WEEDSGALORE_MATCHED_BURDEN_UNCERTAINTY_FROZEN_20260812_V1
+  status: frozen_before_execution
+  parent_run: P2_WEEDSGALORE_MATCHED_BURDEN_ANALYSIS_20260812_v3
+  analysis_class: post_test_paired_cluster_uncertainty
+  compute: CPU_only
+  overwrite_policy: never
+  preserve_failures: true
+input:
+  table: paired_tile_common_k20.tsv
+  expected_variants: [original_T095_A032, commissioned_T070_A032]
+  pairing_key: file
+  cluster_unit: image
+estimands:
+  aggregation: ratio_of_cluster_sums
+  variant_metrics:
+    - all_candidate_precision
+    - many_to_one_spatial_recall
+    - many_to_one_role_qualified_recall
+    - one_to_one_role_qualified_recall
+    - crop_overlap_scene_frequency
+  paired_contrast: commissioned_minus_original
+uncertainty:
+  method: paired_nonparametric_cluster_bootstrap
+  bootstrap_replicates: 10000
+  bootstrap_seed: 20260812
+  interval: percentile_95
+reporting:
+  include_per_tile_median_iqr: true
+  one_to_one_endpoint_primary: true
+

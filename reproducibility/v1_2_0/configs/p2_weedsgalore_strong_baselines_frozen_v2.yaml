@@ -1,0 +1,81 @@
+experiment:
+  id: P2_WEEDSGALORE_STRONG_BASELINES_FROZEN_20260812_V2
+  status: frozen_before_training
+  predecessor: P2_WEEDSGALORE_STRONG_BASELINES_FROZEN_20260812_V1
+  protocol_change_from_v1: none
+  implementation_change: use locally hashed official public initialization files to avoid network-dependent model constructors
+  analysis_class: post_test_baseline_extension_with_locked_external_transfer
+  public_data_only: true
+  preserve_failures: true
+  overwrite_policy: never
+data:
+  training_dataset: WeedsGalore official RGB release
+  archive_sha256: 5d8395c274d990cd8fbfa728445f65c398be2b5d777bd5145eb9ae5ca4d9b68c
+  official_split_counts: {train: 104, validation: 26, test: 26}
+  supervision:
+    semantic_models: dense crop_weed_background masks for the same 104 training images
+    instance_model: public instance maps and semantic role masks for the same 104 training images
+  test_labels_for_training_or_selection: false
+shared_queue_contract:
+  fixed_candidates_per_image: 20
+  primary_endpoint: one_to_one_role_qualified_weed_instance_recall
+  primary_instance_coverage: 0.50
+  primary_candidate_labeled_coverage: 0.50
+  primary_same_role_purity: 0.90
+  candidate_metrics: diagnostic_only
+  epoch_and_component_selection: official_validation_only
+  external_policy_tuning: forbidden
+semantic_baseline:
+  name: DeepLabV3Plus-RGB
+  implementation: segmentation-models-pytorch==0.5.0
+  encoder: resnet50
+  encoder_initialization: ImageNet-1K public weights
+  encoder_weight_sha256: 19c8e3572231adff6824a2da93fd67b5986919a2e65f8b6007eab4edee220097
+  classes: [background, crop, weed]
+  train_crop: [512, 512]
+  evaluation_size: [600, 600]
+  loss: weighted_cross_entropy_plus_soft_dice_on_crop_and_weed
+  optimizer: AdamW
+  learning_rate: 0.0003
+  weight_decay: 0.0001
+  epochs: 30
+  seeds: [20260820, 20260821, 20260822]
+  component_thresholds: [0.30, 0.50, 0.70]
+  component_minimum_areas: [16, 32, 64]
+  rank_score: mean_weed_probability_divided_by_mean_plant_probability
+instance_baseline:
+  name: Mask-RCNN-ResNet50-FPN-v2
+  implementation: torchvision==0.22.1
+  initialization: COCO_V1_public_weights
+  initialization_sha256: 73cbd0190fcbe3ba339921fbce2c3a0b6bb9126c9a133c85e43a2a8e060a109e
+  classes: [background, crop, weed]
+  model_resize: {minimum_side: 600, maximum_side: 600}
+  mask_threshold: 0.50
+  detection_score_floor: 0.05
+  optimizer: SGD
+  learning_rate: 0.005
+  momentum: 0.9
+  weight_decay: 0.0005
+  epochs: 20
+  seeds: [20260820, 20260821, 20260822]
+  queue_score: predicted_weed_class_first_then_detection_confidence
+ranking_diagnostics:
+  fixed_candidate_source: validation-selected ResNet18-UNet components
+  policies: [conditional_weed_probability, mean_weed_probability, mean_predictive_entropy]
+  policy_selection: validation_primary_endpoint_then_precision_then_lexicographic_name
+uncertainty:
+  primary_cluster_unit: image
+  bootstrap_replicates: 10000
+  bootstrap_seed: 20260812
+  interval: percentile_95_percent
+  training_seed_summary: mean_sample_sd_and_per_seed
+external_transfer:
+  dataset_protocol: configs/experiments/p2_cwfid_external_locked_evaluation_frozen_v1.yaml
+  no_external_finetuning_or_threshold_selection: true
+  queue_policy: fixed_K20_per_image
+execution:
+  physical_gpu_ids: [6, 7]
+  maximum_new_training_processes_per_gpu: 1
+  co_tenancy: share_without_terminating_or_modifying_existing_processes
+  preferred_precision: bfloat16_where_supported
+  credentials_and_internal_addresses_in_artifacts: forbidden

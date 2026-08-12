@@ -24,7 +24,7 @@
 \begin{document}
 \begin{frontmatter}
 
-\title{Support-Aware Review Queues for Crop--Weed Vision: A Multitemporal Single-Field Case Study}
+\title{From Candidate Scores to Plant Recovery in Finite Crop--Weed Review Queues}
 \ifAuthorMetadataReady
 \AuthorFrontmatter
 \else
@@ -33,353 +33,277 @@
 \fi
 
 \begin{abstract}
-Finite crop--weed review queues can lose plants during candidate formation, role qualification, ranking, or budget allocation. We evaluated a support-aware queue framework on the official WeedsGalore spatial split (104/26/26 RGB tiles) from one maize field; the test set contains two held-out spatial patches observed across four acquisition dates. Target-training masks supported proposal selection, candidate labels, and a semantic baseline, while validation selected model settings. Proposal commissioning increased spatial weed recall from 0.2973 to 0.5713 and role-qualified recall from 0.1928 to 0.3026, with candidate burden rising from 30.85 to 90.42 per tile. A component-masked DINOv2 ranker achieved candidate-level role-qualified AUC 0.9665 and average precision 0.8813. Across five H200 training seeds, target-semantic fixed queues achieved precision $0.7168\pm0.0260$ and one-to-one recall $0.2027\pm0.0057$. An exploratory 5--50 candidates/tile allocation increased these values to $0.8939\pm0.0249$ and $0.2578\pm0.0090$, but reduced mean worst-date recall from 0.1100 to 0.0473. Date-balanced allocation provided an intermediate operating point: precision 0.7710, one-to-one recall 0.2192, and worst-date recall 0.1163. Its patch-stratified recall effect was negative in one capture-index group and positive in the other. The resulting single-field evidence shows that proposal support and allocation constraints jointly determine queue utility, and that pooled gains require explicit temporal and spatial-group accounting.
+Crop--weed models are commonly evaluated at pixel or candidate level, although a finite review queue succeeds only when distinct plants remain represented after proposal formation, role qualification, ranking, and budget truncation. We formulate an instance-support-aware evaluation that separates these losses and uses deterministic one-to-one matching as its primary endpoint. The framework was evaluated on the official WeedsGalore split (104/26/26 RGB tiles) and in a locked cross-dataset test on 60 CWFID images. At a common 471-candidate test budget, proposal commissioning increased one-to-one role-qualified weed recall from 0.0970 to 0.1157; the paired image-bootstrap difference was 0.0187 (95\% CI 0.0032--0.0347). Under fixed $K=20$ queues, Mask R-CNN reached one-to-one recall 0.2159, compared with 0.2027 for a ResNet-18 U-Net; validation-selected semantic-probability ordering reached 0.2117. Two independent operators agreed on weed reviewability for 94.2\% of 518 queued regions ($\kappa=0.893$). The locked CWFID transfer produced no candidates from any of five WeedsGalore-selected checkpoints, despite stable internal results. Instance-support-aware accounting therefore distinguishes improvements in recoverable plant support from improvements in candidate scores, while exposing threshold-transfer failures that internal validation cannot reveal.
 \end{abstract}
 
 \begin{keyword}
-weed detection \sep spatial validation \sep candidate proposal \sep self-supervised representation \sep review queue \sep precision agriculture
+crop--weed segmentation \sep instance matching \sep review queue \sep review budget \sep cross-dataset evaluation \sep precision agriculture
 \end{keyword}
 \end{frontmatter}
 
 \section{Introduction}
 
-Site-specific weed management links sensing, plant localization, crop--weed discrimination, and intervention \cite{slaughter2008robotic,swinton2005economics}. A classifier score captures one part of this operational chain. Object-proposal evaluation relates recall to proposal count and overlap \cite{hosang2016proposals}, whereas precision-at-the-top learning optimizes performance within a constrained ranking budget \cite{kar2015precision}. Selective prediction formalizes the complementary trade-off between coverage and error \cite{geifman2017selective,geifman2019selectivenet}, and learning-to-defer methods formalize assignment between automated and human decision makers \cite{mozannar2020defer,mozannar2023whoshould}. A crop--weed review queue may lose an instance during candidate formation, role qualification, rank ordering, or budget truncation. Separating these stages connects candidate-level discrimination to end-to-end instance recovery without treating a queue entry as an agronomic decision.
+Site-specific weed management connects sensing, plant localisation, crop--weed discrimination, and intervention \cite{slaughter2008robotic,swinton2005economics}. Segmentation quality is usually summarised by pixel overlap, while instance systems are commonly evaluated by average precision. These metrics describe model output, but they do not establish how many distinct plants remain available to a reviewer when only a finite number of regions can be inspected.
 
-Agricultural images contain strong spatial and temporal dependence. Random image partitions can overstate generalization when neighboring observations share soil, illumination, management, or canopy structure \cite{roberts2017spatial}. Public crop--weed datasets also vary in crop, sensor, viewpoint, acquisition date, image scale, and annotation contract \cite{haug2015cwfid,chebrolu2017sugarbeets,steininger2023cropandweed,weyler2024phenobench,celikkan2025weedsgalore}. Cross-crop semantic transfer \cite{bosilj2020transfer}, sequence-based localization \cite{lottes2020robust}, and field-focused reviews \cite{garibaldi2025authentic} emphasize the complete sensing and decision chain. We use the official WeedsGalore spatial split to evaluate repeated acquisitions across spatial patches within one field.
+Finite review introduces a sequence of losses. A plant can be absent from the proposal pool, contained in a mixed crop--weed region, merged with neighbouring plants, ranked below the review cut-off, or duplicated by several candidates. Object-proposal research relates recall to overlap and proposal count \cite{hosang2016proposals}, and precision-at-the-top learning studies ranking under restricted capacity \cite{kar2015precision}. Neither candidate discrimination nor many-to-one coverage alone resolves duplication and merge effects. A plant-level queue therefore requires an explicit matching contract between selected regions and distinct truth instances.
 
-Frozen self-supervised features offer a practical representation layer when target-field annotation is limited. DINOv2 provides transferable visual features from large-scale self-supervised pretraining \cite{oquab2024dinov2}. Agricultural active learning links selective annotation to redundancy and class imbalance \cite{vanmarrewijk2024active}, while uncertainty-aware segmentation motivates routing ambiguous regions to review \cite{celikkan2023uncertainty}. Recent weed-vision research reduces supervision through point-labelled instance masks, semi-supervised learning with unlabelled maize imagery, and one-shot segmentation \cite{chen2024pisnet,guo2025semisupervised,catalano2026fewshot}. These methods quantify how annotation design changes segmentation accuracy and labour. A review queue answers a different operational question: after a model proposes image regions, which weed instances remain available after role qualification, finite-budget ranking, and cross-tile allocation? This stage-wise accounting complements segmentation and annotation-efficiency results by localizing losses that aggregate pixel or instance metrics do not identify.
+The queue studied here is a post-inference tool for offline agronomic quality assurance and annotation triage. A reviewer may retain a region as weed evidence, reject it, or escalate an ambiguous crop--weed mixture. Crop overlap matters because it identifies regions that require additional scrutiny before they enter an annotation or quality-control record; it is not interpreted as an agronomic treatment risk. This differs from active learning, which chooses observations for model annotation or retraining \cite{sheikh2020gradient,vanmarrewijk2024active}; selective prediction, which abstains from automated outputs \cite{geifman2017selective,geifman2019selectivenet}; and learning to defer, which learns assignment between a model and an expert \cite{mozannar2020defer,mozannar2023whoshould}. The present queue orders already generated regions and does not issue an actuation decision.
 
-Confidence ordering can change under covariate shift, so a globally ranked batch requires explicit checks of score comparability across acquisition groups \cite{ovadia2019uncertainty,gong2021calibration,tomani2021domain}. Constrained ranking provides an adjacent formal perspective on balancing score utility and group exposure \cite{singh2019fairranking}. Multispectral WeedsGalore results demonstrate additional information from red-edge and near-infrared bands \cite{velesaca2026unveiling}. Together, these studies motivate an RGB queue analysis that measures where proposal support, representation, allocation, and review shape recoverable instances.
+Agricultural imagery adds spatial, temporal, and cross-dataset dependence. Random image partitions can overstate generalisation when neighbouring observations share soil, illumination, canopy structure, or management \cite{roberts2017spatial}. Public crop--weed datasets also differ in crop, sensor, viewpoint, scale, and annotation contract \cite{haug2015cwfid,chebrolu2017sugarbeets,steininger2023cropandweed,weyler2024phenobench,celikkan2025weedsgalore}. Internal optimisation stability must therefore be separated from transfer across acquisition systems.
 
-We model crop and weed as scene-dependent agricultural roles. Taxonomic identity (family, genus, and species) and management morphotype (grass-like, broadleaf, sedge, and other) remain separate output axes. The present experiments quantify role-specific candidate recovery.
-
-We introduce a support-aware queue framework with three measurable layers: spatial proposal recall, role-qualified proposal recall, and queued recall after ranking and allocation. Shared-ranker-weight comparisons isolate candidate formation, and all-candidate fitting aligns ranker supervision with deployed support. A target-semantic baseline with equal target-mask access measures direct target-domain component formation. Fixed and quota-constrained allocations are evaluated at matched review budgets, with validation-selected, date-balanced, worst-date, and spatial-block diagnostics. Many-to-one and one-to-one recovery, IoU, crop exposure, simulated label budgets, and per-tile heterogeneity complete the evidence chain.
+We address this gap through an instance-support-aware evaluation of finite crop--weed review queues. The framework distinguishes spatial proposal recall, role-qualified proposal recall, and queued one-to-one plant recovery. It also matches review burden when proposal settings are compared, discloses every source of supervision, and treats candidate AUC and average precision as diagnostic measures. We evaluate source-transfer rankers, target-trained semantic models, an instance segmenter, and simple probability or entropy ordering under the same $K=20$ capacity. A frozen CWFID protocol then tests whether validation-selected WeedsGalore checkpoints and thresholds transfer without external tuning. The resulting analysis identifies where recoverable support is gained, where it is lost, and when an internally stable queue fails across datasets.
 
 \section{Materials and methods}
 
-\subsection{Data lineage, sensor scope, and spatial split}
+\subsection{Review task and information contract}
 
-The source specialist used the public SugarBeets2016 RGB images and masks \cite{chebrolu2017sugarbeets}. The target evaluation used 156 annotated $600\times600$ pixel tiles from the public WeedsGalore release \cite{celikkan2025weedsgalore}. WeedsGalore contains four acquisitions from one maize field and 48 recorded locations: 36 locations were observed on the first three dates and 12 on all four dates. Its official 8/2/2 spatial-patch allocation yields 104 training, 26 validation, and 26 test tiles. The test split contains 1,712 weed and 256 crop instances in the released raster masks.
+The unit presented for review was an RGB region associated with one connected proposal component and a model score. Each tile contributed at most $K=20$ regions. The value $K=20$ defines a standardised experimental capacity; it is not a measured time optimum or a per-hectare workload. The intended reviewer action is retain, reject, or escalate. No autonomous treatment command, operator timing, or labour-cost claim is evaluated.
 
-All inference used RGB to match the SugarBeets source specialist and isolate cross-dataset transfer under a common sensor contract. Red-edge and near-infrared channels define a complementary multispectral extension.
+Figure~\ref{fig:workflow} separates model input from offline scoring. Queue construction can use RGB, model outputs, component geometry, tile identity, and a preselected policy. Target truth can enter training, validation selection, or offline scoring only in its declared data role. Test masks and instance identifiers cannot enter proposal generation, ranking features, or queue allocation.
 
-Raster enumeration produced 2,168 crop and 10,029 weed instances across the 156 tiles, whereas the dataset paper reports 2,169 and 10,031. Direct mask checks found zero semantic--instance inconsistencies and zero excluded instance identifiers. All analyses use the reproducible raster denominators, with the evaluated archive hash reported in the supplement.
-
-Figure~\ref{fig:workflow} defines the information flow. Target RGB enters proposal generation, official-training dense masks support proposal selection and candidate-label derivation, and validation selects regularization, epoch, semantic threshold, minimum component area, and the transferable DINOv2 queue threshold. Every queue was formed from images, scores, and tile identities before its offline scorer accessed test labels.
-
-Table~\ref{tab:chronology} separates the analysis stages by chronology. The core proposal, ranking, matching, and fixed-$K$ configuration was archived before its first official-test score. Target-semantic training, repeated-seed evaluation, quota sensitivity, exact component-mask replay, and group-stratified allocation were specified after the core test had been accessed and are reported as exploratory analyses. The archive contains timestamped configurations and checksums rather than a public immutable preregistration. None of the exploratory results altered the core proposal grid, matching contract, feature definitions, or fixed-$K$ results.
-
-\begin{table}[!t]
-\centering
-\caption{Analysis chronology. Times use China Standard Time (UTC+8). ``First test output'' denotes the earliest archived official-test result for the corresponding analysis family.}
-\label{tab:chronology}
-\footnotesize
-\setlength{\tabcolsep}{3pt}
-\resizebox{\linewidth}{!}{%
-\begin{tabular}{L{4.2cm}L{3.1cm}L{3.1cm}L{2.8cm}}
-\toprule
-Analysis family & Archived specification & First test output & Interpretation \\
-\midrule
-Proposal, ranker, matching, fixed $K$ & 8 Aug 2026, 22:02 & 10 Aug 2026, 14:03 & Recorded core analysis \\
-Target-semantic reference & 10 Aug 2026, 17:16 & 10 Aug 2026, 20:09 & Post-test exploratory \\
-Five-seed H200 repetitions & 12 Aug 2026, 15:44 & 12 Aug 2026 & Post-test exploratory \\
-Quota grid, exact replay, group audits & 12 Aug 2026 & 12 Aug 2026 & Post-test exploratory \\
-\bottomrule
-\end{tabular}}
-\end{table}
+Taxonomic identity, agricultural role, and management morphotype are distinct output axes. Family, genus, and species form the taxonomic axis. Crop, weed, volunteer crop, and unknown role are scene-dependent agricultural roles. Grass-like, broadleaf, sedge, and other describe management morphotype. The experiments in this paper evaluate only the crop--weed role axis.
 
 \begin{figure}[!t]
 \centering
 \includegraphics[width=\textwidth]{figures/Figure_1.pdf}
-\caption{Information architecture of the support-aware queue analysis. (a) The RGB-only path separates candidate formation, role qualification, ranking, allocation, and group-stratified queue auditing. (b) Source supervision and the official WeedsGalore 104/26/26 spatial roles; the 26-tile test set comprises two held-out spatial patches observed across four acquisition dates. (c) Truth-access contract. Training truth supports proposal search and model selection, validation truth is restricted to setting selection, queue formation uses only RGB and model outputs, and test truth is accessed after a queue is locked for offline scoring.}
+\caption{Instance-support-aware evaluation of a finite crop--weed review queue. RGB images pass through candidate formation, role scoring, ranking, and a fixed $K=20$ budget. Offline truth first measures spatial support, then role-qualified support, and finally deterministic one-to-one plant recovery. Training and validation truth remain separated from locked test scoring. The external branch transfers WeedsGalore-selected checkpoints and thresholds to CWFID without external tuning.}
 \label{fig:workflow}
 \end{figure}
 
-\subsection{Source RGB specialists and proposal settings}
+\subsection{Datasets, splits, and external lock}
 
-The foreground and crop/weed semantic specialists were ResNet-18 U-Net-style networks initialized with torchvision ImageNet-1K V1 weights \cite{he2016resnet}. RGB was scaled to $[0,1]$ and normalized by the ImageNet mean $(0.485,0.456,0.406)$ and standard deviation $(0.229,0.224,0.225)$. Both models used the 7,050-image source training partition. The foreground model used 32,768 deterministic $128\times128$ patches, binary cross-entropy with positive weight 30 plus soft Dice, and 10 epochs. The semantic model used 16,384 role-balanced patches, class-weighted cross-entropy with weights $(0.2,1,1)$ plus crop/weed Dice, and 8 epochs. Training used deterministic patches without stochastic augmentation. AdamW (learning rate $8\times10^{-4}$, weight decay $10^{-4}$), bfloat16 autocasting, fixed seeds, gradient clipping at 5, and final-epoch checkpoints completed both runs. The 901-image source validation partition subsequently provided operating-point diagnostics. The foreground diagnostic reached maximum pixel IoU 0.3821 at threshold 0.99 (precision 0.5788, recall 0.5293). At threshold 0.70, recall was 0.9631 and precision was 0.0479. The semantic diagnostic reached three-class macro IoU 0.4425. Its role threshold yielded balanced accuracy 0.7224, crop recall 0.5524, and weed recall 0.8924. These values characterize source-domain pixels; target queue metrics appear in Section~3.
+The source specialists used public SugarBeets2016 RGB images and masks \cite{chebrolu2017sugarbeets}. The target development study used 156 annotated $600\times600$ pixel WeedsGalore tiles from one maize field \cite{celikkan2025weedsgalore}. The official spatial allocation contains 104 training, 26 validation, and 26 test tiles. Raster enumeration yielded 2,168 crop and 10,029 weed instances across all 156 tiles. The official test masks contained 256 crop and 1,712 weed instances.
 
-For a target RGB tile, the frozen specialists produced foreground probability $f(u)$ and semantic probabilities $p_c(u)$ and $p_w(u)$. A proposal foreground mask at threshold $T$ was decomposed into connected components, and components smaller than area $A$ were removed. Each setting is therefore defined by the pair $(T,A)$. Candidate features never read target masks.
+The test tiles represented four acquisition dates (Table~\ref{tab:dates}). The first three dates contributed eight tiles each, whereas 15 June contributed two. Date-macro and worst-date summaries therefore complement pooled counts. Capture-index groups are reported as released grouping variables, without assigning unverified physical field identities.
 
-The pre-existing external-inference configuration used $T=0.95$ and $A=32$ pixels and was fixed before the official spatial reanalysis. Commissioning evaluated a 12-setting grid on the 104 official-training tiles. Feasible settings satisfied a training-set mean burden of at most 100 candidates/image, while per-image counts remained unrestricted. The objective maximized training role-qualified weed proposal recall. Ties favored lower mean burden, higher threshold, and larger area, in that order. This procedure selected $T=0.70$ and $A=32$ pixels, with 95.07 candidates/image, spatial recall 0.5271, and role-qualified recall 0.2856 on training. The 30 May training burden reached 130.38/image. On official test, the median was 89, the interquartile range was 60--114.25, and the maximum was 183. Training masks exclusively determined proposal-setting selection.
+\begin{table}[!t]
+\centering
+\caption{WeedsGalore official-test denominators by acquisition date.}
+\label{tab:dates}
+\small
+\begin{tabular}{lrrr}
+\toprule
+Acquisition date & RGB tiles & Weed instances & Crop instances \\
+\midrule
+25 May 2023 & 8 & 392 & 122 \\
+30 May 2023 & 8 & 440 & 55 \\
+6 June 2023 & 8 & 726 & 68 \\
+15 June 2023 & 2 & 154 & 11 \\
+\midrule
+Total & 26 & 1,712 & 256 \\
+\bottomrule
+\end{tabular}
+\end{table}
 
-\subsection{Candidate contract and non-interchangeable recall layers}
+Cross-dataset evaluation used the official CWFID v1.0 release \cite{haug2015cwfid}. Its 60 RGB images and paired public annotations were fixed at source commit \texttt{176612f3}. Before image or annotation access, the protocol fixed preprocessing, five existing WeedsGalore checkpoints, their validation-selected component settings, fixed $K=20$, the ranking score, truth-component definition, and endpoints. All 242 upstream blobs were verified by byte count and Git blob SHA-1 before one recorded opening. Images were scaled so the longer side measured 600 pixels, reflection-padded to $600\times600$, and normalised as in training. Public annotation colours were transformed by nearest-neighbour interpolation and zero padding. Weed truth units were eight-connected annotation components of at least 16 pixels; they are component proxies rather than persistent plant identities. No CWFID label was used for fitting or selection.
 
-Let $I_j$ be a truth instance and $C_i$ a proposal. Spatial coverage is
+\subsection{Supervision ledger}
+
+Table~\ref{tab:supervision} reports the complete supervision burden. Proposal generation itself is image-only at inference, but selecting its operating point requires target-training masks. Candidate labels are derived from dense masks. A separate 300-candidate training-label ablation therefore restricts sampled training candidates while retaining all 2,436 labelled validation candidates; it is not a 300-label end-to-end regime.
+
+\begin{table}[!t]
+\centering
+\caption{Supervision and data roles. Test truth is restricted to offline scoring.}
+\label{tab:supervision}
+\footnotesize
+\setlength{\tabcolsep}{3.5pt}
+\begin{tabularx}{\textwidth}{L{3.2cm}L{3.2cm}L{3.4cm}X}
+\toprule
+System or stage & Training supervision & Selection supervision & Test use \\
+\midrule
+Source specialists & 7,050 SugarBeets RGB masks & 901 source masks for diagnostics & RGB inference only \\
+Proposal commissioning & 104 target dense masks & Training-mask objective and burden constraint & Offline scoring \\
+Source-transfer rankers & 9,887 target-training candidate labels & 2,436 validation candidate labels & Queue formed before scoring \\
+U-Net and DeepLabV3+ & 104 target RGB dense masks & 26 validation RGB dense masks & Queue formed before scoring \\
+Mask R-CNN & 104 target RGB semantic and instance masks & 26 validation semantic and instance masks & Queue formed before scoring \\
+CWFID transfer & No external labels & No external labels & 60 annotations for locked scoring only \\
+Two-operator review & No model training & Frozen 518-region queue and common instructions & Aggregate technical-review analysis only \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+\subsection{Two-operator technical review}
+
+A frozen target-semantic $K=20$ queue containing 518 regions from the 26 WeedsGalore test tiles was used to assess whether the review categories could be applied consistently. Each item showed the RGB tile, a highlighted candidate box, and a local RGB crop. Acquisition date, scene identity, candidate identifier, model score, rank, model identity, allocation policy, and mask-derived truth were hidden. Two operators completed all items independently under common written instructions and without access to one another's responses.
+
+For each region, the operators recorded primary content (weed-dominant, crop-dominant, background, or uncertain), weed reviewability (yes, no, or uncertain), crop presence (yes, no, or uncertain), localisation usability (adequate, partial, unusable, or uncertain), and confidence on a five-point scale. Timing was neither required nor analysed. Exact agreement and Cohen's $\kappa$ were computed for the categorical fields. A 10,000-replicate scene-cluster bootstrap resampled the 26 source tiles. The analysis characterises these two fixed operators and was not used to select a model, threshold, or queue policy.
+
+\subsection{Candidate formation and model families}
+
+Two source ResNet-18 U-Net-style specialists were initialised with ImageNet-1K weights \cite{he2016resnet}. One estimated plant foreground and the other estimated crop and weed role probabilities. The source-training procedures used deterministic $128\times128$ patches, AdamW, and combined cross-entropy and soft-Dice losses. Full hyperparameters and source diagnostics are reported in the supplement. A target tile produced foreground probability $f(u)$ and role probabilities $p_c(u)$ and $p_w(u)$. Thresholding $f(u)$ at $T$, applying eight-connectivity, and removing components smaller than $A$ pixels defined each proposal setting $(T,A)$.
+
+The original operating point was $(0.95,32)$. Commissioning searched 12 settings on the 104 official-training tiles. Feasible settings had no more than 100 candidates per tile on average. Training role-qualified weed proposal recall was maximised, followed by lower burden, higher threshold, and larger area. The selected setting was $(0.70,32)$.
+
+Five all-candidate rankers were evaluated: the source weed score, geometry, role-plus-local specialist features, frozen DINOv2 ViT-S/14 features, and component-masked DINOv2 features \cite{oquab2024dinov2}. The masked view retained component pixels and filled the surrounding bounding box with the image median. Logistic regularisation was selected on official validation. The target-trained semantic family comprised a ResNet-18 U-Net and DeepLabV3+ with a ResNet-50 encoder \cite{chen2018deeplabv3plus}. The instance family used Mask R-CNN with a ResNet-50 FPN backbone \cite{he2017maskrcnn}. U-Net used five training seeds; DeepLabV3+ and Mask R-CNN used three each. Each seed selected its epoch and component setting on the official validation split.
+
+Semantic components were ranked by conditional weed probability, mean weed probability, or mean predictive entropy. The policy for each checkpoint was selected on validation by one-to-one role-qualified recall, then candidate precision, then policy name. Mask R-CNN ranked predicted weed instances before other detections and then used detection confidence. All model families used the same fixed $K=20$ queue endpoint. Training ran on one NVIDIA H200 accelerator per seed; hardware details, exact software versions, public-weight hashes, and checkpoint hashes are provided in the reproducibility archive.
+
+\subsection{Support, matching, and queue metrics}
+
+For truth instance $I_j$ and candidate $C_i$, instance coverage is
 \begin{equation}
 \operatorname{cov}(I_j,C_i)=\frac{|I_j\cap C_i|}{|I_j|}.
 \end{equation}
-Spatial proposal recall counts $I_j$ when any candidate has $\operatorname{cov}\ge0.50$, irrespective of candidate role. Role-qualified recall additionally requires at least 0.50 labeled-pixel coverage and 0.90 same-role purity in the same candidate. Queued recall applies the corresponding contract to selected candidates. We report the three layers separately to identify support, qualification, and allocation effects. The 0.50/0.50/0.90 values are fixed engineering thresholds for offline candidate accounting, not agronomic treatment or actuation thresholds; the full sensitivity grid below shows how conclusions vary when they change.
+Spatial proposal recall counts $I_j$ when at least one candidate has coverage of 0.50 or greater. Role-qualified support additionally requires the candidate to contain at least 0.50 labelled-pixel coverage and 0.90 same-role purity. These thresholds define an offline matching contract rather than an agronomic treatment threshold.
 
-Many-to-one recall permits one candidate to cover multiple instances. We additionally solve maximum-cardinality one-to-one candidate--instance matching and report standard intersection-over-union sensitivity. The full contract grid crosses instance coverage $\{0.25,0.50,0.75\}$, labeled coverage $\{0.25,0.50,0.75\}$, and same-role purity $\{0.50,0.75,0.90\}$. Split and merge summaries at overlap thresholds 0.10, 0.25, and 0.50 quantify contract sensitivity.
+Many-to-one recall permits one candidate to recover several truth instances. The primary endpoint instead uses maximum-cardinality one-to-one matching between selected candidates and weed instances that satisfy the role-qualified contract. Lexicographic candidate and instance identifiers resolve deterministic ties. Candidate precision is the fraction of selected regions that satisfy the role-qualified weed contract. Crop exposure is the fraction of tiles with any selected region overlapping crop truth. Standard IoU and threshold sensitivity are reported separately.
 
-\subsection{Rankers and support-aware targets}
+\subsection{Matched review burden and uncertainty}
 
-All linear models were fitted with standardized features and logistic loss. The discrimination comparison selected $C\in\{0.001,0.01,0.1,1,10,100\}$ on official validation by ROC AUC, then average precision, then $C$ closest to 1 on the log scale. The queue-selected model used validation $K=20$ one-to-one role-qualified recall, followed by many-to-one recall, precision, and the same log-scale tie-break. This procedure selected $C=10$. Each model was refitted on official train plus validation. Lexicographically ascending candidate ID resolved score ties.
+Commissioning changes both proposal support and candidate burden. To isolate formation quality at a common review burden, the paired comparison used
+\begin{equation}
+k_i=\min(20,n_i^{\mathrm{original}},n_i^{\mathrm{commissioned}})
+\end{equation}
+for each test tile $i$. Both settings therefore contributed the same 471 selected candidates under identical ranker weights. A global equal-$N$ analysis also ranked 471 candidates for each setting. Recall--burden curves for $K\in\{1,5,10,20,50\}$ were summarised by their normalised area (AURBC).
 
-The baselines were: source ResNet weed score; geometry only; role-plus-local specialist features; frozen DINOv2 on the tight RGB bounding box; and component-masked frozen DINOv2. We explicitly distinguish eligible-only fitting from all-candidate fitting. Eligible-only models learn weed versus crop from candidates already satisfying the role contract. All-candidate models learn role-qualified weed versus every other candidate, including crop, mixed-role, background-dominated, and fragmented regions. The latter objective matches the support encountered by the queue.
-
-DINOv2 used the public ViT-S/14 LVD-142M weights distributed through timm, with $224\times224$ inputs and a frozen encoder \cite{oquab2024dinov2}. The unmasked representation used the tight candidate bounding box without padding. The masked representation retained proposal-component pixels and filled its surroundings with the per-image RGB median before resizing. Both representations used RGB and proposal geometry exclusively. This paired context ablation measures how surrounding field texture contributes to ranking.
-
-The equal-target-mask-access baseline was a three-class ResNet-18 U-Net initialized from ImageNet-1K and trained on all 104 official-training RGB/mask pairs. Random $512\times512$ crops and horizontal/vertical flips were applied, with RGB normalization matched to the source models. Its loss combined weighted cross-entropy with weights $(0.15,1,1)$ and crop/weed soft Dice. AdamW optimized the model for 40 epochs (learning rate $3\times10^{-4}$, weight decay $10^{-4}$). Official validation selected the epoch, threshold, and component area. Selection first maximized $K=20$ one-to-one role-qualified recall among settings with mean burden at most 100 candidates/image. Subsequent tie-breaks used many-to-one recall, precision, lower burden, higher threshold, larger area, and earlier epoch.
-
-Training variability was characterized with five independently initialized, 40-epoch single-device runs identified by numeric seeds 20260810--20260814; these identifiers are not acquisition dates. Each run used the same architecture, loss, optimizer, global batch size of six, candidate grid, and validation-only selection rule. The series ran concurrently on two NVIDIA H200 accelerators, with every seed confined to one accelerator and a local batch size of six. Training seed was the independent unit for the stability summary; we report the mean, sample standard deviation, minimum, maximum, and every seed value without treating candidates or instances as independent repeats.
-
-The small-data adaptation recipe trained the final transformer block, final normalization, and binary head from each prospective draw of 300 simulated training-candidate labels derived from dense masks. Model selection additionally used all 2,436 labelled validation candidates; the experiment therefore evaluates a restricted training-label draw under a fully labelled validation set, not a 300-label end-to-end annotation regime. A deterministic rule assigned a positive label only when the candidate satisfied the role-qualified weed contract; all crop, mixed-role, background-dominated, and fragmented candidates were negative. Training used 8 epochs, batch size 64, AdamW, weight decay $10^{-4}$, and class-weighted binary cross-entropy. Learning rates were $10^{-5}$ for the transformer block/norm and $10^{-3}$ for the head. Random horizontal and vertical flips supplied augmentation. Validation selected maximum candidate-level role-qualified AUC, then average precision, then the earlier epoch. Ten paired repeats used identical selected IDs for frozen and fine-tuned comparisons. The resulting empirical draw distribution characterizes this archived last-block adaptation recipe; it is not interpreted as a stable 95\% sampling interval.
-
-\subsection{Queue metrics, controls, and uncertainty}
-
-For each test image, the first $K\in\{1,5,10,20,50\}$ candidates formed the fixed queue. Images with fewer than $K$ proposals contributed every available candidate. At the same seed-specific total as fixed $K=20$, a post-test quota grid crossed minimum allocations $\{0,5,10,20\}$ with maxima $\{20,30,50,\text{unrestricted}\}$. The 5--50 policy is retained as an exploratory pooled-utility setting rather than a primary policy. A validation-only rule first required candidate-level role-qualified precision at least as high as validation fixed $K=20$, then maximized validation worst-date one-to-one recall, pooled recall, and precision in that order. A date-balanced comparator preserved each date's fixed-queue candidate count and globally ranked candidates within date. Unconstrained global top-$N$ and a validation-transferred score threshold provide additional diagnostics. These policies use scores, tile identities, and acquisition groups, so we report per-tile allocation, date shares, pooled/date-macro/worst-date metrics, and the two released capture-index groups as spatial patch proxies.
-
-Three controls locate the fixed-$K$ ceiling. A 1,000-draw random ranker establishes an ordering reference. An exact integer program maximizes role-qualified recalled instances at each $K$ under one selection decision per candidate. For the crop-constrained oracle, scene frequency $\alpha$ becomes the integer allowance $\lfloor \alpha n_{\mathrm{scene}}\rfloor$. Thus, $\alpha=0.01$ with 26 scenes permits zero crop-exposed scenes and removes every candidate with positive crop fraction. At $K=20$, we decompose the distance from perfect recall into proposal loss, budget loss, and the ranking gap to the exact oracle. Global allocation has a broader feasible set because it can assign more than 20 candidates to a tile.
-
-Full-supervision rankers use every official train/validation candidate label derived from dense masks. The equal-target-mask-access semantic baseline trains directly on all 104 target-training masks, with validation choosing epoch, foreground threshold, and minimum component area. Separately, ten simulations of 300 training-candidate labels compare prospective uniform sampling, prospective greedy farthest-first DINOv2 coreset selection, and retrospective class-stratified sampling. Uniform and coreset designs reveal training labels after ID selection, whereas the stratified reference uses class labels during selection; all three use the fully labelled 2,436-candidate validation set. The supervision ledger distinguishes simulated candidate-ranker labels, source masks, target masks, and public pretraining.
-
-The $600\times600$ tile is the measured experimental unit. The 26 test tiles represent two spatial patches in one field with repeated acquisition positions. The public release provides capture indices rather than authoritative field coordinates. We therefore summarize pooled, per-date, per-tile, and two-group capture-index proxy results. Date-macro summaries weight the four acquisition dates equally; worst-date values are the minimum for benefit metrics and the maximum for crop exposure. Paired tile differences include the median, interquartile range, full range, and improved/unchanged/worsened counts. Candidate-level role-qualified AUC and average precision are reported by date and by tiles containing both classes. No population-level $p$-values are calculated from the two patch proxies. Ten-repeat ranges are empirical quantiles across simulated label draws, with paired differences computed within each draw. Group-wise robustness is descriptive because two patches from one field cannot estimate between-field uncertainty \cite{sagawa2020groupdro}.
-
-Target-semantic candidate--instance intersections were replayed from the saved binary connected-component masks and official instance rasters. The replay regenerated all 1,347 candidate identifiers and reproduced all 26 fixed-queue scene summaries exactly. Quota and patch-proxy results use these direct mask intersections; bounding-box reconstruction is not used for the reported target-semantic matching results.
+Uncertainty was estimated with 10,000 paired bootstrap resamples of the 26 test images. Training-seed means and sample standard deviations quantify optimisation variation. Image-cluster percentile intervals quantify test-image heterogeneity. Two prespecified strong-baseline contrasts compare DeepLabV3+ and Mask R-CNN with the ResNet-18 U-Net. Candidate AUC and average precision are diagnostic and are not treated as plant-recovery endpoints. The provenance class of each analysis and the recorded freeze and opening times for the external experiment are reported in Supplementary Table~S1.
 
 \section{Results}
 
-\subsection{Commissioning increased proposal coverage and candidate burden}
+\subsection{Commissioning improved recovery under a matched review burden}
 
-On the official test split, the pre-existing setting proposed 802 candidates (30.85/image), whereas the commissioned setting proposed 2,351 (90.42/image). Spatial weed proposal recall increased from 509/1,712 (0.2973) to 978/1,712 (0.5713). Role-qualified recall increased from 330/1,712 (0.1928) to 518/1,712 (0.3026). Ambiguous or background candidates increased from 0.2506 to 0.7554 of the pool. Role-qualified weed candidates consequently decreased from 0.5648 to 0.1974 of the pool (Figure~\ref{fig:commissioning}). The coverage gain therefore carried a 2.93-fold increase in candidate burden; Table~\ref{tab:matched} reports the corresponding fixed-ranker queue comparison.
+Before budget matching, the original setting produced 802 candidates (30.85 per tile), while the commissioned setting produced 2,351 (90.42 per tile). Spatial proposal recall increased from 509/1,712 (0.2973) to 978/1,712 (0.5713). Role-qualified proposal recall increased from 330/1,712 (0.1928) to 518/1,712 (0.3026).
 
-\begin{figure}[H]
+The gain remained after review burden was matched (Table~\ref{tab:commissioning}). Both settings selected 471 candidates. One-to-one role-qualified recall increased from 0.0970 to 0.1157, a paired difference of 0.0187 (95\% image-bootstrap CI 0.0032--0.0347). Spatial recall increased by 0.0818 (95\% CI 0.0560--0.1098). Candidate precision decreased by 0.0679 (95\% CI $-0.1384$--0.0064), and crop-exposed tile frequency increased by 0.0385 (95\% CI 0--0.1154). Under global equal-$N$, one-to-one recall increased from 0.0970 to 0.1174. AURBC increased from 0.0598 to 0.0750. Commissioning therefore added recoverable support, but also introduced more ambiguous regions and crop overlap.
+
+\begin{table}[!t]
 \centering
-\includegraphics[width=\textwidth]{figures/Figure_2.pdf}
-\caption{Proposal commissioning on the official test split. (a) Spatial and role-qualified proposal recall with candidate burden. (b) End-to-end comparison at $K=20$ using identical all-candidate role-plus-local weights. (c) Candidate-pool composition. Crop exposure is the frequency of images containing any queued candidate with nonzero crop overlap.}
-\label{fig:commissioning}
-\end{figure}
-
-\begin{table}[htbp]
-\centering
-\caption{Shared-ranker-weight original versus commissioned queues at $K=20$. The comparison holds ranker weights fixed but not workload: seven original-setting images contained fewer than 20 proposals, so 471 rather than 520 candidates were accepted.}
-\label{tab:matched}
-\small
+\caption{Proposal settings compared at the same 471-candidate review burden. Recall denominators are 1,712 weed instances; crop exposure denominators are 26 tiles.}
+\label{tab:commissioning}
+\footnotesize
+\setlength{\tabcolsep}{3pt}
 \resizebox{\textwidth}{!}{%
 \begin{tabular}{lrrrrrr}
 \toprule
-Setting & Accepted & Weed cand. & Precision & Spatial recall & Qualified recall & Crop scenes \\
+Setting & Raw candidates/tile & Selected & Precision & Spatial recall & Qualified recall & 1:1 recall \\
 \midrule
-Original ($\tau=0.95$, 32 px) & 471 & 276 & 0.5860 & 321/1712 (0.1875) & 205/1712 (0.1197) & 22/26 (0.8462) \\
-Commissioned ($\tau=0.70$, 32 px) & 520 & 247 & 0.4750 & 467/1712 (0.2728) & 273/1712 (0.1595) & 23/26 (0.8846) \\
+Original $(0.95,32)$ & 30.85 & 471 & 0.5860 & 0.1875 & 0.1197 & 0.0970 \\
+Commissioned $(0.70,32)$ & 90.42 & 471 & 0.5180 & 0.2693 & 0.1571 & \textbf{0.1157} \\
 \bottomrule
 \end{tabular}}
 \end{table}
 
-\subsection{All-candidate training corrected a support mismatch}
-
-An eligible-only role-plus-local model achieved high discrimination inside the eligible subset but candidate-level role-qualified AUC 0.4420 and average precision 0.1640 when applied to all 2,351 test candidates. Training the same feature family on the all-candidate weed-versus-rest target increased these values to 0.9049/0.6960. Geometry alone reached 0.8154/0.5418. Thus, the principal transparent-baseline gain came from matching the fitting target to queue support.
-
-Frozen DINOv2 further increased candidate-level role-qualified AUC/AP to 0.9630/0.8684. Component masking reached 0.9665/0.8813. The masked improvement is small but directionally consistent for both metrics, indicating that the discriminative signal remained when context outside the proposal component was replaced. At $K=20$, the unmasked and masked rankers achieved role-qualified recall 305/1,712 (0.1782) and 319/1,712 (0.1863), respectively (Table~\ref{tab:rankers}; Figure~\ref{fig:queue}).
-
-\begin{table}[htbp]
+\begin{figure}[!t]
 \centering
-\caption{Official-test all-candidate ranking and $K=20$ queue results for the discrimination-selected rankers. AUC, AP, and precision use the candidate-level role-qualified weed label; selection used official validation only.}
-\label{tab:rankers}
-\small
-\resizebox{\textwidth}{!}{%
-\begin{tabular}{lrrrrr}
-\toprule
-Ranker & AUC & AP & Precision & Spatial recall & Qualified recall \\
-\midrule
-Source ResNet score & 0.4947 & 0.2877 & 187/520 (0.3596) & 318/1712 (0.1857) & 192/1712 (0.1121) \\
-All-candidate geometry & 0.8154 & 0.5418 & 212/520 (0.4077) & 534/1712 (0.3119) & 287/1712 (0.1676) \\
-All-candidate role + local & 0.9049 & 0.6960 & 247/520 (0.4750) & 467/1712 (0.2728) & 273/1712 (0.1595) \\
-Frozen DINOv2 & 0.9630 & 0.8684 & 276/520 (0.5308) & 431/1712 (0.2518) & 305/1712 (0.1782) \\
-Component-masked DINOv2 & 0.9665 & 0.8813 & 278/520 (0.5346) & 459/1712 (0.2681) & 319/1712 (0.1863) \\
-\bottomrule
-\end{tabular}}
-\end{table}
-
-\subsection{Proposal, budget, and ranking each constrained queued recall}
-
-At $K=20$, the role-qualified proposal ceiling was 518/1,712 (0.3026), and exact per-image optimization covered 426 instances (0.2488). The 0.01 crop-scene rule permits $\lfloor0.01\times26\rfloor=0$ exposed scenes. Crop-excluding optimization retained 418/1,712 instances (0.2442). The discrimination-selected component-masked ranker recovered 319/1,712 (0.1863), producing a 0.0625 ranking gap to the fixed-$K$ oracle. Relative to perfect recall, proposal construction contributed 0.6974 and the per-image budget contributed 0.0537. Queue-metric selection recovered 324/1,712 (0.1893) and narrowed the ranking gap to 0.0596.
-
-The component-masked ranker exceeded the 1,000-draw random 95\% empirical range at $K=20$ (0.077--0.104 role-qualified recall). Many-to-one recall of 0.1863 became 230/1,712 (0.1343) under one-to-one matching, quantifying candidate--instance multiplicity. Under IoU-only thresholds 0.25/0.50/0.75, many-to-one recall was 0.1898/0.0952/0.0140. Corresponding one-to-one recall was 0.1793/0.0952/0.0140. Across the evaluated role-contract grid, masked-DINOv2 many-to-one recall ranged from 0.0485 to 0.2886. One-to-one recall ranged from 0.0374 to 0.1881. These sensitivity curves position the 0.50/0.50/0.90 contract within the broader operating space.
-
-\begin{figure}[H]
-\centering
-\includegraphics[width=\textwidth]{figures/Figure_3.pdf}
-\caption{Official-test queue behavior. (a) All-candidate precision and (b) role-qualified recall across $K$. (c) Proposal, exact-budget, and observed $K=20$ ceilings. (d) Test-scene frequency with queued crop overlap at four minimum crop fractions.}
-\label{fig:queue}
+\includegraphics[width=\textwidth]{figures/Figure_2.pdf}
+\caption{Matched-burden commissioning analysis. (a) Raw proposal recall and candidate burden. (b) Original and commissioned queues after applying a common per-tile capacity, with 95\% image-bootstrap intervals. (c) Paired commissioned-minus-original effects. (d) One-to-one recall--burden curves and normalised AURBC.}
+\label{fig:commissioning}
 \end{figure}
 
-\subsection{Frozen representations remained competitive with 300 training labels and a fully labelled validation set}
+\subsection{Candidate discrimination did not determine plant recovery}
 
-Across ten official-training draws of 300 simulated mask-derived training-candidate labels, prospective uniform sampling achieved mean candidate-level role-qualified AUC/AP 0.9549/0.8544, $K=20$ precision 0.5242, and role-qualified recall 0.1724. DINOv2 coreset selection achieved 0.9543/0.8534, 0.5217, and 0.1717. The retrospective class-stratified reference achieved 0.9547/0.8502, 0.5231, and 0.1725. In this candidate pool, the prospective policies produced similar empirical means to the retrospective reference; the ten draws do not establish population-level equivalence (Figure~\ref{fig:controls}).
+Changing the fitting target from eligible candidates to the complete deployed candidate pool increased role-plus-local candidate AUC from 0.4420 to 0.9049. Frozen DINOv2 reached AUC/AP of 0.9630/0.8684, while component masking reached 0.9665/0.8813. The absolute masking differences were 0.0035 in AUC and 0.0129 in AP.
 
-Under the predefined last-block recipe, validation selected epoch 8 in all ten paired repeats. Fine-tuned minus frozen candidate-level role-qualified AUC averaged $-0.0396$, with empirical 2.5/97.5 draw percentiles of $-0.0525/-0.0170$. Precision averaged $-0.0373$, and role-qualified recall averaged $-0.0115$, with reductions in 9/10 repeats. These are paired descriptive summaries of the archived optimizer, trainable block, augmentation, and epoch grid, not confidence intervals.
+High candidate discrimination did not translate directly to distinct-plant recovery. At $K=20$, the masked DINOv2 queue achieved candidate precision 0.5346 and many-to-one qualified recall 0.1863. One-to-one matching reduced recall to 0.1343 because merged candidates and duplicate support could not be counted repeatedly. The role-qualified proposal ceiling was 0.3026, and an exact per-tile budget oracle reached 0.2488. Proposal formation therefore removed most plants before ranking, while candidate multiplicity created an additional gap between many-to-one and one-to-one evaluation.
 
-\begin{figure}[H]
+The qualitative atlas in Figure~\ref{fig:failures} shows four mechanisms selected deterministically from the 26 test tiles: fragmentation of one weed into two candidates, merger of five weeds into one candidate, a background component with no labelled support, and a crop--weed mixture. Each mechanism changes plant recovery without being fully described by a single candidate score.
+
+\begin{figure}[!t]
 \centering
 \includegraphics[width=\textwidth]{figures/Figure_4.pdf}
-\caption{Controls and sensitivity. (a) Ten draws of 300 simulated mask-derived training-candidate labels; every model also uses the fully labelled validation set, and horizontal bars are empirical means. (b) Paired last-block fine-tuning minus frozen-feature differences. (c) One slice of the evaluated matching-contract grid. (d) $K=20$ role-qualified recall against random ranking and progressively stronger rankers.}
-\label{fig:controls}
+\caption{Instance-support failure atlas from WeedsGalore test tiles. Coloured contours show proposal components and truth support. (a) One weed split into two fragments. (b) One candidate merged five weed instances. (c) A background-dominated component contained no labelled plant pixels. (d) A mixed component contained both crop and weed support. Selection rules and source identifiers are provided in the source-data table.}
+\label{fig:failures}
 \end{figure}
 
-Per-date behavior was heterogeneous. For the discrimination-selected masked DINOv2 ranker at $K=20$, role-qualified recall was 12/392 (0.0306), 84/440 (0.1909), 210/726 (0.2893), and 13/154 (0.0844) across the four acquisition dates. Corresponding precision was 0.0813, 0.5563, 0.9375, and 0.6500. Candidate discrimination also varied: the pooled AUC/AP of 0.9605/0.8617 for the queue-selected ranker became date-macro values of 0.8774/0.6901, with worst-date values of 0.7382/0.2131. Twenty-four of 26 tiles contained both candidate classes and supported tile-level AUC/AP; their macro values were 0.9091/0.6869. These descriptive strata reveal variation hidden by pooled estimates.
+\subsection{Strong baselines changed the ordering of queue systems}
 
-\subsection{Quota-constrained allocation traded pooled recovery against temporal coverage}
+Under the same $K=20$ contract, Mask R-CNN achieved the highest one-to-one recall and candidate precision (Table~\ref{tab:strong}). Its mean one-to-one recall was 0.2159 across three seeds, compared with 0.2027 across five U-Net seeds. The paired image-bootstrap contrast was 0.0132 (95\% CI 0.0015--0.0284). DeepLabV3+ reached 0.1924; its contrast with U-Net was $-0.0103$ (95\% CI $-0.0216$ to $-0.0002$). Mask R-CNN simultaneously reduced many-to-one spatial recall relative to U-Net by 0.0254 (95\% CI $-0.0485$ to $-0.0015$), illustrating that candidate compactness and one-to-one separability favour different endpoints.
 
-Selecting linear regularization by validation $K=20$ one-to-one recall chose $C=10$. Its test candidate-level role-qualified AUC/AP were 0.9605/0.8617, compared with 0.9665/0.8813 under discrimination-based selection. Under fixed $K=20$, the queue-selected model accepted 520 candidates. Precision was 0.5288, many-to-one qualified recall was 0.1893, and one-to-one qualified recall was 0.1326. The exploratory 5--50 policy reallocated the same 520 slots and increased these pooled values to 0.7346, 0.2646, and 0.1840, respectively (Table~\ref{tab:allocation}). Date-macro precision, many-to-one recall, and one-to-one recall changed from 0.5516/0.1504/0.1111 under fixed allocation to 0.6133/0.1959/0.1415 under 5--50 allocation. However, worst-date many-to-one and one-to-one recall decreased from 0.0255 to 0.0153. Unconstrained global top-520 produced pooled values of 0.7462/0.2710/0.1869 and is retained as a diagnostic upper bound. The validation-transferred threshold accepted 426 candidates and achieved precision 0.8169, with many-to-one/one-to-one recall of 0.2477/0.1694.
+Validation selected mean weed probability for four U-Net seeds and conditional weed probability for one. These simple semantic scores achieved one-to-one recall $0.2117\pm0.0047$ and precision $0.7440\pm0.0185$. Their queue recall was close to Mask R-CNN and above the default U-Net score. Predictive entropy was evaluated within the same candidate pool but was not selected. The internal comparison therefore supports explicit plant matching and model-family choice, rather than added feature complexity, as the main determinants of queue performance.
 
-\begin{table}[htbp]
+\begin{table}[!t]
 \centering
-\caption{Queue-allocation analysis using the queue-selected masked-DINOv2 ranker. The first three policies share total budget $N=520$; the validation threshold realized $N=426$. Macro and worst values summarize four acquisition dates.}
-\label{tab:allocation}
-\small
-\setlength{\tabcolsep}{4pt}
-\begin{tabular}{p{5.0cm}rrrr}
+\caption{Fixed $K=20$ WeedsGalore queues. Values are mean $\pm$ sample SD across independently trained seeds. The probability row reorders the five U-Net component pools using validation-selected semantic scores.}
+\label{tab:strong}
+\footnotesize
+\setlength{\tabcolsep}{3pt}
+\resizebox{\textwidth}{!}{%
+\begin{tabular}{lrrrrrr}
 \toprule
-Policy & Accepted & Precision & Qualified recall & 1:1 recall \\
+System & Seeds & Precision & Spatial recall & Qualified recall & 1:1 recall & Crop-exposed tiles \\
 \midrule
-Fixed $K=20$/tile & 520 & 0.5288 & 0.1893 & 0.1326 \\
-Exploratory 5--50/tile & 520 & 0.7346 & 0.2646 & 0.1840 \\
-Diagnostic global top-$N$ & 520 & 0.7462 & 0.2710 & 0.1869 \\
-Validation score threshold & 426 & 0.8169 & 0.2477 & 0.1694 \\
+ResNet-18 U-Net & 5 & $0.7168\pm0.0260$ & $0.2668\pm0.0211$ & $0.2468\pm0.0231$ & $0.2027\pm0.0057$ & $0.2462\pm0.0439$ \\
+DeepLabV3+--ResNet-50 & 3 & $0.6832\pm0.0042$ & $0.2710\pm0.0107$ & $0.2420\pm0.0094$ & $0.1924\pm0.0032$ & $0.2436\pm0.0222$ \\
+Mask R-CNN--ResNet-50-FPN & 3 & $\mathbf{0.7891\pm0.0142}$ & $0.2414\pm0.0041$ & $0.2259\pm0.0053$ & $\mathbf{0.2159\pm0.0038}$ & $0.2308\pm0.0769$ \\
+Validation-selected probability ranking & 5 & $0.7440\pm0.0185$ & $\mathbf{0.3391\pm0.0249}$ & $\mathbf{0.2873\pm0.0082}$ & $0.2117\pm0.0047$ & $0.2846\pm0.0516$ \\
 \bottomrule
-\end{tabular}
+\end{tabular}}
+\end{table}
 
-\vspace{0.5em}
-\begin{tabular}{p{5.0cm}rr}
+\begin{figure}[!t]
+\centering
+\includegraphics[width=\textwidth]{figures/Figure_3.pdf}
+\caption{Strong-baseline comparison on the 26 WeedsGalore test tiles. (a) Candidate precision and (b) one-to-one role-qualified recall; bars show seed means and points show individual seeds. (c) Paired image-bootstrap contrasts with the ResNet-18 U-Net. (d) U-Net one-to-one recall by acquisition date, with tile and weed-instance denominators shown above each group.}
+\label{fig:strong}
+\end{figure}
+
+Internal performance varied by acquisition date. The five U-Net seeds achieved mean one-to-one recall of 0.1378, 0.2864, 0.2061, and 0.1130 on 25 May, 30 May, 6 June, and 15 June, respectively. Corresponding precision was 0.4035, 0.8163, 0.9513, and 0.5650. The 15 June estimate represents only two tiles and 154 weed instances. Pooled performance therefore combines materially different date-specific conditions.
+
+\subsection{Independent operators applied the review categories consistently}
+
+Both operators completed all 518 queued regions. They agreed on weed reviewability for 488 regions (0.9421), with Cohen's $\kappa=0.8930$ (Table~\ref{tab:operators}). The scene-cluster bootstrap interval was 0.9228--0.9611 for exact agreement and 0.8474--0.9249 for $\kappa$. Both marked 301 regions as reviewable weed evidence and 143 as not reviewable; 74 were disputed or included at least one uncertain response. Agreement exceeded 0.94 for primary content, crop presence, and localisation usability.
+
+Of the 301 consensus-reviewable regions, 249 also satisfied the mask-derived role-qualified weed contract (0.8272). Human reviewability and geometric mask qualification therefore overlapped strongly but were not equivalent: a reviewer can recognise useful weed evidence in a partial or mixed crop, while the offline contract applies fixed coverage and purity thresholds.
+
+\begin{table}[!t]
+\centering
+\caption{Agreement between two independent operators on the frozen 518-region review queue.}
+\label{tab:operators}
+\small
+\begin{tabular}{lrr}
 \toprule
-Policy & Date-macro 1:1 & Worst-date 1:1 \\
+Review field & Exact agreement & Cohen's $\kappa$ \\
 \midrule
-Fixed $K=20$/tile & 0.1111 & 0.0255 \\
-Exploratory 5--50/tile & 0.1415 & 0.0153 \\
-Diagnostic global top-$N$ & 0.1435 & 0.0153 \\
-Validation score threshold & 0.1311 & 0.0128 \\
+Primary content & 0.9479 & 0.9095 \\
+Weed reviewability & 0.9421 & 0.8930 \\
+Crop presence & 0.9459 & 0.8492 \\
+Localisation usability & 0.9402 & 0.9049 \\
 \bottomrule
 \end{tabular}
 \end{table}
 
-Allocation counts show how the pooled gain formed (Figure~\ref{fig:allocation}). The bounded policy assigned 51/149/285/35 candidates to 25 May, 30 May, 6 June, and 15 June; 54.8\% of the budget therefore went to 6 June. It assigned at least five candidates to every tile, although eight tiles received fewer than ten, and its allocation Gini coefficient was 0.3817. Unconstrained global top-520 assigned 38/153/293/36 candidates by date, left one tile empty, assigned fewer than five candidates to five tiles, and had Gini 0.4220. For global minus fixed one-to-one recall, 9/26 tiles improved, 12 were unchanged, and 5 declined. Date-level one-to-one recall fell from 0.0255 to 0.0153 on 25 May, increased from 0.1614 to 0.1773 on 30 May and from 0.1860 to 0.3099 on 6 June, and remained 0.0714 on 15 June. Bounded allocation followed the same pattern with a slightly smaller pooled gain. Thus, neither globally scored policy improved the worst acquisition date.
+\subsection{Locked cross-dataset evaluation exposed complete threshold-transfer failure}
 
-Crop severity changed alongside queue allocation. Fixed $K=20$ covered at least half of 32/256 crop instances (0.1250), compared with 12/256 (0.0469) for the exploratory 5--50 policy and 10/256 (0.0391) for unconstrained global top-$N$. The validation threshold covered 5/256 (0.0195). Maximum candidate crop fraction remained 0.919--0.973 across policies, revealing rare severe overlaps beyond scene frequency.
+The CWFID lock was opened once after all 242 upstream blobs, five checkpoint hashes, and 60 RGB--annotation pairs passed audit. The primary truth definition yielded 331 weed components across 60 images. Every WeedsGalore-selected checkpoint classified all CWFID pixels as background at its frozen operating point. Consequently, all five seeds generated zero candidates, selected zero regions, and recovered zero weed components. One-to-one role-qualified recall was 0 with an image-bootstrap 95\% interval of 0--0. Weed and crop IoU were both 0; background IoU was 0.9450.
+
+The identical result across five checkpoints separates optimisation stability from acquisition transfer. The internal U-Net queue varied only from 0.1951 to 0.2097 in one-to-one recall, yet none of those validation-selected component thresholds transferred to CWFID. This outcome rules out a cross-dataset performance claim for the present queue and identifies component calibration as a prerequisite for deployment beyond the development dataset.
 
 \begin{figure}[!t]
 \centering
 \includegraphics[width=\textwidth]{figures/Figure_5.pdf}
-\caption{Allocation-policy analysis after selecting regularization by the validation $K=20$ one-to-one metric. (a) Pooled precision and qualified recall; the validation threshold realizes 426 candidates, while the other policies use 520. (b) Paired tile-level global-minus-fixed one-to-one recall. (c) Per-date many-to-one qualified recall with fixed/global accepted counts. (d) Crop exposure as scene frequency and crop-instance coverage. Unconstrained global allocation and the post-test 5--50 candidates/tile allocation are exploratory diagnostics.}
-\label{fig:allocation}
-\end{figure}
-
-\subsection{Target-semantic components and the representation--allocation comparison}
-
-Validation selected epoch 36, semantic foreground threshold 0.30, and minimum component area 16 pixels for the archived target-semantic reference run. On official test, background/crop/weed IoU was 0.9778/0.6957/0.7131, yielding three-class mIoU 0.7955 and plant-role mIoU 0.7044. The model produced 1,347 components (51.81/tile). At fixed $K=20$, 518 candidates were accepted; 355 were role-qualified weed candidates, giving precision 0.6853. Spatial, many-to-one qualified, and one-to-one qualified recovery were 520/1,712 (0.3037), 453/1,712 (0.2646), and 348/1,712 (0.2033). Direct component-mask replay regenerated every candidate identifier and reproduced these scene-level results exactly.
-
-Applying the exploratory 5--50 candidates/tile rule to the target-semantic scores completed the representation--allocation comparison (Table~\ref{tab:semantic}). Under its fixed total of 518 reviews, 5--50 allocation increased candidate precision from 0.6853 to 0.8205 and one-to-one recall from 0.2033 to 0.2477. Crop-exposed scenes decreased from 6/26 to 1/26. Date-macro one-to-one recall increased from 0.1891 to 0.2070, whereas worst-date recall decreased from 0.1169 to 0.0510. Representation and allocation therefore contributed separately, and the pooled improvement did not imply uniform temporal improvement.
-
-\begin{table}[!t]
-\centering
-\caption{Representation--allocation comparison under equal target-mask access. Fixed policies use $K=20$/tile; exploratory 5--50 policies preserve each system's fixed total. Precision counts candidate-level role-qualified weed candidates among all accepted candidates. Recall uses 1,712 weed instances, and crop exposure uses 26 test tiles.}
-\label{tab:semantic}
-\footnotesize
-\setlength{\tabcolsep}{2pt}
-\begin{tabular}{L{3.2cm}L{2.3cm}rrrrr}
-\toprule
-Representation & Allocation & $N$ & Prec. & 1:1 & Crop & Worst 1:1 \\
-\midrule
-Masked DINO & Fixed 20/tile & 520 & 0.5288 & 0.1326 & 13/26 & 0.0255 \\
-Masked DINO & Exploratory 5--50 & 520 & 0.7346 & 0.1840 & 14/26 & 0.0153 \\
-Target semantic reference & Fixed 20/tile & 518 & 0.6853 & 0.2033 & 6/26 & 0.1169 \\
-Target semantic reference & Exploratory 5--50 & 518 & 0.8205 & 0.2477 & 1/26 & 0.0510 \\
-\bottomrule
-\end{tabular}
-\end{table}
-
-\subsection{H200 repetitions exposed a quota-dependent pooled--group trade-off}
-
-Five independent H200 runs selected epochs 31--40; the 16-pixel component minimum was selected in all runs, while the foreground threshold was 0.30 once, 0.50 three times, and 0.70 once. Official-test semantic mIoU was $0.7955\pm0.0127$ (mean $\pm$ sample SD). At fixed $K=20$, candidate-level role-qualified precision was $0.7168\pm0.0260$ and one-to-one recall was $0.2027\pm0.0057$ (Table~\ref{tab:h200_seeds}).
-
-Across the full $4\times4$ quota grid, increasing the maximum allocation increased pooled recovery but generally weakened the lowest-recall date (Figure~\ref{fig:quota}). The 5--50 setting improved precision by $0.1770\pm0.0146$ and one-to-one recall by $0.0551\pm0.0053$ relative to fixed $K=20$, with positive differences in every seed and both patch proxies. It reduced worst-date one-to-one recall by $0.0627\pm0.0070$ in every seed. Date-balanced allocation provided a less concentrated alternative: precision $0.7710\pm0.0226$, one-to-one recall $0.2192\pm0.0064$, and worst-date recall $0.1163\pm0.0190$. Relative to fixed allocation, its one-to-one recall effect averaged $-0.0458$ in patch proxy 0 and $+0.0603$ in patch proxy 1. Validation selection chose fixed $K=20$ in four seeds and a 0--30 quota in one; it never selected 5--50. These results identify the 5--50 gain as an exploratory pooled-utility trade-off rather than a validation-supported group-robust policy.
-
-\begin{table}[!t]
-\centering
-\caption{Target-semantic H200 stability across five numeric training-seed identifiers. Values are mean $\pm$ sample standard deviation across seeds. Crop is the fraction of 26 test scenes with any queued crop overlap.}
-\label{tab:h200_seeds}
-\footnotesize
-\setlength{\tabcolsep}{3pt}
-\resizebox{\linewidth}{!}{%
-\begin{tabular}{L{3.7cm}rrrrr}
-\toprule
-Allocation & Accepted & Precision & 1:1 recall & Crop & Worst-date 1:1 \\
-\midrule
-Fixed 20/tile & $511.8\pm5.6$ & $0.7168\pm0.0260$ & $0.2027\pm0.0057$ & $0.2462\pm0.0439$ & $0.1100\pm0.0106$ \\
-Exploratory 5--50/tile & $511.8\pm5.6$ & $0.8939\pm0.0249$ & $0.2578\pm0.0090$ & $0.0615\pm0.0439$ & $0.0473\pm0.0089$ \\
-Date-balanced global & $511.8\pm5.6$ & $0.7710\pm0.0226$ & $0.2192\pm0.0064$ & $0.2615\pm0.0834$ & $0.1163\pm0.0190$ \\
-Global top-$N$ & $511.8\pm5.6$ & $0.9158\pm0.0255$ & $0.2643\pm0.0083$ & $0.0077\pm0.0172$ & $0.0210\pm0.0092$ \\
-Validation threshold & $342.0\pm17.4$ & $0.9487\pm0.0194$ & $0.1853\pm0.0137$ & $0.0000\pm0.0000$ & $0.0077\pm0.0065$ \\
-\bottomrule
-\end{tabular}}
-\end{table}
-
-The official WeedsGalore paper reports RGB semantic mIoU of 79.33\% for DeepLabv3+ and 79.26\% for MaskFormer, with RGB MaskFormer instance mAP of 32.17\% (AP50 33.66\%, AP75 32.01\%) \cite{celikkan2025weedsgalore}. Table~\ref{tab:published} places the archived target-semantic reference beside those published values. Because semantic mIoU, instance mAP, and role-qualified queue recall characterize non-interchangeable evaluation levels, the table presents them as complementary context.
-
-\begin{table}[!t]
-\centering
-\caption{Published official WeedsGalore RGB context and the target-semantic baseline.}
-\label{tab:published}
-\small
-\setlength{\tabcolsep}{5pt}
-\begin{tabular}{L{5.1cm}L{4.2cm}r}
-\toprule
-System and evidence tier & Metric & Value (\%) \\
-\midrule
-Official DeepLabv3+ RGB (published) & Semantic mIoU & 79.33 \\
-Official MaskFormer RGB (published) & Semantic mIoU & 79.26 \\
-Official MaskFormer RGB (published) & Instance mAP & 32.17 \\
-ResNet-18 U-Net RGB (single-run target-semantic baseline) & Semantic mIoU & 79.55 \\
-ResNet-18 U-Net RGB (single-run target-semantic baseline) & Queue 1:1 recall at $K=20$ & 20.33 \\
-\bottomrule
-\end{tabular}
-\end{table}
-
-\begin{figure}[!t]
-\centering
-\includegraphics[width=\linewidth]{figures/Figure_6.pdf}
-\caption{Exploratory target-semantic quota and group robustness across five H200 training seeds. (a,b) Mean pooled and worst-date one-to-one recall over the complete minimum/maximum quota grid. (c) Paired date-balanced-minus-fixed effects for candidate-level role-qualified precision and one-to-one recall. (d) Date-balanced-minus-fixed one-to-one recall in the two capture-index patch proxies; points are seeds and diamonds with error bars show mean $\pm$ sample SD.}
-\label{fig:quota}
-\end{figure}
-
-\begin{figure}[!t]
-\centering
-\includegraphics[width=\linewidth]{figures/Figure_7.pdf}
-\caption{Five-seed H200 stability of target-semantic component formation and queue allocation. (a) Official-test semantic mIoU for each numeric training-seed identifier. (b--d) Candidate-level role-qualified precision, one-to-one weed-instance recall, and crop-exposed scene frequency for fixed, exploratory 5--50, global, and validation-threshold policies. Points denote independent training seeds; bars show the mean and sample standard deviation.}
-\label{fig:seed_stability}
+\caption{Locked CWFID transfer without external tuning. (a) WeedsGalore fixed-queue one-to-one recall across five U-Net seeds. (b) CWFID candidate burden for the same checkpoints. (c) CWFID weed-component recovery. (d) CWFID semantic IoU. All 60 images and 331 weed components contributed to every external seed result.}
+\label{fig:external}
 \end{figure}
 
 \section{Discussion}
 
-The official spatial analysis identifies distinct transitions from proposals to finite review queues. Commissioning approximately doubled spatial recall, while candidate burden tripled and three quarters of the pool became ambiguous or background-dominated. Support-aware all-candidate fitting aligned supervision with the deployed queue and increased role-plus-local candidate-level role-qualified AUC from 0.4420 to 0.9049. Candidate support is therefore a central design variable alongside representation quality.
+Instance-support-aware evaluation changes how a crop--weed queue is judged. Candidate AUC described ordering inside a generated pool, whereas one-to-one recall measured whether distinct plants survived the full proposal-to-budget chain. The difference was substantial: the masked DINOv2 ranker reached candidate AUC 0.9665, yet recovered 0.1343 of weed instances under one-to-one matching. Direct target-trained models recovered approximately 0.19--0.22 under the same budget. Candidate scores and plant recovery are therefore related but non-interchangeable evidence levels.
 
-The ceiling decomposition turns aggregate recall into an engineering diagnostic. Missed proposals form the largest distance from perfect recovery. Within the commissioned pool, the ranking gap slightly exceeds the remaining $K=20$ budget gap. Component formation is therefore the primary improvement target, paired with ranker fitting on the complete candidate distribution. The shared-ranker-weight comparison further quantifies how proposal density trades coverage against crop exposure and workload; its accepted workloads differ because seven original-setting tiles supplied fewer than 20 candidates.
+The burden-matched commissioning analysis isolates a genuine proposal effect. Lowering the foreground threshold increased raw candidate burden almost threefold, but the commissioned pool still recovered more plants when both settings were restricted to 471 reviews. The gain was modest in absolute terms and accompanied by lower precision and greater crop exposure. Recall--burden curves provide a weight-free way to represent this trade-off without assigning an arbitrary utility to a recovered weed, an ambiguous region, or a crop overlap.
 
-Queue allocation emerged as a separate optimization problem. With candidate scores and total review budget fixed, globally scored policies shifted capacity toward the high-density 6 June acquisition. The complete quota grid shows a continuous pooled-recovery versus weakest-date frontier. The exploratory 5--50 policy increased pooled precision and one-to-one recovery in every H200 seed and in both patch proxies, while consistently reducing worst-date recovery. Date-balanced allocation preserved mean worst-date performance and modestly improved pooled metrics, but its effect reversed between the two patch proxies. Validation selection consequently retained fixed $K=20$ in four of five seeds. These findings align with group-robust learning results in which pooled optimization and worst-group performance represent distinct objectives \cite{sagawa2020groupdro}.
+Strong baselines refine the technical conclusion. Mask R-CNN provided the highest internal one-to-one recall and precision, while DeepLabV3+ did not improve on the smaller U-Net for the queue endpoint. A simple validation-selected semantic-probability score nearly matched Mask R-CNN. Frozen DINOv2 remained useful as a diagnostic ranker, but its small masking ablation and lower one-to-one recovery do not establish a need for an additional representation stage. The reusable contribution is the evaluation contract that exposes support, multiplicity, and review burden across model families.
 
-Direct target-semantic training changed the preferred component representation. The archived reference recovered more one-to-one weed instances than the source-specialist proposal plus masked-DINO ranker, and the five H200 repetitions placed fixed-queue recall in a narrow 0.1951--0.2097 range. Exact component-mask replay produced identical candidate identifiers and scene metrics, removing geometric reconstruction from this comparison. The source-specialist representation remains a single recorded-run comparator, whereas the target-semantic series quantifies initialization variability.
+The two-operator study shows that the queue categories are interpretable in a concrete review setting. High agreement coexisted with a measurable difference between consensus reviewability and the mask-derived contract, supporting separate reporting of human decisions and geometric matching. The study records category consistency rather than operator-population performance or labour cost; review-time and area-normalised workload remain separate evaluation targets.
 
-Component masking changed DINOv2 AUC/AP by 0.0035/0.0129 in the recorded run. This paired result functions as a context ablation. The broader contribution is the measurable separation of spatial discovery, role qualification, rank ordering, and budget allocation. The same separation clarifies supervision cost: proposal-setting selection uses complete official-training masks; full rankers use 9,887 training and 2,436 validation candidate labels; the nominal 300-label experiments restrict only the sampled training candidates and retain the fully labelled validation set. This supervision ledger positions the queue analysis alongside methods that reduce label construction at the segmentation-training stage \cite{chen2024pisnet,guo2025semisupervised,catalano2026fewshot}.
+The locked CWFID result defines the transfer boundary directly. Five internally stable checkpoints produced the same all-background outcome on a different crop, camera geometry, image scale, and acquisition distribution. Because no external label changed a threshold, the result measures the frozen system rather than a retuned variant. Cross-dataset calibration or unsupervised operating-point adaptation is therefore a separate technical problem. It cannot be inferred from seed stability within one field.
 
-The evidence supports a multitemporal single-field engineering case study. Four dates characterize temporal variation within one maize field, and two capture-index groups provide spatial-block diagnostics within the official test split. The five training seeds quantify optimization variability rather than between-field uncertainty. Independent farms, seasons, crops, and sensors define the next validation level. Within the present scope, timestamped configurations, exact mask replay, failure records, source-data tables, and group-stratified outputs make the computational chain auditable.
+The intended queue supports offline image quality assurance and annotation triage. A region can be retained, rejected, or escalated, and the finite budget makes omissions auditable. The current evidence does not measure operator time or agronomic treatment value, so $K=20$ should be read as a controlled capacity unit. WeedsGalore supplies multitemporal internal evidence from one maize field; CWFID supplies an independently acquired carrot-field stress test but uses connected components rather than persistent plant identities. Evaluation across additional farms, seasons, sensors, and reviewer workflows is needed to relate plant recovery to operational cost.
 
 \section{Conclusion}
 
-This multitemporal single-field case study connects candidate formation, role-qualified ranking, and review-budget allocation within one crop--weed queue. Proposal commissioning increased recoverable support at a substantial candidate-burden cost. Across five H200 seeds, the exploratory 5--50 allocation increased pooled target-semantic one-to-one recall from $0.2027\pm0.0057$ to $0.2578\pm0.0090$ and precision from $0.7168\pm0.0260$ to $0.8939\pm0.0249$, while reducing weakest-date recall. Date-balanced allocation preserved mean weakest-date performance but produced opposite recall effects in the two spatial patch proxies. Support-aware fitting, exact component matching, and group-stratified allocation therefore provide complementary controls for interpreting finite crop--weed review queues.
+This study establishes an instance-support-aware evaluation for finite crop--weed review queues. Matched-burden analysis showed that proposal commissioning increased recoverable plant support, strong baselines identified Mask R-CNN and simple semantic-probability ordering as effective internal systems, and independent operators applied the review categories consistently. The locked CWFID test then exposed complete failure of the transferred component thresholds. Separating spatial support, role qualification, one-to-one matching, human reviewability, and review capacity makes both internal improvements and cross-dataset failures visible before a queue is assigned operational meaning.
 
 \section*{Data availability}
-SugarBeets2016 and WeedsGalore are public datasets available from their cited official sources. The official SugarBeets page identifies the release as CC BY-SA 4.0, and WeedsGalore includes a CC BY 4.0 licence. The reproducibility archive records source URLs, download dates, release identifiers, licence snapshots, and SHA-256 checksums. Source imagery remains available through the official repositories; derived source-data tables and verification hashes accompany the code release.
+SugarBeets2016, WeedsGalore, and CWFID are public datasets available from their cited official sources. The reproducibility archive records source URLs, access dates, release identifiers, licence information, exact source revisions, and integrity hashes. Public imagery remains with the original repositories. Derived source-data tables, result manifests, and verification hashes accompany the code release.
 
 \section*{Code availability}
-The versioned reproducibility archive is available from GitHub Release v1.1.0 at \url{https://github.com/Fytap/agrispec-vlm-reproducibility/releases/tag/v1.1.0}. It contains frozen configurations, environment specifications, training and embedding-extraction source, model acquisition instructions, archived prediction and exact matching outputs, table/figure scripts, run summaries, failure records, and clean-room replay commands. Public dataset imagery and public model weights remain at their cited upstream sources.
+The versioned reproducibility materials are maintained at \url{https://github.com/Fytap/agrispec-vlm-reproducibility}. The release contains frozen configurations, environment specifications, model acquisition records, training and evaluation source, archived predictions and matching outputs, source tables for every figure, failure records, and clean-room replay commands. Public dataset imagery and public model weights remain at their upstream sources.
 
 \section*{Declaration of Generative AI and AI-Assisted Technologies in the Manuscript Preparation Process}
 During the preparation of this work, the authors used OpenAI Codex for code review, reproducibility checks, and language editing, including checks of sentence clarity, grammar, and wording. The authors reviewed and edited all affected content and take full responsibility for the content of the publication.
 
 \section*{Ethics declaration}
-This study analysed public agricultural image datasets and did not involve human participants, animals, or personally identifiable information.
+This study analysed public agricultural image datasets. Two operators performed technical quality assurance on model-generated agricultural image regions; no personal, sensitive, demographic, or behavioural data were collected, and no operator identity is reported. This annotation and software-quality activity did not constitute human-subject research and did not require formal ethical approval. No animals were involved.
 
 \section*{Declaration of competing interest}
 Zhi Ling, Yu Yan, and Ziyi Kuang report an affiliation with Kiwiar Co., Ltd. No proprietary dataset or commercial product was evaluated in this study.
@@ -395,6 +319,7 @@ Zhi Ling, Yu Yan, and Ziyi Kuang report an affiliation with Kiwiar Co., Ltd. No 
 \fi
 
 \setlength{\bibsep}{0pt}
+\small
 \bibliographystyle{elsarticle-num}
 \bibliography{references}
 

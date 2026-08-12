@@ -1,0 +1,36 @@
+experiment:
+  id: P2_WEEDSGALORE_MATCHED_BURDEN_ANALYSIS_FROZEN_20260812_V3
+  status: frozen_before_execution
+  predecessor: P2_WEEDSGALORE_MATCHED_BURDEN_ANALYSIS_FROZEN_20260812_V2
+  protocol_change_from_v2: none
+  implementation_fix: separate selected_ranker_from_global_curve_temporary_rows
+  analysis_class: post_test_matched_burden_audit
+  compute: CPU_only
+  public_data_only: true
+  overwrite_policy: never
+  preserve_failures: true
+comparisons:
+  variants:
+    original: T095_A032
+    globally_commissioned: T070_A032
+  commissioned_selection: official_training_split_only_under_mean_burden_at_most_100
+  ranker: one_role_plus_local_weight_vector_fit_on_commissioned_train_plus_validation_and_applied_unchanged
+  global_equal_N: minimum_total_available_at_fixed_K20_across_variants
+  paired_per_image:
+    common_k: min(requested_k, original_available, commissioned_available)
+    requested_k_grid: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20]
+  global_curve: every_integer_N_from_0_to_common_K20_total
+matching:
+  primary: maximum_cardinality_one_to_one
+  instance_coverage: 0.50
+  candidate_labeled_coverage: 0.50
+  same_role_purity: 0.90
+endpoints:
+  primary: one_to_one_role_qualified_weed_instance_recall
+  secondary: [many_to_one_spatial_recall, many_to_one_role_qualified_recall, all_candidate_precision, crop_overlap_scene_frequency]
+  curve_summary: normalized_area_under_recall_burden_curve
+uncertainty:
+  cluster_unit: image
+  bootstrap_replicates: 10000
+  bootstrap_seed: 20260812
+

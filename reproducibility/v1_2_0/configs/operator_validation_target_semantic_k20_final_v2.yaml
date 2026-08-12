@@ -1,0 +1,72 @@
+schema_version: 2
+study_id: OPVAL_TARGET_SEMANTIC_K20_20260811_V1
+status: completed_registered_two_operator_analysis
+predecessor: operator_validation_target_semantic_k20_pilot_v1.yaml
+recorded_revision: v3_no_timing_outcome
+
+design:
+  type: independent_two_operator_technical_review
+  queue: frozen_target_semantic_fixed_k20
+  candidates: 518
+  scenes: 26
+  operators: 2
+  presentation_order: shared_fixed_order
+  practice_source: official_validation_split_only
+  model_or_policy_tuning_from_operator_results: false
+
+independence:
+  different_natural_persons: true
+  sample_level_discussion: false
+  labels_or_rationales_exchanged: false
+  peer_responses_or_completed_files_viewed: false
+  external_search_used: false
+  automated_labeling_or_filling_used: false
+  evidence_basis: project_owner_attestation_and_returned_response_provenance
+
+blinding:
+  hidden_from_operators:
+    - acquisition_date
+    - scene_identity
+    - candidate_id
+    - model_score
+    - rank
+    - model_and_policy_name
+    - mask_derived_truth
+  visible_to_operators:
+    - rgb_tile
+    - highlighted_candidate_box
+    - local_rgb_zoom
+
+responses:
+  analysed:
+    - primary_content
+    - weed_reviewable
+    - crop_present
+    - localization_usability
+    - confidence_1_to_5
+  excluded:
+    - elapsed_ms
+    - submitted_at_utc
+  timing_outcome: not_collected_or_analysed
+
+analysis:
+  primary_field: weed_reviewable
+  categorical_metrics: [exact_agreement, cohen_kappa]
+  dependence_summary: scene_cluster_bootstrap
+  bootstrap_replicates: 10000
+  bootstrap_seed: 20260811
+  operator_population_inference: prohibited
+  aggregate_outputs_only_for_public_release: true
+
+ethics_and_privacy:
+  activity: annotation_and_software_quality_assurance_on_public_agricultural_images
+  formal_ethical_approval_required: false
+  personal_sensitive_demographic_or_behavioural_data_collected: false
+  operator_identity_reported: false
+
+integrity:
+  operator_a_sha256: 71860b17d707f23f7a55f1145339e1c1b4babbc312cc4898202f4e7107f5cf12
+  operator_b_sha256: e36a5d85f3c27cdcf2266280c5e0f085ff0a3792eb7c8fbd39657992ac5f4b8e
+  aggregate_summary_sha256: 233157c59d062b5d5577dcb12890089f87178e8527627633dcf1ec296b331fb9
+  raw_responses_publication_scope: restricted
+  failures_and_prior_versions: preserve

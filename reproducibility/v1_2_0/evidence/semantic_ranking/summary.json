@@ -1,0 +1,62 @@
+{
+  "run_id": "P2_WEEDSGALORE_SEMANTIC_RANKING_DIAGNOSTICS_20260812_v3",
+  "status": "completed_validation_selected_semantic_ranking_diagnostics",
+  "selection_rule": "validation primary recall, then precision, then lexicographic policy name",
+  "selected_policies": {
+    "20260810": "mean_weed_probability",
+    "20260811": "mean_weed_probability",
+    "20260812": "mean_weed_probability",
+    "20260813": "conditional_weed_probability",
+    "20260814": "mean_weed_probability"
+  },
+  "official_test_selected_policy_mean_sample_sd": {
+    "all_candidate_precision": {
+      "mean": 0.7440008802962463,
+      "sample_sd": 0.01848307034546962
+    },
+    "many_to_one_spatial_recall": {
+      "mean": 0.3391355140186916,
+      "sample_sd": 0.024900585153225015
+    },
+    "many_to_one_role_qualified_recall": {
+      "mean": 0.28726635514018695,
+      "sample_sd": 0.008150405482503096
+    },
+    "one_to_one_role_qualified_recall": {
+      "mean": 0.2116822429906542,
+      "sample_sd": 0.00470201210221918
+    },
+    "crop_overlap_scene_frequency": {
+      "mean": 0.2846153846153846,
+      "sample_sd": 0.05160156871153361
+    },
+    "candidate_AUC_diagnostic": {
+      "mean": 0.9020554841218097,
+      "sample_sd": 0.013516949383048696
+    },
+    "candidate_AP_diagnostic": {
+      "mean": 0.9416733211893324,
+      "sample_sd": 0.011696497160015055
+    }
+  },
+  "inputs": {
+    "archive_sha256": "5d8395c274d990cd8fbfa728445f65c398be2b5d777bd5145eb9ae5ca4d9b68c",
+    "config_sha256": "d8007d26d5d49d330a2da8b3eb39670701e48943c0f22c4f43a1be217f9fdd93",
+    "script_sha256": "d4f6c17d7aff51b1b956960c1a012c7b8a4b8856ab56399f808467f79871bd07"
+  },
+  "runtime": {
+    "wall_seconds": 108.30266556981951,
+    "physical_gpu_id": 7,
+    "gpu": "NVIDIA H200"
+  },
+  "software": {
+    "python": "3.10.12",
+    "torch": "2.7.1+cu126",
+    "cuda_runtime": "12.6"
+  },
+  "governance": {
+    "analysis_class": "post_test_strong_baseline_extension",
+    "ranking_policy_selected_on": "official_validation_only",
+    "test_labels_for_selection": false
+  }
+}

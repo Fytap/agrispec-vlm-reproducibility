@@ -1,0 +1,9 @@
+seed	internal_one_to_one_recall	external_candidates	external_one_to_one_recall	external_weed_components	semantic_class	external_iou
+20260810	0.20619158878504673	0	0.0	331		
+20260811	0.1991822429906542	0	0.0	331		
+20260812	0.20327102803738317	0	0.0	331		
+20260813	0.20969626168224298	0	0.0	331		
+20260814	0.19509345794392524	0	0.0	331		
+					Background	0.9450411574074075
+					Crop	0.0
+					Weed	0.0

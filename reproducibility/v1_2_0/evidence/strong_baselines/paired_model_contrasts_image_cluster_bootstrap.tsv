@@ -1,0 +1,13 @@
+contrast	metric	estimate	ci95_low	ci95_high	cluster_unit	clusters	bootstrap_replicates
+DeepLabV3Plus-ResNet50_minus_ResNet18-UNet	all_candidate_precision	-0.03367866327210667	-0.0704513922060546	0.0013360048391386594	image	26	10000
+DeepLabV3Plus-ResNet50_minus_ResNet18-UNet	many_to_one_spatial_recall	0.004205607476635509	-0.008992952105862696	0.016996204037446103	image	26	10000
+DeepLabV3Plus-ResNet50_minus_ResNet18-UNet	many_to_one_role_qualified_recall	-0.004828660436137083	-0.022047354163237918	0.010512357692453194	image	26	10000
+DeepLabV3Plus-ResNet50_minus_ResNet18-UNet	one_to_one_role_qualified_recall	-0.01031931464174457	-0.02163884999877194	-0.00019177535361985428	image	26	10000
+DeepLabV3Plus-ResNet50_minus_ResNet18-UNet	crop_overlap_scene_frequency	-0.002564102564102555	-0.03846153846153855	0.03846153846153849	image	26	10000
+DeepLabV3Plus-ResNet50_minus_ResNet18-UNet	mean_candidates_per_image	0.020512820512816887	-0.13846153846153442	0.16923076923077218	image	26	10000
+Mask-RCNN-ResNet50-FPN-v2_minus_ResNet18-UNet	all_candidate_precision	0.07226990562143332	0.023142728563427452	0.13704399615976018	image	26	10000
+Mask-RCNN-ResNet50-FPN-v2_minus_ResNet18-UNet	many_to_one_spatial_recall	-0.02538940809968851	-0.048541848051409604	-0.0015421029567784083	image	26	10000
+Mask-RCNN-ResNet50-FPN-v2_minus_ResNet18-UNet	many_to_one_role_qualified_recall	-0.020989096573208715	-0.04422218828910824	0.0032732694707621936	image	26	10000
+Mask-RCNN-ResNet50-FPN-v2_minus_ResNet18-UNet	one_to_one_role_qualified_recall	0.013239875389408129	0.001479498060720439	0.028408706751969458	image	26	10000
+Mask-RCNN-ResNet50-FPN-v2_minus_ResNet18-UNet	crop_overlap_scene_frequency	-0.015384615384615413	-0.15897435897435896	0.12820512820512825	image	26	10000
+Mask-RCNN-ResNet50-FPN-v2_minus_ResNet18-UNet	mean_candidates_per_image	0.3153846153846125	0.0	0.7692307692307665	image	26	10000

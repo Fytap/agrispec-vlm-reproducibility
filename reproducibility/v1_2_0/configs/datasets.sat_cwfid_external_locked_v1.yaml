@@ -1,0 +1,30 @@
+dataset:
+  id: cwfid_v1_0_external_locked
+  name: Crop/Weed Field Image Dataset (CWFID)
+  role: external_locked_evaluation_only
+  public_data_only: true
+  official_repository: https://github.com/cwfid/dataset
+  frozen_revision:
+    tag: v1.0
+    commit: 176612f3506c0ce70d85518cb82ddd938a6206c8
+  expected_images: 60
+  crop_context: carrot field
+  annotation_semantics:
+    source: public RGB annotation PNGs
+    crop_channel_rule: channel_2_equals_255
+    weed_channel_rule: channel_1_equals_255
+    background_rule: neither_crop_nor_weed
+  licence:
+    declared_scope: non-commercial research use
+    redistribution: follow upstream terms; do not redistribute raw images in the manuscript archive
+  pre_freeze_access:
+    repository_metadata_and_documentation_only: true
+    image_bytes_accessed: false
+    annotation_bytes_accessed: false
+  lineage_requirements:
+    - record clone commit and UTC acquisition time
+    - hash every consumed RGB and annotation file
+    - preserve upstream README and licence evidence
+    - audit RGB/annotation one-to-one pairing before inference
+    - preserve all exclusions and failures
+

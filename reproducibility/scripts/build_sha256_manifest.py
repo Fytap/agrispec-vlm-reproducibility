@@ -9,6 +9,22 @@ import hashlib
 from pathlib import Path
 
 
+TEXT_SUFFIXES = {
+    ".bib",
+    ".cff",
+    ".csv",
+    ".json",
+    ".md",
+    ".py",
+    ".svg",
+    ".tex",
+    ".tsv",
+    ".txt",
+    ".yaml",
+    ".yml",
+}
+
+
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--base", type=Path, required=True)
@@ -22,12 +38,11 @@ def parse_args() -> argparse.Namespace:
     return parser.parse_args()
 
 
-def file_sha256(path: Path) -> str:
-    digest = hashlib.sha256()
-    with path.open("rb") as handle:
-        for block in iter(lambda: handle.read(1 << 20), b""):
-            digest.update(block)
-    return digest.hexdigest()
+def manifest_bytes(path: Path) -> bytes:
+    content = path.read_bytes()
+    if path.suffix.lower() in TEXT_SUFFIXES and b"\x00" not in content:
+        return content.replace(b"\r\n", b"\n").replace(b"\r", b"\n")
+    return content
 
 
 def main() -> None:
@@ -49,8 +64,10 @@ def main() -> None:
     rows = ['"relative_path"\t"bytes"\t"sha256"']
     for path in files:
         relative = path.relative_to(base).as_posix()
-        rows.append(f'"{relative}"\t"{path.stat().st_size}"\t"{file_sha256(path)}"')
-    output.write_text("\n".join(rows) + "\n", encoding="utf-8")
+        content = manifest_bytes(path)
+        rows.append(f'"{relative}"\t"{len(content)}"\t"{hashlib.sha256(content).hexdigest()}"')
+    with output.open("w", encoding="utf-8", newline="\n") as handle:
+        handle.write("\n".join(rows) + "\n")
     print(f"{output}: {len(files)} files")
 
 
