@@ -59,6 +59,7 @@ plt.rcParams.update(
         "pdf.fonttype": 42,
         "ps.fonttype": 42,
         "svg.fonttype": "none",
+        "svg.hashsalt": "agrispec-vlm-v1.3.1",
         "savefig.facecolor": "white",
         "savefig.bbox": "tight",
         "savefig.pad_inches": 0.04,
@@ -70,6 +71,12 @@ def parse_args() -> argparse.Namespace:
     p = argparse.ArgumentParser()
     p.add_argument("--repo-root", type=Path, required=True)
     p.add_argument("--output-dir", type=Path, required=True)
+    p.add_argument(
+        "--figure",
+        action="append",
+        choices=[f"Figure_{index}" for index in range(1, 6)],
+        help="Build only the selected figure; repeat to select multiple figures.",
+    )
     return p.parse_args()
 
 
@@ -158,8 +165,18 @@ def text_bounds_audit(fig: plt.Figure, out: Path, stem: str) -> dict[str, object
 def export(fig: plt.Figure, out: Path, stem: str) -> dict[str, str]:
     hashes: dict[str, str] = {}
     for ext, kwargs in [
-        ("pdf", {}),
-        ("svg", {}),
+        (
+            "pdf",
+            {
+                "metadata": {
+                    "Creator": "AgriSpec-VLM Python figure builder",
+                    "Producer": "matplotlib",
+                    "CreationDate": None,
+                    "ModDate": None,
+                }
+            },
+        ),
+        ("svg", {"metadata": {"Creator": "AgriSpec-VLM Python figure builder", "Date": "2026-08-13"}}),
         ("png", {"dpi": 300}),
         ("tiff", {"dpi": 600, "pil_kwargs": {"compression": "tiff_lzw"}}),
     ]:
@@ -305,18 +322,49 @@ def figure2(v13: Path, out: Path) -> tuple[dict[str, str], list[dict[str, object
     stab = {(r["ranker_scheme"], r["metric"]): r for r in stability}
     smetrics = ["spatial_recall", "set_coverage_recall", "one_to_one_recall"]
     slabels = ["Spatial", "Set", "1:1"]
-    x = np.arange(len(schemes))
-    width = 0.23
     colours = [BLUE, TEAL, RED]
-    for j, (metric, lab, colour) in enumerate(zip(smetrics, slabels, colours)):
-        values = [int(stab[(scheme, metric)]["positive_contracts"]) for scheme in schemes]
-        ax.bar(x + (j - 1) * width, values, width, color=colour, label=lab, zorder=3)
-    ax.axhline(27, color=INK, linewidth=0.7, linestyle="--")
-    ax.set_xticks(x, labels, rotation=18, ha="right")
-    ax.set_ylabel("Contracts with positive effect")
-    ax.set_ylim(0, 29)
-    style_axis(ax)
-    ax.legend(frameon=False, ncol=3, loc="upper right")
+    count_matrix = np.asarray(
+        [
+            [int(stab[(scheme, metric)]["positive_contracts"]) for scheme in schemes]
+            for metric in smetrics
+        ]
+    )
+    for row, colour in enumerate(colours):
+        for col, count in enumerate(count_matrix[row]):
+            if count:
+                alpha = min(1.0, 0.22 + 0.78 * count / 27)
+                ax.scatter(
+                    col,
+                    row,
+                    s=430,
+                    marker="s",
+                    color=colour,
+                    alpha=alpha,
+                    edgecolor=colour,
+                    linewidth=0.8,
+                    zorder=3,
+                )
+                text_colour = "white" if count >= 15 else INK
+            else:
+                ax.scatter(
+                    col,
+                    row,
+                    s=430,
+                    marker="s",
+                    facecolor="white",
+                    edgecolor=GRID,
+                    linewidth=0.8,
+                    zorder=3,
+                )
+                text_colour = MUTED
+            ax.text(col, row, f"{count}/27", ha="center", va="center", fontsize=6.2, color=text_colour, zorder=4)
+    ax.set_xticks(np.arange(len(schemes)), labels, rotation=18, ha="right")
+    ax.set_yticks(np.arange(len(smetrics)), slabels)
+    ax.set_xlim(-0.5, len(schemes) - 0.5)
+    ax.set_ylim(len(smetrics) - 0.5, -0.5)
+    ax.set_ylabel("Endpoint")
+    style_axis(ax, grid="both")
+    ax.tick_params(length=0)
 
     ax = axs[1, 1]
     panel(ax, "d", "Ceiling, oracle, and achieved queue")
@@ -577,6 +625,7 @@ def main() -> None:
         raise FileExistsError(out)
     out.mkdir(parents=True)
     manifest: dict[str, object] = {"backend": "Python/matplotlib", "figures": {}}
+    selected = set(args.figure or [f"Figure_{index}" for index in range(1, 6)])
     for stem, builder in [
         ("Figure_1", lambda: figure1(out)),
         ("Figure_2", lambda: figure2(v13, out)),
@@ -584,6 +633,8 @@ def main() -> None:
         ("Figure_4", lambda: figure4(repo, out)),
         ("Figure_5", lambda: figure5(v13, out)),
     ]:
+        if stem not in selected:
+            continue
         hashes, _ = builder()
         manifest["figures"][stem] = hashes
     manifest["source_data"] = {path.name: sha256(path) for path in sorted(out.glob("Figure_*_source_data.tsv"))}
