@@ -34,7 +34,7 @@
 \fi
 
 \begin{abstract}
-Finite crop--weed review queues must preserve distinct plants through candidate formation, role qualification, ranking, and capacity truncation. We introduce bounded instance-support evaluation, in which set coverage counts truth instances incident to qualified candidates and one-to-one support computes the maximum candidate--plant matching at a fixed queue capacity and threshold tuple. On the official WeedsGalore split, proposal commissioning increased spatial support from 0.2973 to 0.5713 and role-qualified support from 0.1928 to 0.3026. At matched burden, the commissioned-only ranker increased one-to-one support by 0.0187, whereas mismatched ranker sources reversed the effect. Mask R-CNN achieved the highest $K=20$ point estimate (0.2159); its crossed seed-by-image contrast with U-Net was 0.0132 (95\% interval, $-0.0009$ to 0.0300). Merge-aware evaluation revealed a 105-instance gap between set coverage and one-to-one support that was absent from AP, AR, and queue-level PQ-style summaries. Two independent operators reached 0.9421 agreement on weed reviewability ($\kappa=0.8930$). In CWFID transfer, validation-selected thresholds exceeded external foreground responses. Image-macro plant-pixel AUROC ranged from 0.3871 to 0.6374, while threshold 0.01 yielded spatial recall of 0.0363--1.0000 and qualified one-to-one recall up to 0.0423. Finite-queue performance therefore depends jointly on proposal formation, ranker distribution, matching contract, and external calibration.
+Finite crop--weed review queues must preserve distinct plants through candidate formation, role qualification, ranking, and capacity truncation. We introduce bounded instance-support evaluation, in which set coverage counts truth instances incident to qualified candidates and one-to-one support computes the maximum candidate--plant matching at a fixed queue capacity and threshold tuple. On the official WeedsGalore split, proposal commissioning increased spatial support from 0.2973 to 0.5713 and role-qualified support from 0.1928 to 0.3026. At matched burden, the commissioned-only ranker increased one-to-one support by 0.0187, whereas mismatched ranker sources reversed the effect. Mask R-CNN achieved the highest $K=20$ point estimate (0.2159); its crossed seed-by-image contrast with U-Net was 0.0132 (95\% interval, $-0.0009$ to 0.0300). Merge-aware evaluation revealed a 105-instance gap between set coverage and one-to-one support that was absent from average precision, average recall, and queue-level Panoptic Quality summaries. Two independent operators reached 0.9421 agreement on weed reviewability ($\kappa=0.8930$). In cross-dataset transfer, validation-selected thresholds exceeded external foreground responses. Image-macro plant-pixel area under the receiver operating characteristic curve ranged from 0.3871 to 0.6374, while threshold 0.01 yielded spatial recall of 0.0363--1.0000 and qualified one-to-one recall up to 0.0423. Finite-queue performance therefore depends jointly on proposal formation, ranker distribution, matching contract, and external calibration.
 \end{abstract}
 
 \begin{keyword}
@@ -52,7 +52,7 @@ Finite review introduces several loss mechanisms. A plant can be absent from the
 
 The queue studied here supports offline annotation quality assurance and model review. An operator can retain a region, reject it, or escalate an ambiguous mixture before any downstream action. This record-oriented task complements active learning, which selects observations for annotation or retraining \cite{sheikh2020gradient,vanmarrewijk2024active}; selective prediction, which abstains from automated outputs \cite{geifman2017selective,geifman2019selectivenet}; and learning to defer, which assigns cases between a model and an expert \cite{mozannar2020defer,mozannar2023whoshould}.
 
-We present a bounded instance-support evaluation for finite crop--weed review queues. It has four contributions. First, it separates spatial, role-qualified, set-coverage, and one-to-one endpoints. Second, it tests proposal effects across 27 matching contracts and four ranker-training schemes. Third, it combines seed and test-image variation and compares the queue endpoint with standard AP, AR, and PQ-style metrics. Fourth, it connects geometric support to independent operator review and a pre-specified cross-dataset transfer. Together, these components establish a reproducible evaluation framework for agricultural review queues.
+We present a bounded instance-support evaluation for finite crop--weed review queues. It has four contributions. First, it separates spatial, role-qualified, set-coverage, and one-to-one endpoints. Second, it tests proposal effects across 27 matching contracts and four ranker-training schemes. Third, it combines seed and test-image variation and compares the queue endpoint with standard AP, AR, and PQ-style metrics. Fourth, it connects geometric support to independent operator review and a prespecified cross-dataset transfer. Together, these components establish a reproducible evaluation framework for agricultural review queues.
 
 \section{Materials and methods}
 
@@ -96,9 +96,9 @@ Total & 26 & 1,712 & 256 \\
 \end{tabular}
 \end{table}
 
-Analyses were separated by data role and experimental objective. Five validation-selected U-Net checkpoints provided the pre-specified CWFID transfer. On WeedsGalore, matched-burden, model-family, ranker-source, contract-grid, merge-aware, operator, and standard-metric experiments used the official test split for scoring. Continuous-score and threshold-response analyses characterised the external transfer after queue construction. Run identifiers and result tables preserve these data-role boundaries.
+Analyses were separated by data role and experimental objective. Five validation-selected U-Net checkpoints defined the prespecified transfer to the Crop/Weed Field Image Dataset (CWFID). On WeedsGalore, matched-burden, model-family, ranker-source, contract-grid, merge-aware, operator, and standard-metric experiments used the official test split for scoring. Continuous-score and threshold-response analyses characterised the external transfer after queue construction. This design maintained separation between model development, operating-point selection, and endpoint scoring.
 
-Cross-dataset evaluation used the official CWFID v1.0 release \cite{haug2015cwfid}. Its 60 RGB images and public annotations were fixed at source commit \texttt{176612f3}. The transfer applied fixed preprocessing, five existing U-Net checkpoints, validation-selected settings, $K=20$, and pre-specified endpoints. Weed truth units were defined as eight-connected annotation components of at least 16 pixels. Model fitting and selection used no CWFID labels.
+Cross-dataset evaluation used the official CWFID v1.0 release \cite{haug2015cwfid}. Its 60 RGB images and public annotations were fixed at source commit \texttt{176612f3}. The transfer applied fixed preprocessing, five existing U-Net checkpoints, validation-selected settings, $K=20$, and prespecified endpoints. Weed truth units were defined as eight-connected annotation components of at least 16 pixels. Model fitting and selection used no CWFID labels.
 
 \subsection{Supervision ledger}
 
@@ -119,7 +119,7 @@ Proposal commissioning & 104 target dense masks & Training-mask objective and bu
 Source-transfer rankers & 9,887 target-training candidate labels & 2,436 validation candidate labels & Queue formed before scoring \\
 U-Net and DeepLabV3+ & 104 target RGB dense masks & 26 validation RGB dense masks & Queue formed before scoring \\
 Mask R-CNN & 104 target RGB semantic and instance masks & 26 validation semantic and instance masks & Queue formed before scoring \\
-CWFID transfer & No external labels & No external labels & 60 annotations for pre-specified scoring only \\
+CWFID transfer & No external labels & No external labels & 60 annotations for prespecified scoring only \\
 Two-operator review & No model training & Fixed 518-region queue and common instructions & Aggregate technical-review analysis \\
 \bottomrule
 \end{tabularx}
@@ -210,7 +210,7 @@ Mask R-CNN had the highest one-to-one point estimate at $K=20$: $0.2159\pm0.0038
 
 The date-block plus seed interval was 0.0023 to 0.0341 for Mask R-CNN minus U-Net and $-0.0244$ to 0.0133 for DeepLabV3+ minus U-Net. Across the observed dates, point estimates and standard metrics consistently favoured Mask R-CNN, while the crossed image-level interval retained uncertainty around its contrast with U-Net.
 
-Standard metrics on the same predictions also favoured Mask R-CNN (Table~\ref{tab:models}). Its mAP was 0.1064 and AP50 was 0.3189. U-Net reached 0.0853 and 0.2616, respectively. At the queue limit, Mask R-CNN reached AR20@50 of 0.1861 and a PQ-style score of 0.1936. The matching-contract grid was less uniform: Mask R-CNN ranked first in 21 of 27 contracts, while U-Net ranked first in six. U-Net led when instance coverage was 0.75 with labelled coverage of 0.25 or 0.50.
+Standard metrics on the same predictions also favoured Mask R-CNN (Table~\ref{tab:models}; Figure~\ref{fig:models}). Its mAP was 0.1064 and AP50 was 0.3189. U-Net reached 0.0853 and 0.2616, respectively. At the queue limit, Mask R-CNN reached AR20@50 of 0.1861 and a PQ-style score of 0.1936. The matching-contract grid was less uniform: Mask R-CNN ranked first in 21 of 27 contracts, while U-Net ranked first in six. U-Net led when instance coverage was 0.75 with labelled coverage of 0.25 or 0.50.
 
 \begin{table}[!t]
 \centering
@@ -255,16 +255,16 @@ The operators reached consensus that 301 regions were reviewable and 143 were no
 
 \subsection{External transfer exposed threshold-sensitive plant evidence}
 
-The CWFID transfer contained 60 images and 331 weed-component proxies. For all five U-Net checkpoints, the maximum external foreground response remained below the validation-selected threshold, producing an empty connected-component queue. Continuous plant-pixel discrimination varied substantially across checkpoints: image-macro AUROC ranged from 0.3871 to 0.6374 and AP from 0.0438 to 0.0715 (Figure~\ref{fig:external}a).
+The CWFID transfer contained 60 images and 331 weed-component proxies. For all five U-Net checkpoints, the maximum external foreground response remained below the validation-selected threshold, producing an empty connected-component queue. Continuous plant-pixel discrimination varied substantially across checkpoints: image-macro area under the receiver operating characteristic curve (AUROC) ranged from 0.3871 to 0.6374 and AP from 0.0438 to 0.0715 (Figure~\ref{fig:external}a).
 
-Image-macro foreground q99 values ranged from 0.0118 to 0.0498 and image-macro maxima from 0.0384 to 0.2205, compared with validation-selected thresholds of 0.30--0.70 (Figure~\ref{fig:external}b). The resulting score-scale separation explains why connected-component extraction remained inactive at the registered operating points.
+Image-macro foreground $q_{0.99}$ values ranged from 0.0118 to 0.0498 and image-macro maxima from 0.0384 to 0.2205, compared with validation-selected thresholds of 0.30--0.70 (Figure~\ref{fig:external}b). The resulting score-scale separation explains why connected-component extraction remained inactive at the selected operating points.
 
 At threshold 0.01, spatial recall ranged from 0.0363 to 1.0000, candidate precision from 0 to 0.3520, and crop-exposure frequency from 0.25 to 1.00 (Figure~\ref{fig:external}c). Role-qualified one-to-one recall was positive for one checkpoint and reached 0.0423. Checkpoint 4 combined spatial recall of 1.0000 with crop exposure of 1.0000 and qualified recall of 0, localising transfer loss to both score scale and crop--weed role qualification.
 
 \begin{figure}[!t]
 \centering
 \includegraphics[width=\textwidth]{figures/Figure_5.pdf}
-\caption{External CWFID transfer across five U-Net checkpoints. (a) Image-macro plant-pixel AUROC and AP; error bars show the sample SD across 60 images. (b) Image-macro foreground q99 and maximum probabilities relative to the validation-selected threshold. (c) Spatial recall, role-qualified one-to-one recall, and crop-exposure image frequency at threshold 0.01. Checkpoints follow the registered seed order.}
+\caption{External CWFID transfer across five U-Net checkpoints. (a) Image-macro plant-pixel AUROC and AP; error bars show the sample SD across 60 images. (b) Image-macro foreground $q_{0.99}$ and maximum probabilities relative to the validation-selected threshold. (c) Spatial recall, role-qualified one-to-one recall, and crop-exposure image frequency at threshold 0.01. Checkpoints follow the predefined evaluation order.}
 \label{fig:external}
 \end{figure}
 
@@ -280,7 +280,7 @@ Mask R-CNN led 21 of 27 matching contracts and all reported standard metrics. It
 
 The two operators applied the review categories consistently, with weed-reviewability agreement of 0.9421 and AC1 of 0.9206. The 74 disputed or uncertain regions define the escalation branch of the workflow. On determinate consensus items, the human--mask Jaccard index of 0.6766 shows that geometric qualification and human reviewability capture related but distinct properties. Operator-population variation, plant-count extraction, review speed, and labour economics remain separate study endpoints.
 
-The CWFID experiment reveals a two-stage transfer pattern. First, external foreground responses fell below every validation-selected threshold. Second, threshold relaxation recovered spatial coverage for several checkpoints but yielded little role-qualified one-to-one support and frequent crop exposure. This separation identifies score-scale transfer and agricultural role qualification as distinct bottlenecks. The registered external experiment used the five U-Net checkpoints available before CWFID opening; evaluation of the later Mask R-CNN family is a natural next external comparison.
+The CWFID experiment reveals a two-stage transfer pattern. First, external foreground responses fell below every validation-selected threshold. Second, threshold relaxation recovered spatial coverage for several checkpoints but yielded little role-qualified one-to-one support and frequent crop exposure. This separation identifies score-scale transfer and agricultural role qualification as distinct bottlenecks. The cross-dataset comparison comprised the five U-Net checkpoints specified for CWFID; extending the same design to Mask R-CNN would test whether these shifts persist across model families.
 
 For annotation quality assurance, the contract links four design choices---candidate source, role criterion, review budget, and escalation rule---to proposal ceilings, achieved support, crop exposure, and standard AP/AR. Ranker-source and matching-contract grids show whether improvements persist across training distributions and overlap criteria. External transfer then tests score scale and role qualification under a new acquisition domain. Timing, plant-count extraction, and cost can be incorporated as additional operational endpoints.
 
@@ -313,8 +313,8 @@ Versioned reproducibility materials are maintained at \url{https://github.com/Fy
 \FundingStatement
 \fi
 
-\section*{Declaration of Generative AI and AI-Assisted Technologies in the Manuscript Preparation Process}
-During the preparation of this work, the authors used AI-assisted tools for code review and language review, including checks of sentence clarity, grammar, and wording. The authors reviewed and edited all affected content and take full responsibility for the content of the publication.
+\section*{Declaration of generative AI and AI-assisted technologies in the manuscript preparation process}
+During the preparation of this work, the authors used OpenAI Codex for code review and language review, including checks of sentence clarity, grammar, and wording. After using this tool, the authors reviewed and edited all affected content and take full responsibility for the content of the publication.
 
 \setlength{\bibsep}{0pt}
 \footnotesize

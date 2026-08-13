@@ -12,16 +12,19 @@ Compile with pdfLaTeX and BibTeX:
 The manuscript uses five vector PDF figures. The full repository also provides
 editable SVG, high-resolution TIFF, PNG previews, source-data tables, and
 text-bound audits. The compact Overleaf archive retains the LaTeX sources,
-vector figures, bibliography, author metadata, highlights, and cover letter.
+vector figures, bibliography, author metadata, highlights, figure captions,
+and cover letter.
 
 The public reproducibility archive is maintained at:
 
 <https://github.com/Fytap/agrispec-vlm-reproducibility/releases/tag/v1.3.0>
 
-Version v1.3.0 contains the ranker/contract grid, merge-aware accounting,
-crossed uncertainty, standard metrics, aggregate operator analysis, locked
-CWFID evidence, frozen configurations, failure records, and compact checks.
-Public imagery and upstream model weights remain at their original sources.
+The manuscript-linked v1.3.1 evidence layer is pinned at the immutable commit
+<https://github.com/Fytap/agrispec-vlm-reproducibility/tree/6930f7b48995054095dbaaeebef4f155029c107a/reproducibility/v1_3_1>.
+It contains the ranker/contract grid, merge-aware accounting, crossed
+uncertainty, standard metrics, aggregate operator analysis, CWFID evidence,
+frozen configurations, failure records, and compact checks. Public imagery and
+upstream model weights remain at their original sources.
 
 ## Submission metadata
 

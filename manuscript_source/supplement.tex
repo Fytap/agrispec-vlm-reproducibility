@@ -8,6 +8,7 @@
 \usepackage{tabularx}
 \usepackage{longtable}
 \usepackage{graphicx}
+\usepackage{float}
 \usepackage{amsmath,amssymb}
 \usepackage{xurl}
 \usepackage[hidelinks]{hyperref}
@@ -17,6 +18,9 @@
 \setlength{\@fptop}{0pt}
 \makeatother
 \setcounter{secnumdepth}{0}
+\renewcommand{\thetable}{S\arabic{table}}
+\renewcommand{\thefigure}{S\arabic{figure}}
+\renewcommand{\theequation}{S\arabic{equation}}
 \setcounter{topnumber}{5}
 \setcounter{bottomnumber}{5}
 \setcounter{totalnumber}{10}
@@ -40,7 +44,7 @@
 
 \section{S1. Data roles and analysis sequence}
 
-WeedsGalore and CWFID have different experimental roles. WeedsGalore supports model development, internal comparison, and uncertainty analysis on its official train, validation, and test split. CWFID supports a pre-specified cross-dataset transfer. Table~S1 summarises the analysis sequence. Test truth was unavailable to queue-forming stages and entered only offline scoring.
+WeedsGalore and the Crop/Weed Field Image Dataset (CWFID) have different experimental roles. WeedsGalore supports model development, internal comparison, and uncertainty analysis on its official train, validation, and test split. CWFID supports a prespecified cross-dataset transfer. Table~\ref{tab:s1chronology} summarises the analysis sequence. Test truth was unavailable to queue-forming stages and entered only offline scoring.
 
 \begin{table}[htbp]
 \centering
@@ -68,7 +72,7 @@ The CWFID model list, preprocessing, component definition, fixed $K=20$, ranking
 
 \section{S2. Public-data lineage and denominators}
 
-All reported imagery is public. SugarBeets2016 supplied source-specialist masks. WeedsGalore supplied internal development data. CWFID supplied the cross-dataset transfer set. Public images and public weights remain at upstream repositories. The release records source links, access dates, licences, versions, byte counts, and hashes.
+All reported imagery is public. SugarBeets2016 supplied source-specialist masks. WeedsGalore supplied internal development data. CWFID supplied the cross-dataset transfer set. Public images and public weights remain at upstream repositories. The release records source links, access dates, licences, versions, byte counts, and hashes. Table~\ref{tab:s2split} reports the WeedsGalore split and test denominators by acquisition date.
 
 \begin{table}[htbp]
 \centering
@@ -96,6 +100,8 @@ CWFID was fixed at upstream commit \nolinkurl{176612f3506c0ce70d85518cb82ddd938a
 
 \section{S3. Supervision ledger and model construction}
 
+Table~\ref{tab:s3ledger} enumerates the supervision available to each stage, and Table~\ref{tab:s3models} specifies the target-trained model recipes.
+
 \begin{table}[htbp]
 \centering
 \caption{Complete supervision ledger. ``Selection access'' identifies labels used to choose an operating point.}
@@ -110,7 +116,7 @@ WeedsGalore training masks & 104 tiles & Proposal commissioning and model fittin
 WeedsGalore validation masks & 26 tiles & Epoch, threshold, area, regularisation, rank policy & Model and queue selection \\
 WeedsGalore test masks & 26 tiles & None & Offline proposal, matching, IoU, and exposure scores \\
 Restricted candidate draw & 300 training candidates per draw & All 2,436 validation candidates retained & Restricted training reveal, not a 300-label pipeline \\
-CWFID annotations & 60 images & None & One locked score and post-lock diagnostics \\
+CWFID annotations & 60 images & None & Primary endpoint and continuous-score diagnostics \\
 Operator responses & 518 regions per operator & None & Agreement and human--mask comparison \\
 \bottomrule
 \end{tabularx}
@@ -145,6 +151,8 @@ q_L=\frac{|C\cap L|}{|C|},\qquad
 q_R=\frac{|C\cap R|}{|C\cap L|}.
 \]
 The primary role-qualified edge requires $q_I\ge0.50$, $q_L\ge0.50$, $q_R\ge0.90$, and a role match. The 27-contract grid crosses $q_I\in\{0.25,0.50,0.75\}$, $q_L\in\{0.25,0.50,0.75\}$, and $q_R\in\{0.50,0.75,0.90\}$.
+
+Tables~\ref{tab:s4grid}--\ref{tab:s4cropmodels} report proposal selection, split--merge sensitivity, and crop exposure.
 
 \begin{table}[htbp]
 \centering
@@ -212,7 +220,7 @@ Mask R-CNN & $0.2308\pm0.0769$ & $0.2051\pm0.0588$ & $0.1538\pm0.0666$ \\
 
 \section{S5. Ranker-source and commissioning sensitivity}
 
-Four ranker-training schemes were evaluated without changing the 471-candidate comparison burden. Commissioned-only and original-only used candidate labels from one proposal distribution. Union training combined both distributions. Reciprocal cross-pool training applied each distribution's ranker to the other distribution.
+Four ranker-training schemes were evaluated without changing the 471-candidate comparison burden. Commissioned-only and original-only used candidate labels from one proposal distribution. Union training combined both distributions. Reciprocal cross-pool training applied each distribution's ranker to the other distribution. Tables~\ref{tab:s5primary} and~\ref{tab:s5signs} report primary-contract effects and their direction across the contract grid.
 
 \begin{table}[htbp]
 \centering
@@ -257,7 +265,7 @@ The commissioned-only one-to-one effect ranged from $-0.0368$ to 0.0572, with me
 
 \section{S6. Merge-aware bounds for the fixed U-Net queue}
 
-Set coverage is the number of distinct truth instances incident to at least one qualified selected candidate. One-to-one support is the maximum matching cardinality. Qualified memberships count all candidate-to-instance edges. Memberships beyond the set union equal total memberships minus distinct covered instances. The merge-capacity gap equals set-covered instances minus matched instances.
+Set coverage is the number of distinct truth instances incident to at least one qualified selected candidate. One-to-one support is the maximum matching cardinality. Qualified memberships count all candidate-to-instance edges. Memberships beyond the set union equal total memberships minus distinct covered instances. The merge-capacity gap equals set-covered instances minus matched instances. Tables~\ref{tab:s6merge} and~\ref{tab:s6multiplicity} connect this accounting to operator reviewability.
 
 \begin{table}[htbp]
 \centering
@@ -310,9 +318,11 @@ All 453 edge memberships represented distinct instances, so duplicate membership
 \end{tabular}
 \end{table}
 
-The increase in reviewability with multiplicity shows that merged candidates can retain useful evidence. Set coverage and one-to-one support are computed on the same thresholded graph and are indexed by the queue capacity and matching tuple. The operator protocol did not request plant counts; neither geometric endpoint is interpreted as realised human recovery or as a bound on it.
+The increase in reviewability with multiplicity shows that merged candidates can retain useful evidence. Set coverage and one-to-one support are computed on the same thresholded graph and are indexed by the queue capacity and matching tuple. The operator protocol assessed region reviewability rather than plant enumeration, so the geometric endpoints and operator responses quantify separate aspects of the queue.
 
 \section{S7. Model stability, standard metrics, and crossed uncertainty}
+
+Tables~\ref{tab:s7seeds}--\ref{tab:s7standard} report per-seed endpoints, crossed contrasts, and standard instance metrics.
 
 \begin{table}[htbp]
 \centering
@@ -357,7 +367,7 @@ Mask R-CNN minus U-Net & $+0.0132$ & $[-0.0009,\ 0.0300]$ & $[-0.0027,\ 0.0329]$
 \end{tabular}
 \end{table}
 
-Date-block plus seed intervals were $[-0.0244,0.0133]$ for DeepLabV3+ minus U-Net and $[0.0023,0.0341]$ for Mask R-CNN minus U-Net. They resample four observed dates and training seeds. They do not estimate a new-field distribution.
+Date-block plus seed intervals were $[-0.0244,0.0133]$ for DeepLabV3+ minus U-Net and $[0.0023,0.0341]$ for Mask R-CNN minus U-Net. They describe variation across the four observed dates and training seeds; new-field generalisation remains outside this estimand.
 
 \begin{table}[htbp]
 \centering
@@ -388,13 +398,13 @@ Mask R-CNN & \shortstack{$0.0782$\\$(0.0049)$} & \shortstack{$0.1861$\\$(0.0079)
 \end{tabular}
 \end{table}
 
-The standard calculations used at most 100 predicted weed regions per image. Queue AR20 used the predicted-weed subset of the $K=20$ review queue. The PQ-style calculation used IoU greater than 0.50 and decomposed into segmentation and recognition terms. It is not a full panoptic score. Primary endpoint replay was checked for 66 model--seed--metric combinations; all differences were zero.
+The standard calculations used at most 100 predicted weed regions per image. Queue AR20 used the predicted-weed subset of the $K=20$ review queue. The PQ-style calculation used IoU greater than 0.50 and decomposed into segmentation and recognition terms, representing a predicted-weed diagnostic rather than a complete panoptic partition. Recomputation across 66 model--seed--metric combinations reproduced every primary endpoint exactly.
 
 Across the 27 contracts, Mask R-CNN ranked first in 21 and U-Net in six. U-Net ranked first at instance coverage 0.75 with labelled coverage 0.25 or 0.50 across all three purity values. Mask R-CNN ranked first in all remaining cells. DeepLabV3+ did not rank first.
 
 \section{S8. Operator agreement and human--mask correspondence}
 
-The two operators were different natural persons. They followed common written instructions and completed 12 validation-derived practice items. They independently reviewed every formal item without discussion, peer-response access, automatic labelling, or external search. No occupational, demographic, or professional credential data were collected. Results are therefore restricted to these two anonymous operators. Timing fields were excluded because timing was not part of the protocol.
+Two different human operators followed common written instructions and completed 12 validation-derived practice items. They independently reviewed every formal item without discussion, peer-response access, automatic labelling, or external search. The analysis characterises agreement between these two anonymous operators; occupational, demographic, and professional-credential variables were outside the study design. Timing was likewise outside the measurement set. Tables~\ref{tab:s8agreement}--\ref{tab:s8confidence} report agreement, response contingencies, and human--mask correspondence.
 
 \begin{table}[htbp]
 \centering
@@ -469,13 +479,13 @@ Binary correspondence was evaluated on the 444 determinate-consensus regions: tr
 \end{tabular}
 \end{table}
 
-\section{S9. Pre-specified CWFID transfer and continuous diagnostics}
+\section{S9. Prespecified CWFID transfer and continuous diagnostics}
 
-The transfer pipeline scaled each longer image side to 600 pixels, reflection-padded the shorter side, and applied training normalisation. Annotations used nearest-neighbour resizing and zero padding. Five U-Net checkpoints retained their validation-selected epoch, foreground threshold, minimum area, and ranking score. CWFID labels were not used for fitting, calibration, threshold selection, or allocation.
+The transfer pipeline scaled each longer image side to 600 pixels, reflection-padded the shorter side, and applied training normalisation. Annotations used nearest-neighbour resizing and zero padding. Five U-Net checkpoints retained their validation-selected epoch, foreground threshold, minimum area, and ranking score. CWFID labels were not used for fitting, calibration, threshold selection, or allocation. Tables~\ref{tab:s9locked} and~\ref{tab:s9continuous} report the primary endpoint and continuous-score diagnostics.
 
 \begin{table}[htbp]
 \centering
-\caption{Pre-specified CWFID endpoint. Every checkpoint produced the same structural outcome.}
+\caption{Primary CWFID endpoint across five U-Net checkpoints.}
 \label{tab:s9locked}
 \footnotesize
 \setlength{\tabcolsep}{4pt}
@@ -488,11 +498,11 @@ The transfer pipeline scaled each longer image side to 600 pixels, reflection-pa
 \end{tabular}
 \end{table}
 
-The all-zero empirical image bootstrap is degenerate and is not used as a population interval. The one-sided 95\% binomial reference upper bound for candidate presence in an image was 0.0487. This quantity does not bound weed-component recall or transfer to other farms.
+Because every image produced zero candidates at the primary threshold, the empirical image bootstrap collapsed to a point mass at zero. The one-sided 95\% binomial reference upper bound for candidate presence in an image was 0.0487. This image-level quantity is distinct from weed-component recall and cross-farm transfer.
 
 \begin{table}[htbp]
 \centering
-\caption{Post-lock continuous CWFID diagnostics. AUROC and AP are image-macro plant-pixel scores.}
+\caption{Continuous CWFID score diagnostics. AUROC and AP are image-macro plant-pixel scores.}
 \label{tab:s9continuous}
 \footnotesize
 \setlength{\tabcolsep}{4pt}
@@ -511,11 +521,13 @@ Checkpoint & \shortstack{Validation\\threshold} & \shortstack{Plant\\AUROC} & \s
 
 Twenty equal-width calibration bins were specified. Almost all pixels fell below predicted plant probability 0.05. In that bin, mean predicted probability ranged from 0.0072 to 0.0239 across checkpoints, while observed plant prevalence was about 0.055. Higher-probability bins were sparse and often had near-zero observed plant fraction.
 
-The diagnostic threshold grid was 0.01, 0.02, 0.05, 0.10, 0.20, 0.30, 0.40, 0.50, 0.60, 0.70, 0.80, 0.90, and 0.95. At 0.01, spatial recall ranged from 0.0363 to 1.0000. Only checkpoint 2 obtained nonzero role-qualified recall, at 0.0423. Several lower-threshold components were broad or mixed. The diagnostic therefore cannot distinguish threshold mismatch from representation, role-semantic, scale, crop, viewpoint, or annotation-contract shift.
+The diagnostic threshold grid was 0.01, 0.02, 0.05, 0.10, 0.20, 0.30, 0.40, 0.50, 0.60, 0.70, 0.80, 0.90, and 0.95. At 0.01, spatial recall ranged from 0.0363 to 1.0000. Only checkpoint 2 obtained nonzero role-qualified recall, at 0.0423. Several lower-threshold components were broad or mixed. These diagnostics characterize the combined effect of threshold, representation, role-semantic, scale, crop, viewpoint, and annotation-contract shifts; component-specific attribution requires a factorial design.
 
-External evaluation used the five U-Net checkpoints available in the pre-specified transfer. The later Mask R-CNN models were evaluated on WeedsGalore and provide a defined model family for future cross-dataset comparison.
+External evaluation used the five U-Net checkpoints included in the prespecified transfer. The Mask R-CNN models evaluated on WeedsGalore provide a defined model family for a subsequent cross-dataset comparison.
 
 \section{S10. Candidate-ranking and allocation diagnostics}
+
+Table~\ref{tab:s10ranking} compares candidate discrimination across five ranking features.
 
 \begin{table}[htbp]
 \centering
@@ -537,14 +549,23 @@ Component-masked DINOv2, all candidates & 0.9665 & 0.8813 \\
 
 The masked DINOv2 ranker reached one-to-one support 0.1343 at $K=20$ despite its candidate AUC of 0.9665. This gap motivates separate candidate and instance-support reporting.
 
-An exploratory 5--50 candidates-per-tile allocation was evaluated after official-test access. It was not selected by validation in the five-seed study. Fixed $K=20$, bounded allocation, and global top-$N$ accepted 520 regions. Their one-to-one numerators were 227, 315, and 320. The bounded and global policies concentrated more than half of reviews on 6 June and reduced worst-date support. These results remain hypothesis-generating.
+A post hoc allocation-sensitivity analysis evaluated capacities of 5--50 candidates per tile. Fixed $K=20$, bounded allocation, and global top-$N$ each accepted 520 regions, with one-to-one numerators of 227, 315, and 320. The bounded and global policies concentrated more than half of reviews on 6 June and reduced worst-date support. This analysis characterises allocation sensitivity and was excluded from model selection and primary inference.
 
-\section{S11. Metric correspondence}
+\section{S11. Reproducibility resources}
 
-\begin{table}[htbp]
+The release contains versioned configurations, model-acquisition records, environment specifications, training and evaluation source, checkpoint hashes, aggregate and per-image metrics, matching outputs, and figure source data. Public dataset imagery and weights are acquired from upstream sources. They are not redistributed when upstream terms prohibit redistribution.
+
+The principal environment used Python 3.10.12, PyTorch 2.7.1 with CUDA 12.6, torchvision 0.22.1, and segmentation-models-pytorch 0.5.0. Training used one NVIDIA H200 accelerator per seed. Aggregation and bootstrap programs ran on CPU and read immutable result tables.
+
+The compact verifier reconstructs published aggregate tables and numerical invariants from archived outputs and verifies their checksums. Full reproduction uses the public datasets and weights, recorded environment, and supplied training and evaluation programs. The public package provides aggregate operator results; item-level private response files remain outside the release.
+
+\clearpage
+\section{S12. Metric correspondence}
+
+\begin{table}[H]
 \centering
 \caption{Relationship between established instance metrics and the finite-queue contract.}
-\label{tab:s11metrics}
+\label{tab:s12metrics}
 \footnotesize
 \begin{tabularx}{\textwidth}{L{2.8cm}L{3.1cm}L{3.2cm}X}
 \toprule
@@ -561,14 +582,6 @@ One-to-one queue support & maximum qualified matching & fixed per-tile review bu
 \end{tabularx}
 \end{table}
 
-The queue endpoint reuses familiar matching machinery. Its contribution is the agricultural information contract: it records proposal support, role qualification, merge capacity, ranker source, and review truncation as separate evidence layers. It complements AP, AR, PQ, and recent instance-quality metrics with a fixed review-capacity endpoint.
-
-\section{S12. Reproducibility resources}
-
-The release contains versioned configurations, model-acquisition records, environment specifications, training and evaluation source, checkpoint hashes, aggregate and per-image metrics, matching outputs, and figure source data. Public dataset imagery and weights are acquired from upstream sources. They are not redistributed when upstream terms prohibit redistribution.
-
-The principal environment used Python 3.10.12, PyTorch 2.7.1 with CUDA 12.6, torchvision 0.22.1, and segmentation-models-pytorch 0.5.0. Training used one NVIDIA H200 accelerator per seed. Physical devices 6 and 7 were explicitly assigned. CPU-only aggregation and bootstrap programs read immutable result tables.
-
-The compact verifier reconstructs published aggregate tables and numerical invariants from archived outputs and verifies their checksums. Full reproduction uses the public datasets and weights, recorded environment, and supplied training and evaluation programs. The public package contains only publication-ready aggregate operator results and excludes private response files.
+Table~\ref{tab:s12metrics} situates the finite-queue endpoints within established instance-metric conventions. The queue endpoint reuses familiar matching machinery. Its contribution is the agricultural information contract: it records proposal support, role qualification, merge capacity, ranker source, and review truncation as separate evidence layers. It complements AP, AR, PQ, and recent instance-quality metrics with a fixed review-capacity endpoint.
 
 \end{document}
