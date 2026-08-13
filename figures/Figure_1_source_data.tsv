@@ -1,17 +1,11 @@
-panel	stage	detail	endpoint	conditioning	interpretation
-a	RGB tile	inference input			
-a	Candidate formation	connected regions			
-a	Role qualification	coverage + purity			
-a	Ranking	frozen score			
-a	Queue	at most 20 regions			
-b			one_to_one	fixed_queue_capacity_and_matching_thresholds	maximum_bipartite_matching_cardinality
-b			set_coverage	fixed_queue_capacity_and_matching_thresholds	qualified_truth_instance_union
-b			human_recovery	not_measured	not_bounded_by_geometric_endpoints
-c	"Frozen
-primary"	U-Net protocol			
-c	"Official
-test"	one field			
-c	"Post-test
-audits"	models / metrics			
-c	"Locked
-transfer"	CWFID once			
+panel	metric	group	value	archived_source
+commissioning	spatial_support	original	0.2973	reproducibility/v1_3_1/source_data/Figure_2_source_data.tsv
+commissioning	spatial_support	commissioned	0.5713	reproducibility/v1_3_1/source_data/Figure_2_source_data.tsv
+commissioning	role_qualified_support	original	0.1928	reproducibility/v1_3_1/source_data/Figure_2_source_data.tsv
+commissioning	role_qualified_support	commissioned	0.3026	reproducibility/v1_3_1/source_data/Figure_2_source_data.tsv
+merge_aware	distinct_set_covered_instances	all_selected	453	reproducibility/v1_3_1/evidence/merge_aware/merge_aware_queue_summary.tsv
+merge_aware	one_to_one_matched_instances	all_selected	348	reproducibility/v1_3_1/evidence/merge_aware/merge_aware_queue_summary.tsv
+merge_aware	merge_capacity_gap_instances	all_selected	105	reproducibility/v1_3_1/evidence/merge_aware/merge_aware_queue_summary.tsv
+operator	exact_agreement	weed_reviewable	0.942084942085	reproducibility/v1_3_1/evidence/operator_extended/operator_agreement_extended.tsv
+operator	cohen_kappa	weed_reviewable	0.893010575017	reproducibility/v1_3_1/evidence/operator_extended/operator_agreement_extended.tsv
+operator	n	weed_reviewable	518	reproducibility/v1_3_1/evidence/operator_extended/operator_agreement_extended.tsv

@@ -2,10 +2,10 @@
   "backend": "Python/matplotlib",
   "figures": {
     "Figure_1": {
-      "Figure_1.pdf": "4d3767990a13b3b47fba284cbd99175861916317bf449516da4214ab62483b9d",
-      "Figure_1.svg": "2ce9af6d98e8292b124bdd6d880826956cfb671cceed7d2c6c2b25d8456c2d3d",
-      "Figure_1.png": "1f13192cabb54cf7e4fd7184e452915f78d3b6572f789d206c813065852b74f6",
-      "Figure_1.tiff": "3aa53278f5ca5767df0bd8da584ef68a5921d3544af7469006c3606991120364"
+      "Figure_1.pdf": "31907818ace8c3f196d0db8ef68190263e64432201147bbecfbe0eb6df150fc6",
+      "Figure_1.svg": "0cf054223e1f75b47ebbea8e4b445f080247c1a0a9873aa93e1a474f86d4b486",
+      "Figure_1.png": "1e50bb95183c6c16663b6d6b7716b354bfabbf34ede04dd4a563a7cc91d8aa80",
+      "Figure_1.tiff": "933299d53909d28c1bd4131fa6dc604979a8f3c62d04dcb933a588dcb7079fa2"
     },
     "Figure_2": {
       "Figure_2.pdf": "68dfc7f8db377493e4daba931f06a1950b7755f37dada89042aaf3e75222ed69",
@@ -35,7 +35,7 @@
     }
   },
   "source_data": {
-    "Figure_1_source_data.tsv": "31cc6a7e93c46daba8709ccd31f54b3acd630046d24425b70cbb1971e8517b00",
+    "Figure_1_source_data.tsv": "d454d32669181ed1f6dfa51fb2dd5b068ce6010e8f59940e8fc7092c14e88396",
     "Figure_2_source_data.tsv": "b4884dbe7caab0338a7c7cb6baba4c124cf87f40c84f91c504004350e3d3c1ce",
     "Figure_3_source_data.tsv": "89b67b380a74c28655b17d38f2f8e46373b0fa7ba380507b44a2601e00ea04f4",
     "Figure_4_source_data.json": "b88ce8dc4291cdc2801a7ed70ac0a5fe4d055c07df701377cd9a2d863b233894",

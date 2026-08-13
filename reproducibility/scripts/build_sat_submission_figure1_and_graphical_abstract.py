@@ -1,8 +1,10 @@
 #!/usr/bin/env python3
 """Build the SAT submission Figure 1 and graphical abstract.
 
-The script reads only archived aggregate evidence. It does not access model
-checkpoints, test images, masks, or GPUs.
+Figure 1 combines archived aggregate evidence with four public WeedsGalore
+training images selected without masks or model outputs.  The graphical
+abstract remains aggregate-only.  The script does not access checkpoints,
+validation/test masks, or GPUs.
 """
 
 from __future__ import annotations
@@ -10,6 +12,7 @@ from __future__ import annotations
 import csv
 import hashlib
 import json
+import os
 from datetime import datetime, timezone
 from pathlib import Path
 
@@ -17,13 +20,21 @@ import matplotlib
 
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt
+import numpy as np
 from matplotlib import patheffects
 from matplotlib.patches import Circle, FancyArrowPatch, FancyBboxPatch, Rectangle
+from PIL import Image
 
 
 REPO = Path(__file__).resolve().parents[2]
 OUT = REPO / "manuscript_source" / "figures"
 SOURCE_OUT = REPO / "reproducibility" / "v1_3_1" / "source_data"
+WEEDSGALORE_ROOT = Path(
+    os.environ.get(
+        "AGRISPEC_WEEDSGALORE_ROOT",
+        REPO / "data" / "weedsgalore-dataset",
+    )
+)
 FIG2_SOURCE = SOURCE_OUT / "Figure_2_source_data.tsv"
 MERGE_SOURCE = (
     REPO
@@ -70,7 +81,7 @@ plt.rcParams.update(
         "pdf.fonttype": 42,
         "ps.fonttype": 42,
         "svg.fonttype": "none",
-        "svg.hashsalt": "agrispec-sat-figure1-v1",
+        "svg.hashsalt": "agrispec-sat-figure1-v2-field-scenes",
         "savefig.facecolor": "white",
     }
 )
@@ -140,7 +151,7 @@ def arrow(ax, start, end, color=COLORS["muted"], lw=1.0, z=4):
 def panel_label(ax, label):
     ax.text(
         -0.025,
-        1.02,
+        1.00,
         label,
         transform=ax.transAxes,
         ha="left",
@@ -304,12 +315,233 @@ def draw_panel_c(ax, e):
     ax.text(0.76, 0.215, "jointly determine finite-queue support", ha="center", va="center", fontsize=5.3, color=COLORS["muted"])
 
 
+def sha256(path):
+    h = hashlib.sha256()
+    with path.open("rb") as handle:
+        for block in iter(lambda: handle.read(1 << 20), b""):
+            h.update(block)
+    return h.hexdigest()
+
+
+def prepare_rgb_scene(sample_id: str) -> tuple[np.ndarray, dict[str, object]]:
+    """Create a display RGB composite with only global per-tile adjustments."""
+    date = sample_id[:10]
+    image_dir = WEEDSGALORE_ROOT / date / "images"
+    paths = {band: image_dir / f"{sample_id}_{band}.png" for band in "RGB"}
+    for path in paths.values():
+        if not path.exists():
+            raise FileNotFoundError(path)
+    raw = np.stack(
+        [np.asarray(Image.open(paths[band]), dtype=np.float32) for band in "RGB"],
+        axis=-1,
+    )
+    medians = np.median(raw, axis=(0, 1))
+    target = float(np.mean(medians))
+    balanced = raw * (target / np.maximum(medians, 1.0))[None, None, :]
+    lo, hi = np.percentile(balanced, [1.0, 99.0])
+    rgb = np.clip((balanced - lo) / max(float(hi - lo), 1.0), 0.0, 1.0) ** 0.90
+    exg = 2.0 * rgb[..., 1] - rgb[..., 0] - rgb[..., 2]
+    record = {
+        "sample_id": sample_id,
+        "date": date,
+        "vegetation_fraction": float(np.mean(exg > 0.06)),
+        "display_transform": (
+            "global per-tile gray-world balance; common 1st--99th percentile "
+            "stretch across RGB; gamma 0.90; no crop or local adjustment"
+        ),
+        "bands": {
+            band: {
+                "dataset_relative_path": path.relative_to(WEEDSGALORE_ROOT).as_posix(),
+                "sha256": sha256(path),
+            }
+            for band, path in paths.items()
+        },
+    }
+    return rgb, record
+
+
+def select_training_scenes() -> list[tuple[np.ndarray, dict[str, object]]]:
+    """Select the training tile nearest the within-date median vegetation proxy."""
+    split_path = WEEDSGALORE_ROOT / "splits" / "train.txt"
+    sample_ids = [line.strip() for line in split_path.read_text(encoding="utf-8").splitlines() if line.strip()]
+    selected: list[tuple[np.ndarray, dict[str, object]]] = []
+    for date in ("2023-05-25", "2023-05-30", "2023-06-06", "2023-06-15"):
+        candidates = []
+        for sample_id in sample_ids:
+            if sample_id.startswith(date):
+                rgb, record = prepare_rgb_scene(sample_id)
+                candidates.append((record["vegetation_fraction"], sample_id, rgb, record))
+        if not candidates:
+            raise RuntimeError(f"No training images found for {date}")
+        candidates.sort(key=lambda item: (item[0], item[1]))
+        target = float(np.median([item[0] for item in candidates]))
+        _, _, rgb, record = min(candidates, key=lambda item: (abs(item[0] - target), item[1]))
+        record["selection_rule"] = (
+            "training tile nearest the within-date median excess-green vegetation fraction"
+        )
+        record["candidate_count"] = len(candidates)
+        selected.append((rgb, record))
+    return selected
+
+
+def draw_scene_panel(fig, subplot_spec, scenes):
+    grid = subplot_spec.subgridspec(
+        3,
+        2,
+        height_ratios=[0.16, 1.0, 1.0],
+        hspace=0.075,
+        wspace=0.055,
+    )
+    header = fig.add_subplot(grid[0, :])
+    header.axis("off")
+    panel_label(header, "a")
+    header.text(
+        0.0,
+        0.78,
+        "Field variability across acquisition dates",
+        ha="left",
+        va="center",
+        fontsize=8.7,
+        fontweight="bold",
+        color=COLORS["ink"],
+    )
+    header.text(
+        0.0,
+        0.16,
+        "Public WeedsGalore training scenes; median vegetation proxy per date",
+        ha="left",
+        va="center",
+        fontsize=5.7,
+        color=COLORS["muted"],
+    )
+    for idx, (rgb, record) in enumerate(scenes):
+        ax = fig.add_subplot(grid[1 + idx // 2, idx % 2])
+        ax.imshow(rgb, interpolation="nearest")
+        ax.set_xticks([])
+        ax.set_yticks([])
+        for spine in ax.spines.values():
+            spine.set_color("white")
+            spine.set_linewidth(1.0)
+        label = datetime.strptime(record["date"], "%Y-%m-%d").strftime("%d %b")
+        ax.text(
+            0.035,
+            0.95,
+            label,
+            transform=ax.transAxes,
+            ha="left",
+            va="top",
+            color="white",
+            fontsize=6.2,
+            fontweight="bold",
+            path_effects=[patheffects.withStroke(linewidth=1.5, foreground="#1C252B")],
+        )
+
+
+def draw_pipeline_panel(ax):
+    ax.set(xlim=(0, 1), ylim=(0, 1))
+    ax.axis("off")
+    panel_label(ax, "b")
+    ax.text(
+        0.0,
+        0.98,
+        "One image, one finite queue, one operator record",
+        ha="left",
+        va="top",
+        fontsize=8.7,
+        fontweight="bold",
+        color=COLORS["ink"],
+    )
+    stages = [
+        (0.08, "1", "Candidates", "connected regions", COLORS["blue"]),
+        (0.29, "2", "Qualify", "weed support", COLORS["green"]),
+        (0.50, "3", "Rank", "priority score", COLORS["orange"]),
+        (0.71, "4", "Allocate", "top-K, K=20", COLORS["purple"]),
+        (0.92, "5", "Review", "retain / reject /\nescalate", COLORS["red"]),
+    ]
+    ax.plot([0.08, 0.92], [0.55, 0.55], color=COLORS["grid"], lw=2.4, zorder=1)
+    for i in range(len(stages) - 1):
+        arrow(ax, (stages[i][0] + 0.055, 0.55), (stages[i + 1][0] - 0.055, 0.55), color=COLORS["muted"], lw=0.75, z=2)
+    for x, number, title, subtitle, accent in stages:
+        ax.add_patch(Circle((x, 0.55), 0.057, facecolor="white", edgecolor=accent, lw=1.6, zorder=3))
+        ax.text(x, 0.55, number, ha="center", va="center", fontsize=7.6, fontweight="bold", color=accent, zorder=4)
+        ax.text(x, 0.38, title, ha="center", va="top", fontsize=6.6, fontweight="bold", color=COLORS["ink"])
+        ax.text(x, 0.265, subtitle, ha="center", va="top", fontsize=5.15, color=COLORS["muted"], linespacing=1.15)
+    rounded(ax, (0.065, 0.035), 0.87, 0.105, "#F6F8F9", edge=COLORS["grid"], lw=0.55, radius=0.012, z=1)
+    ax.plot([0.50, 0.50], [0.052, 0.123], color=COLORS["grid"], lw=0.55, zorder=2)
+    ax.text(0.28, 0.097, "QUEUE FORMATION", fontsize=5.1, fontweight="bold", color=COLORS["blue"], va="center", ha="center")
+    ax.text(0.28, 0.061, "RGB and model outputs only", fontsize=5.0, color=COLORS["ink"], va="center", ha="center")
+    ax.text(0.72, 0.097, "OFFLINE SCORING", fontsize=5.1, fontweight="bold", color=COLORS["purple"], va="center", ha="center")
+    ax.text(0.72, 0.061, "truth-linked endpoints", fontsize=5.0, color=COLORS["ink"], va="center", ha="center")
+
+
+def draw_endpoint_panel(ax):
+    ax.set(xlim=(0, 1), ylim=(0, 1))
+    ax.axis("off")
+    panel_label(ax, "c")
+    ax.text(0.0, 0.98, "Merge-aware endpoints", ha="left", va="top", fontsize=8.4, fontweight="bold", color=COLORS["ink"])
+    graph_nodes(ax, 2, 3, [(0, 0), (0, 1), (1, 2)], 0.13, 0.43, COLORS["grid"])
+    ax.text(0.13, 0.835, "queue", ha="center", fontsize=5.3, color=COLORS["muted"])
+    ax.text(0.43, 0.835, "plants", ha="center", fontsize=5.3, color=COLORS["muted"])
+    ax.plot([0.59, 0.59], [0.16, 0.80], color=COLORS["grid"], lw=0.65)
+    ax.text(0.65, 0.73, "3", ha="left", va="center", fontsize=18, fontweight="bold", color=COLORS["green"])
+    ax.text(0.65, 0.59, "set covered", ha="left", va="center", fontsize=5.8, fontweight="bold", color=COLORS["ink"])
+    ax.text(0.65, 0.38, "2", ha="left", va="center", fontsize=18, fontweight="bold", color=COLORS["purple"])
+    ax.text(0.65, 0.24, "one-to-one", ha="left", va="center", fontsize=5.8, fontweight="bold", color=COLORS["ink"])
+    ax.text(0.50, 0.055, "Merges retain set membership but consume one queue record", ha="center", va="center", fontsize=5.1, color=COLORS["muted"])
+
+
+def draw_results_panel(ax, e):
+    ax.set(xlim=(0, 1), ylim=(0, 1))
+    ax.axis("off")
+    panel_label(ax, "d")
+    ax.text(0.0, 0.98, "Evidence at fixed K=20", ha="left", va="top", fontsize=8.4, fontweight="bold", color=COLORS["ink"])
+
+    ax.text(0.0, 0.82, "Spatial support", fontsize=5.8, fontweight="bold", color=COLORS["ink"], va="center")
+    x0, x1 = 0.39, 0.95
+    lo, hi = 0.0, 0.60
+    pos_o = x0 + (e["original_spatial"] - lo) / (hi - lo) * (x1 - x0)
+    pos_c = x0 + (e["commissioned_spatial"] - lo) / (hi - lo) * (x1 - x0)
+    ax.plot([x0, x1], [0.82, 0.82], color=COLORS["grid"], lw=2.0)
+    ax.plot([pos_o, pos_c], [0.82, 0.82], color=COLORS["blue"], lw=2.0)
+    ax.scatter([pos_o], [0.82], s=26, facecolor="white", edgecolor=COLORS["blue"], linewidth=1.0, zorder=3)
+    ax.scatter([pos_c], [0.82], s=30, facecolor=COLORS["blue"], edgecolor="white", linewidth=0.6, zorder=3)
+    ax.text(pos_o, 0.73, f"{e['original_spatial']:.3f}", ha="center", va="top", fontsize=4.9, color=COLORS["muted"])
+    ax.text(pos_c, 0.73, f"{e['commissioned_spatial']:.3f}", ha="center", va="top", fontsize=4.9, fontweight="bold", color=COLORS["blue"])
+
+    ax.text(0.0, 0.51, "Merge capacity", fontsize=5.8, fontweight="bold", color=COLORS["ink"], va="center")
+    max_instances = max(e["set_covered"], e["one_to_one"])
+    ax.add_patch(Rectangle((0.39, 0.50), 0.49 * e["set_covered"] / max_instances, 0.055, facecolor=COLORS["green_light"], edgecolor="none"))
+    ax.add_patch(Rectangle((0.39, 0.425), 0.49 * e["one_to_one"] / max_instances, 0.055, facecolor=COLORS["purple_light"], edgecolor="none"))
+    ax.text(0.90, 0.527, f"set {int(e['set_covered'])}", fontsize=5.0, color=COLORS["green"], va="center", ha="right")
+    ax.text(0.90, 0.452, f"1:1 {int(e['one_to_one'])}", fontsize=5.0, color=COLORS["purple"], va="center", ha="right")
+    ax.text(0.95, 0.49, f"gap {int(e['merge_gap'])}", fontsize=5.4, fontweight="bold", color=COLORS["ink"], va="center", ha="right")
+
+    ax.text(0.0, 0.19, "Operator\nagreement", fontsize=5.7, fontweight="bold", color=COLORS["ink"], va="center", linespacing=1.05)
+    ax.text(0.42, 0.19, f"{e['operator_agreement']:.3f}", fontsize=12.2, fontweight="bold", color=COLORS["green"], va="center")
+    ax.text(0.81, 0.215, f"kappa {e['operator_kappa']:.3f}", fontsize=4.8, color=COLORS["ink"], va="center")
+    ax.text(0.81, 0.135, f"n={int(e['operator_n'])}", fontsize=4.8, color=COLORS["muted"], va="center")
+
+
 def make_figure1(e):
-    fig = plt.figure(figsize=(183 * MM, 108 * MM), constrained_layout=False)
-    gs = fig.add_gridspec(2, 2, height_ratios=[1.0, 1.05], width_ratios=[0.92, 1.08], hspace=0.20, wspace=0.18, left=0.045, right=0.985, bottom=0.075, top=0.965)
-    draw_panel_a(fig.add_subplot(gs[0, :]))
-    draw_panel_b(fig.add_subplot(gs[1, 0]))
-    draw_panel_c(fig.add_subplot(gs[1, 1]), e)
+    scenes = select_training_scenes()
+    fig = plt.figure(figsize=(183 * MM, 100 * MM), constrained_layout=False)
+    gs = fig.add_gridspec(
+        2,
+        2,
+        height_ratios=[1.02, 0.98],
+        width_ratios=[1.04, 1.16],
+        hspace=0.24,
+        wspace=0.17,
+        left=0.045,
+        right=0.985,
+        bottom=0.065,
+        top=0.97,
+    )
+    draw_scene_panel(fig, gs[:, 0], scenes)
+    draw_pipeline_panel(fig.add_subplot(gs[0, 1]))
+    bottom = gs[1, 1].subgridspec(1, 2, width_ratios=[0.96, 1.04], wspace=0.26)
+    draw_endpoint_panel(fig.add_subplot(bottom[0, 0]))
+    draw_results_panel(fig.add_subplot(bottom[0, 1]), e)
     return fig
 
 
@@ -359,7 +591,12 @@ def save_all(fig, stem: Path, *, tiff_dpi=600):
     }
     fig.savefig(stem.with_suffix(".pdf"), bbox_inches="tight", pad_inches=0.02, metadata=metadata)
     svg_path = stem.with_suffix(".svg")
-    fig.savefig(svg_path, bbox_inches="tight", pad_inches=0.02)
+    fig.savefig(
+        svg_path,
+        bbox_inches="tight",
+        pad_inches=0.02,
+        metadata={"Creator": "Python/matplotlib", "Date": "2026-08-13T00:00:00+00:00"},
+    )
     svg_text = svg_path.read_text(encoding="utf-8")
     svg_path.write_text("\n".join(line.rstrip() for line in svg_text.splitlines()) + "\n", encoding="utf-8")
     fig.savefig(stem.with_suffix(".png"), dpi=300, bbox_inches="tight", pad_inches=0.02)
@@ -405,12 +642,75 @@ def write_source_data(e):
             writer.writerow([panel, metric, group, f"{value:.12g}", source.relative_to(REPO).as_posix()])
 
 
-def sha256(path):
-    h = hashlib.sha256()
-    with path.open("rb") as handle:
-        for block in iter(lambda: handle.read(1 << 20), b""):
-            h.update(block)
-    return h.hexdigest()
+def write_image_source_manifest():
+    scenes = select_training_scenes()
+    out = SOURCE_OUT / "Figure_1_image_sources.tsv"
+    with out.open("w", encoding="utf-8", newline="") as handle:
+        writer = csv.writer(handle, delimiter="\t")
+        writer.writerow(
+            [
+                "panel",
+                "dataset",
+                "split",
+                "sample_id",
+                "acquisition_date",
+                "selection_rule",
+                "vegetation_fraction",
+                "display_transform",
+                "band",
+                "dataset_relative_path",
+                "sha256",
+            ]
+        )
+        for _, record in scenes:
+            for band in "RGB":
+                source = record["bands"][band]
+                writer.writerow(
+                    [
+                        "a",
+                        "WeedsGalore",
+                        "train",
+                        record["sample_id"],
+                        record["date"],
+                        record["selection_rule"],
+                        f"{record['vegetation_fraction']:.12g}",
+                        record["display_transform"],
+                        band,
+                        source["dataset_relative_path"],
+                        source["sha256"],
+                    ]
+                )
+    contract = {
+        "core_conclusion": (
+            "Across real field variation, finite-queue support depends jointly on "
+            "candidate formation, role qualification, ranking, capacity, and the "
+            "matching contract."
+        ),
+        "archetype": "asymmetric mixed-modality figure",
+        "backend": "Python/matplotlib",
+        "final_size_mm": [183, 100],
+        "panel_map": {
+            "a": "Four public training scenes, one per acquisition date",
+            "b": "Finite review-queue workflow",
+            "c": "Set-coverage and one-to-one geometric endpoints",
+            "d": "Commissioning, merge-capacity, and operator evidence",
+        },
+        "image_integrity": {
+            "selection": "Within-date median vegetation proxy on the training split only",
+            "truth_or_model_outputs_used": False,
+            "crop": "none",
+            "local_adjustment": "none",
+            "global_adjustment": (
+                "Per-tile gray-world balance, common RGB 1st--99th percentile stretch, gamma 0.90"
+            ),
+        },
+        "selection_risk_control": (
+            "Scene selection is deterministic, training-only, and independent of model performance or masks."
+        ),
+    }
+    (SOURCE_OUT / "Figure_1_contract.json").write_text(
+        json.dumps(contract, indent=2) + "\n", encoding="utf-8"
+    )
 
 
 def main():
@@ -426,6 +726,7 @@ def main():
     save_all(ga, OUT / "Graphical_Abstract", tiff_dpi=300)
     plt.close(ga)
     write_source_data(evidence)
+    write_image_source_manifest()
     artifacts = [
         OUT / f"Figure_1.{ext}" for ext in ("pdf", "svg", "png", "tiff")
     ] + [OUT / f"Graphical_Abstract.{ext}" for ext in ("pdf", "svg", "png", "tiff")]

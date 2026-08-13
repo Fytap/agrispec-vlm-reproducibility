@@ -27,6 +27,7 @@ def main() -> None:
         "cover_letter": "01_UPLOAD_TO_SAT/SAT_Cover_Letter.pdf",
         "graphical_abstract": "01_UPLOAD_TO_SAT/SAT_Graphical_Abstract.pdf",
         "declaration": "05_QA_AND_MANIFEST/Declaration_of_Competing_Interests_preview.pdf",
+        "informed_consent": "05_QA_AND_MANIFEST/Ethics_and_Informed_Consent_Statement_preview.pdf",
     }
     for document in pdf["documents"]:
         document["path"] = path_map[document["label"]]

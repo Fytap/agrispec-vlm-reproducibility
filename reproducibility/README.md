@@ -55,13 +55,20 @@ The exact quota and patch analyses are implemented in `analyze_target_semantic_q
 
 Figures are Python-generated. The current generators are:
 
+- `build_sat_submission_figure1_and_graphical_abstract.py` for the public
+  training-scene workflow figure and graphical abstract; set
+  `AGRISPEC_WEEDSGALORE_ROOT` to the extracted public WeedsGalore dataset;
 - `build_sat_revision14_figure1_nature.py` for the workflow diagram;
 - `build_sat_revision14_figures.py` for the metric panels;
 - `build_sat_revision17_quota_figure.py` for the quota and patch analysis;
 - `build_sat_revision15_seed_stability_figure.py` for H200 seed stability;
 - `build_sat_submission_figure5.py` for the three-panel CWFID transfer result.
 
-Each generator accepts `--help`; its output is deterministic conditional on the archived inputs and installed plotting stack. Submission-ready exports are included in the repository-level `figures/` directory.
+The submission generator records the selected training images, band hashes, display
+transform, figure contract, output hashes, and text-bound audit under
+`v1_3_1/source_data/`. Its outputs are deterministic conditional on the archived inputs
+and the plotting stack recorded in `environment/editorial-artifact-requirements.txt`.
+Submission-ready exports are included in the repository-level `figures/` directory.
 
 ## Contents and boundaries
 
@@ -69,6 +76,7 @@ Each generator accepts `--help`; its output is deterministic conditional on the 
 - `scripts/`: proposal, queue, baseline, sensitivity, figure, and replay code.
 - `results/p2_development/`: evidence-bearing TSV/JSON outputs and preserved diagnostics.
 - `environment/requirements-lock.txt`: environment versions recorded by completed runs.
+- `environment/editorial-artifact-requirements.txt`: CPU-only figure, DOCX, and PDF-QA stack.
 - `DATASET_PROVENANCE_LICENSES.md`: dataset acquisition and licensing records.
 - `MODEL_ACQUISITION.md`: public model identifiers and acquisition boundaries.
 - `CODE_QA.md`: command-entry-point and replay verification.

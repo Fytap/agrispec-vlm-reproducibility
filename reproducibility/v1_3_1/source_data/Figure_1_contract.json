@@ -1,0 +1,23 @@
+{
+  "core_conclusion": "Across real field variation, finite-queue support depends jointly on candidate formation, role qualification, ranking, capacity, and the matching contract.",
+  "archetype": "asymmetric mixed-modality figure",
+  "backend": "Python/matplotlib",
+  "final_size_mm": [
+    183,
+    100
+  ],
+  "panel_map": {
+    "a": "Four public training scenes, one per acquisition date",
+    "b": "Finite review-queue workflow",
+    "c": "Set-coverage and one-to-one geometric endpoints",
+    "d": "Commissioning, merge-capacity, and operator evidence"
+  },
+  "image_integrity": {
+    "selection": "Within-date median vegetation proxy on the training split only",
+    "truth_or_model_outputs_used": false,
+    "crop": "none",
+    "local_adjustment": "none",
+    "global_adjustment": "Per-tile gray-world balance, common RGB 1st--99th percentile stretch, gamma 0.90"
+  },
+  "selection_risk_control": "Scene selection is deterministic, training-only, and independent of model performance or masks."
+}
