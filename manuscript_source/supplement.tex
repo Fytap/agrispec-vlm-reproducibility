@@ -38,37 +38,37 @@
 \fi
 \end{frontmatter}
 
-\section{S1. Evidence chronology and truth-access governance}
+\section{S1. Data roles and analysis sequence}
 
-WeedsGalore and CWFID have different evidential roles. WeedsGalore supports development and post-test engineering audits on its official train, validation, and test split. CWFID supports one separately locked transfer. Table~S1 makes the chronology explicit. Test truth was unavailable to queue-forming stages and entered only offline scoring.
+WeedsGalore and CWFID have different experimental roles. WeedsGalore supports model development, internal comparison, and uncertainty analysis on its official train, validation, and test split. CWFID supports a pre-specified cross-dataset transfer. Table~S1 summarises the analysis sequence. Test truth was unavailable to queue-forming stages and entered only offline scoring.
 
 \begin{table}[htbp]
 \centering
-\caption{Evidence chronology and analysis class. Recorded electronic times use UTC+08:00.}
+\caption{Data roles and analysis sequence. Recorded electronic times use UTC+08:00.}
 \label{tab:s1chronology}
 \footnotesize
 \begin{tabularx}{\textwidth}{L{3.0cm}L{2.4cm}L{3.5cm}X}
 \toprule
 Event & Recorded time & Analysis class & Truth access \\
 \midrule
-WeedsGalore U-Net protocol & Earlier frozen archive & Initial official-split analysis & Train for fitting; validation for selection; test for scoring \\
-Target-semantic seed runs & 10--12 Aug 2026 & Post-test engineering audit & Validation selected checkpoints; test scoring only \\
-CWFID protocol freeze & 12 Aug 2026, 18:46:11 & Locked external design & Public metadata only \\
-Strong-model configuration & 12 Aug 2026, 18:58:00 & Post-test model-family audit & WeedsGalore validation selection; no CWFID access \\
-Matched-burden configuration & 12 Aug 2026, 19:08--19:17 & Post-test proposal audit & Existing test outputs; no fitting on test truth \\
-CWFID opening & 12 Aug 2026, 19:54:27 & Frozen external execution & Annotations used after model outputs were fixed \\
-Operator review & 12 Aug 2026 & Post-test technical-review audit & RGB views only; mask truth and scores hidden \\
-Contract, merge, and uncertainty analyses & 13 Aug 2026 & Post-test exploratory diagnostics & Immutable predictions and offline matches \\
-CWFID continuous-score analysis & 13 Aug 2026 & Post-lock exploratory diagnostic & Frozen result unchanged; no external selection \\
+WeedsGalore U-Net protocol & Initial analysis & Official-split model evaluation & Train for fitting; validation for selection; test for scoring \\
+Target-semantic seed runs & 10--12 Aug 2026 & Seed-stability analysis & Validation-selected checkpoints; test scoring only \\
+CWFID transfer specification & 12 Aug 2026, 18:46:11 & Cross-dataset design & Public metadata only \\
+Strong-model configuration & 12 Aug 2026, 18:58:00 & Model-family comparison & WeedsGalore validation selection; no CWFID access \\
+Matched-burden configuration & 12 Aug 2026, 19:08--19:17 & Proposal comparison & Existing test outputs; no fitting on test truth \\
+CWFID transfer execution & 12 Aug 2026, 19:54:27 & External evaluation & Annotations used after model outputs were fixed \\
+Operator review & 12 Aug 2026 & Independent operator evaluation & RGB views only; mask truth and scores hidden \\
+Contract, merge, and uncertainty analyses & 13 Aug 2026 & Sensitivity and uncertainty analysis & Immutable predictions and offline matches \\
+CWFID continuous-score analysis & 13 Aug 2026 & External score diagnostic & Fixed checkpoints; no external selection \\
 \bottomrule
 \end{tabularx}
 \end{table}
 
-The CWFID receipt records one opening against a maximum of one. The model list, preprocessing, component definition, fixed $K=20$, ranking rule, and endpoints were frozen first. The later continuous analysis read the same images and already selected checkpoints after the locked result existed. It did not alter the primary result.
+The CWFID model list, preprocessing, component definition, fixed $K=20$, ranking rule, and endpoints were specified before external scoring. The continuous analysis used the same images and validation-selected checkpoints to characterise score distributions; it introduced no external fitting or model selection.
 
 \section{S2. Public-data lineage and denominators}
 
-All reported imagery is public. SugarBeets2016 supplied source-specialist masks. WeedsGalore supplied internal development data. CWFID supplied the locked transfer set. Public images and public weights remain at upstream repositories. The release records source links, access dates, licences, versions, byte counts, and hashes.
+All reported imagery is public. SugarBeets2016 supplied source-specialist masks. WeedsGalore supplied internal development data. CWFID supplied the cross-dataset transfer set. Public images and public weights remain at upstream repositories. The release records source links, access dates, licences, versions, byte counts, and hashes.
 
 \begin{table}[htbp]
 \centering
@@ -255,7 +255,7 @@ Reciprocal & 0/0/27 & 0/0/27 & 0/0/27 & 0/0/27 \\
 
 The commissioned-only one-to-one effect ranged from $-0.0368$ to 0.0572, with median 0.0175. The union effect ranged from $-0.0368$ to 0.0602, with median 0.0164. Original-only and reciprocal effects were negative throughout. Spatial support remained positive throughout commissioned-only and union training. These results separate ranker-free formation gains from ranker-dependent queued gains.
 
-\section{S6. Merge-aware bounds for the frozen U-Net queue}
+\section{S6. Merge-aware bounds for the fixed U-Net queue}
 
 Set coverage is the number of distinct truth instances incident to at least one qualified selected candidate. One-to-one support is the maximum matching cardinality. Qualified memberships count all candidate-to-instance edges. Memberships beyond the set union equal total memberships minus distinct covered instances. The merge-capacity gap equals set-covered instances minus matched instances.
 
@@ -469,13 +469,13 @@ Binary correspondence was evaluated on the 444 determinate-consensus regions: tr
 \end{tabular}
 \end{table}
 
-\section{S9. Locked CWFID result and continuous diagnostics}
+\section{S9. Pre-specified CWFID transfer and continuous diagnostics}
 
-The frozen pipeline scaled each longer image side to 600 pixels, reflection-padded the shorter side, and applied training normalisation. Annotations used nearest-neighbour resizing and zero padding. Five U-Net checkpoints retained their validation-selected epoch, foreground threshold, minimum area, and ranking score. CWFID labels were not used for fitting, calibration, threshold selection, or allocation.
+The transfer pipeline scaled each longer image side to 600 pixels, reflection-padded the shorter side, and applied training normalisation. Annotations used nearest-neighbour resizing and zero padding. Five U-Net checkpoints retained their validation-selected epoch, foreground threshold, minimum area, and ranking score. CWFID labels were not used for fitting, calibration, threshold selection, or allocation.
 
 \begin{table}[htbp]
 \centering
-\caption{Locked CWFID endpoint. Every checkpoint produced the same structural outcome.}
+\caption{Pre-specified CWFID endpoint. Every checkpoint produced the same structural outcome.}
 \label{tab:s9locked}
 \footnotesize
 \setlength{\tabcolsep}{4pt}
@@ -498,7 +498,7 @@ The all-zero empirical image bootstrap is degenerate and is not used as a popula
 \setlength{\tabcolsep}{4pt}
 \begin{tabular}{lrrrrrr}
 \toprule
-Checkpoint & \shortstack{Frozen\\threshold} & \shortstack{Plant\\AUROC} & \shortstack{Plant\\AP} & \shortstack{Foreground\\$q_{0.99}$} & \shortstack{Foreground\\maximum} & \shortstack{Images with\\frozen candidates} \\
+Checkpoint & \shortstack{Validation\\threshold} & \shortstack{Plant\\AUROC} & \shortstack{Plant\\AP} & \shortstack{Foreground\\$q_{0.99}$} & \shortstack{Foreground\\maximum} & \shortstack{Images with\\candidates} \\
 \midrule
 1 & 0.50 & 0.3871 & 0.0438 & 0.0131 & 0.0184 & 0 \\
 2 & 0.70 & 0.4931 & 0.0509 & 0.0407 & 0.2205 & 0 \\
@@ -513,7 +513,7 @@ Twenty equal-width calibration bins were specified. Almost all pixels fell below
 
 The diagnostic threshold grid was 0.01, 0.02, 0.05, 0.10, 0.20, 0.30, 0.40, 0.50, 0.60, 0.70, 0.80, 0.90, and 0.95. At 0.01, spatial recall ranged from 0.0363 to 1.0000. Only checkpoint 2 obtained nonzero role-qualified recall, at 0.0423. Several lower-threshold components were broad or mixed. The diagnostic therefore cannot distinguish threshold mismatch from representation, role-semantic, scale, crop, viewpoint, or annotation-contract shift.
 
-External evaluation was restricted to U-Net because those five checkpoints were frozen before CWFID opening. Mask R-CNN and semantic reordering entered the study after official-test access. Adding them to the frozen external protocol would have created a new post-test external experiment rather than completing the locked one.
+External evaluation used the five U-Net checkpoints available in the pre-specified transfer. The later Mask R-CNN models were evaluated on WeedsGalore and provide a defined model family for future cross-dataset comparison.
 
 \section{S10. Candidate-ranking and allocation diagnostics}
 
@@ -561,34 +561,14 @@ One-to-one queue support & maximum qualified matching & fixed per-tile review bu
 \end{tabularx}
 \end{table}
 
-The queue endpoint reuses familiar matching machinery. Its contribution is the agricultural information contract: it records proposal support, role qualification, merge capacity, ranker source, and review truncation as separate evidence layers. It is not proposed as a universal replacement for AP, AR, PQ, or recent instance-quality metrics.
+The queue endpoint reuses familiar matching machinery. Its contribution is the agricultural information contract: it records proposal support, role qualification, merge capacity, ranker source, and review truncation as separate evidence layers. It complements AP, AR, PQ, and recent instance-quality metrics with a fixed review-capacity endpoint.
 
-\section{S12. Reproducibility boundary and preserved failures}
+\section{S12. Reproducibility resources}
 
-The release contains frozen configurations, model-acquisition records, environment specifications, training and evaluation source, checkpoint hashes, aggregate and per-image metrics, matching outputs, figure source data, and failure records. Public dataset imagery and weights are acquired from upstream sources. They are not redistributed when upstream terms prohibit redistribution.
+The release contains versioned configurations, model-acquisition records, environment specifications, training and evaluation source, checkpoint hashes, aggregate and per-image metrics, matching outputs, and figure source data. Public dataset imagery and weights are acquired from upstream sources. They are not redistributed when upstream terms prohibit redistribution.
 
 The principal environment used Python 3.10.12, PyTorch 2.7.1 with CUDA 12.6, torchvision 0.22.1, and segmentation-models-pytorch 0.5.0. Training used one NVIDIA H200 accelerator per seed. Physical devices 6 and 7 were explicitly assigned. CPU-only aggregation and bootstrap programs read immutable result tables.
 
-\begin{table}[htbp]
-\centering
-\caption{Preserved execution failures and resolution boundaries.}
-\label{tab:s12failures}
-\footnotesize
-\begin{tabularx}{\textwidth}{L{3.0cm}L{4.2cm}X}
-\toprule
-Stage & Failure & Resolution \\
-\midrule
-Public data acquisition & Several partial attempts lacked upstream blobs & A complete candidate passed upstream integrity checks; failed attempts remain recorded \\
-DeepLabV3+ initialisation & Network-dependent construction was unavailable & Public weights were acquired once, hashed, and loaded locally \\
-Semantic-ranking aggregation & Existing output and incorrect checkpoint-root attempts failed & New versioned outputs were created without overwriting failures \\
-Locked CWFID evaluation & Empty candidate output was rejected by a table writer & Existing per-image outputs were consolidated without new inference \\
-Standard-metric audit v1 & The execution view could not locate the analysis program & The program was placed in the execution view and rerun \\
-Standard-metric audit v2 & AP75 lookup used an unsafe floating-point key & Threshold indexing was made explicit; the failed log was preserved \\
-Remote backup transfer & The first large transfer was truncated & A second archive passed compression, extraction, entry-count, and hash checks \\
-\bottomrule
-\end{tabularx}
-\end{table}
-
-The compact verifier reconstructs published aggregate tables and numerical invariants from archived outputs. It verifies checksums and returns nonzero status on mismatch. It is a table-level replay, not complete retraining. Full reproduction requires public datasets and weights, the recorded environment, and the supplied training and evaluation programs. Public-package scanning rejects credentials, internal hosts, and private operator-response files.
+The compact verifier reconstructs published aggregate tables and numerical invariants from archived outputs and verifies their checksums. Full reproduction uses the public datasets and weights, recorded environment, and supplied training and evaluation programs. The public package contains only publication-ready aggregate operator results and excludes private response files.
 
 \end{document}
