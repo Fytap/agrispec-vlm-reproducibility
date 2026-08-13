@@ -28,10 +28,10 @@
       "Figure_4_source_data.json": "b88ce8dc4291cdc2801a7ed70ac0a5fe4d055c07df701377cd9a2d863b233894"
     },
     "Figure_5": {
-      "Figure_5.pdf": "5f8a7d6309affb3d17606ed643c32cd6c59e65590df74ec156c39dbe4dec20cc",
-      "Figure_5.svg": "cd365e9ae2f087e4426c74d31b4e3f15c2d4a546c2a1dbeda9166f4fd1a2236d",
-      "Figure_5.png": "c23abd4ff84605f9326320b304ecc56699185dbf251c7fb13a94a2e033233c13",
-      "Figure_5.tiff": "def84510a8b0197699146d66c2e270c1bdafe755d1fb6f1017b133aeb92c0bc9"
+      "Figure_5.pdf": "18227e5be81caf79242b1f492819c089f3d508b71e8c8ace5d95f9d0c7bf6cd4",
+      "Figure_5.svg": "c0fc6064a64b989d7d6e55cdb6a401182a7982143ae091caabd3c5093814f038",
+      "Figure_5.png": "fdcbeb955431c275f699c87c64662779de97c5e85d4e63ba17a358a132cc0292",
+      "Figure_5.tiff": "c525c722ebfff2b668b1233b607c3b145def1b668ebdafb00829352dd1fb59b4"
     }
   },
   "source_data": {
@@ -40,6 +40,13 @@
     "Figure_3_source_data.tsv": "89b67b380a74c28655b17d38f2f8e46373b0fa7ba380507b44a2601e00ea04f4",
     "Figure_4_source_data.json": "b88ce8dc4291cdc2801a7ed70ac0a5fe4d055c07df701377cd9a2d863b233894",
     "Figure_4_source_data.tsv": "fd8ab95b132ea492ca255ac86a56ecfdbd8a8ea1a170ef2760d1de9417100509",
-    "Figure_5_source_data.tsv": "93cdec7927a5ed9f14923e3fb15fc3a547cb6650c864ff46110736319f3c0bb5"
+    "Figure_5_source_data.tsv": "aa4abb6eeca348ddc52484d45b514012399df099237eeecfd79eb87c21481365"
+  },
+  "text_bounds": {
+    "Figure_5": {
+      "figure": "Figure_5",
+      "outside_canvas_count": 0,
+      "outside_canvas_text": []
+    }
   }
 }

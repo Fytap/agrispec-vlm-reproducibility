@@ -58,7 +58,8 @@ Figures are Python-generated. The current generators are:
 - `build_sat_revision14_figure1_nature.py` for the workflow diagram;
 - `build_sat_revision14_figures.py` for the metric panels;
 - `build_sat_revision17_quota_figure.py` for the quota and patch analysis;
-- `build_sat_revision15_seed_stability_figure.py` for H200 seed stability.
+- `build_sat_revision15_seed_stability_figure.py` for H200 seed stability;
+- `build_sat_submission_figure5.py` for the three-panel CWFID transfer result.
 
 Each generator accepts `--help`; its output is deterministic conditional on the archived inputs and installed plotting stack. Submission-ready exports are included in the repository-level `figures/` directory.
 
