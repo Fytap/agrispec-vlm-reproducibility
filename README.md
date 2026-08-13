@@ -66,6 +66,11 @@ Version `v1.3.1` is the corrected manuscript-linked release:
 
 <https://github.com/Fytap/agrispec-vlm-reproducibility/releases/tag/v1.3.1>
 
+The corrected evidence layer used by the manuscript has an immutable commit
+link:
+
+<https://github.com/Fytap/agrispec-vlm-reproducibility/tree/6930f7b48995054095dbaaeebef4f155029c107a/reproducibility/v1_3_1>
+
 Citation metadata are provided in [`CITATION.cff`](CITATION.cff). No
 credentials, internal addresses, private infrastructure logs, source imagery,
 or personal data are included.
