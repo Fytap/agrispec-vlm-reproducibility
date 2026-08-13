@@ -1,5 +1,19 @@
 # Changelog
 
+## v1.3.1 -- 2026-08-13
+
+- Defined human--mask precision, recall, F1, Jaccard, and accuracy on the 444
+  determinate two-operator consensus items; retained all 74 unresolved items
+  in the complete three-by-two contingency table.
+- Corrected the corresponding values to precision 0.7880, recall 0.8272, F1
+  0.8071, Jaccard 0.6766, and accuracy 0.7320.
+- Defined one-to-one support and set coverage as graph endpoints conditioned on
+  queue capacity and matching thresholds; neither is used as a bound on human
+  plant recovery.
+- Updated Figure 1, manuscript text, supplement, source data, analysis code,
+  and the standard-library verifier as one traceable correction layer.
+- Retained v1.3.0 and its tag unchanged as the historical release record.
+
 ## v1.3.0 -- 2026-08-13
 
 - Added four ranker-source schemes over a 27-contract matching grid, including

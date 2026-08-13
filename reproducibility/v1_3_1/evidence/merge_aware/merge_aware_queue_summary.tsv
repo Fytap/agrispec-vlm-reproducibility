@@ -1,0 +1,5 @@
+group	reviewed_candidates	candidates_with_no_qualified_instance	single_instance_candidates	multi_instance_candidates	maximum_instances_in_one_candidate	qualified_edge_memberships	distinct_set_covered_instances	one_to_one_matched_instances	merge_capacity_gap_instances	duplicate_memberships_beyond_set_union	set_coverage_recall	one_to_one_recall	qualified_instances_per_review_upper_bound
+all_selected	518	170	286	62	9	453	453	348	105	0	0.26460280373831774	0.20327102803738317	0.8745173745173745
+operator_consensus_reviewable	301	52	195	54	9	346	346	249	97	0	0.20210280373831777	0.14544392523364486	1.149501661129568
+mask_role_qualified	355	7	286	62	9	453	453	348	105	0	0.26460280373831774	0.20327102803738317	1.276056338028169
+operator_and_mask	249	0	195	54	9	346	346	249	97	0	0.20210280373831777	0.14544392523364486	1.3895582329317269

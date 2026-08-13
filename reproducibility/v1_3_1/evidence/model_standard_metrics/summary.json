@@ -1,0 +1,48 @@
+{
+  "run_id": "P2_WEEDSGALORE_MODEL_CONTRACT_AND_STANDARD_METRICS_20260813_v3",
+  "status": "completed_post_test_model_contract_and_standard_metric_diagnostics",
+  "analysis_class": "post_test_exploratory_sensitivity_analysis",
+  "official_test_split_changed": false,
+  "model_or_threshold_selection_permitted": false,
+  "queue_k": 20,
+  "standard_max_detections_per_image": 100,
+  "contract_grid": {
+    "instance_coverage": [
+      0.25,
+      0.5,
+      0.75
+    ],
+    "candidate_labeled_coverage": [
+      0.25,
+      0.5,
+      0.75
+    ],
+    "same_role_purity": [
+      0.5,
+      0.75,
+      0.9
+    ]
+  },
+  "iou_thresholds": [
+    0.5,
+    0.55,
+    0.6000000000000001,
+    0.6500000000000001,
+    0.7000000000000002,
+    0.7500000000000002,
+    0.8000000000000003,
+    0.8500000000000003,
+    0.9000000000000004,
+    0.9500000000000004
+  ],
+  "checkpoint_runs": 11,
+  "primary_replay_checks": 66,
+  "primary_replay_failures": 0,
+  "hardware": {
+    "physical_gpu_id": 7,
+    "gpu": "NVIDIA H200"
+  },
+  "runtime_seconds": 34.2770170615986,
+  "script_sha256": "0ae5248f8a5458a5bedcc07083b99a1d7f20004e1772462492c67d5cf8292ecb",
+  "interpretation_scope": "Same-field official-test diagnostics. AP/AR use predicted-weed regions; PQ-style values use the predicted-weed subset of the fixed K=20 review queue."
+}

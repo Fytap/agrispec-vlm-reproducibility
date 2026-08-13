@@ -1,0 +1,16 @@
+{
+  "status": "completed_anonymous_operator_agreement_extension",
+  "items": 518,
+  "scenes": 26,
+  "timing_used": false,
+  "operator_population_inference": false,
+  "raw_item_level_responses_public": false,
+  "ordered_localization_rule": "exclude_pairs_with_uncertain_before_weighted_kappa",
+  "human_mask_binary_rule": "compute_binary_metrics_on_determinate_consensus_yes_or_no_only",
+  "human_mask_unresolved_rule": "retain_in_three_by_two_contingency_and_exclude_from_binary_metrics",
+  "bootstrap": {
+    "unit": "scene",
+    "replicates": 10000,
+    "seed": 20260813
+  }
+}

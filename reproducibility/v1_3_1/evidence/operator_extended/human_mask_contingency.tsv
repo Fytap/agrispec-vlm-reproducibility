@@ -1,0 +1,7 @@
+human_status	mask_status	count
+consensus_yes	mask_positive	249
+consensus_yes	mask_negative	52
+consensus_no	mask_positive	67
+consensus_no	mask_negative	76
+disputed_or_uncertain	mask_positive	39
+disputed_or_uncertain	mask_negative	35

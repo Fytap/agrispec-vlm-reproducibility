@@ -310,7 +310,7 @@ All 453 edge memberships represented distinct instances, so duplicate membership
 \end{tabular}
 \end{table}
 
-The increase in reviewability with multiplicity shows that merges can retain useful evidence. The operator protocol did not request plant counts. Consequently, set coverage is not interpreted as realised human recovery.
+The increase in reviewability with multiplicity shows that merged candidates can retain useful evidence. Set coverage and one-to-one support are computed on the same thresholded graph and are indexed by the queue capacity and matching tuple. The operator protocol did not request plant counts; neither geometric endpoint is interpreted as realised human recovery or as a bound on it.
 
 \section{S7. Model stability, standard metrics, and crossed uncertainty}
 
@@ -435,7 +435,7 @@ Uncertain & 1 & 10 & 44 \\
 
 \begin{table}[htbp]
 \centering
-\caption{Human consensus versus mask qualification. Unresolved includes disagreement or at least one uncertain response.}
+\caption{Human consensus versus mask qualification for all 518 regions. Unresolved includes disagreement or at least one uncertain response and is excluded from binary correspondence metrics.}
 \label{tab:s8humanmask}
 \small
 \begin{tabular}{lrr}
@@ -449,7 +449,7 @@ Unresolved & 39 & 35 \\
 \end{tabular}
 \end{table}
 
-Mask precision against human consensus was 0.7014, recall was 0.8272, F1 was 0.7591, and Jaccard was 0.6118. These symmetric measures prevent the 249/301 conditional proportion from being interpreted as equivalence.
+Binary correspondence was evaluated on the 444 determinate-consensus regions: true positives $=249$, false positives $=67$, false negatives $=52$, and true negatives $=76$. The remaining 74 regions stayed in the three-by-two contingency table but did not enter binary denominators. Mask precision against human consensus was 0.7880, recall was 0.8272, F1 was 0.8071, Jaccard was 0.6766, and accuracy was 0.7320. The determinate analysis covered 85.71\% of all reviewed regions.
 
 \begin{table}[htbp]
 \centering

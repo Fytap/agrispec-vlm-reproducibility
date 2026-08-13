@@ -1,0 +1,4 @@
+operator	n	mean	median	q25	q75
+OP-A	518	3.523166023166023	4.0	3.0	4.0
+OP-B	518	3.5096525096525095	4.0	3.0	4.0
+paired_absolute_difference	518	0.055984555984555984	0.0	0.0	0.0

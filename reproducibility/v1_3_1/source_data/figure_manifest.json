@@ -1,0 +1,79 @@
+{
+    "backend":  "Python/matplotlib",
+    "figures":  {
+                    "Figure_1":  {
+                                     "Figure_1.pdf":  "32fdfe50a00917027937057be9f8fb80968ad6fadea45285c3ae04ceec186e3e",
+                                     "Figure_1.svg":  "ee5018f981f0b24c8eeb6569da0238e5ca19d83a068d869bc5a1ac7597ae9ed0",
+                                     "Figure_1.png":  "c64f425be06781fcd0890bde52a025b8189a19f0beb7acccc416cad9e92d4505",
+                                     "Figure_1.tiff":  "20ca0d87618933af0947a4f8276dda72e6e808446e2e38ebcc3b9e1f82515a57"
+                                 },
+                    "Figure_2":  {
+                                     "Figure_2.pdf":  "baf27b764571519c98aab1d3a4df90491e7a6ec0f40567ce05ca85351fa3768d",
+                                     "Figure_2.svg":  "d1309c14b83918fd89a34c789a28e764004e956c0bfc45dd2fec7e48ec9198aa",
+                                     "Figure_2.png":  "06b001f025a5f11e9375ed9cfba90f5453e762e9172018e66a6df11172a92488",
+                                     "Figure_2.tiff":  "1aa3c22477c9bfca9b1a7a9291133df1ba8a5ec15cab10ef95e092f14c16bebc"
+                                 },
+                    "Figure_3":  {
+                                     "Figure_3.pdf":  "0274cca9abf486c6db089a6f27de430a757506ce11d4fbcbd86a65d9f39e1b39",
+                                     "Figure_3.svg":  "dab0c1715da62a65f16531f3205f7219503586ab2560ee25aa552266ca1fd31e",
+                                     "Figure_3.png":  "b9ffbe14c8905541d5385adf534131a7682845bccfab2bdba0f2851d93cf8730",
+                                     "Figure_3.tiff":  "5548acfd5eea4674971d89c4d427188c9e1d0f5c451d1abd54c503e808ba2eb8"
+                                 },
+                    "Figure_4":  {
+                                     "Figure_4.pdf":  "af2f225e36f55732f185b66de52646201d5db8503d2b742c7ca1530f539adf85",
+                                     "Figure_4.svg":  "6c31e2baf794d3c8801cf35a52c56455d83bb0b820956947d055bff94de7655d",
+                                     "Figure_4.png":  "2023af256595974cb86203e155db7d2ab1e9329dc91468bdacfaebb11926c9bf",
+                                     "Figure_4.tiff":  "3675a8bf9ac25f1db1cebe89435b38563fc02d0478fd005c4815cba643b484c2"
+                                 },
+                    "Figure_5":  {
+                                     "Figure_5.pdf":  "509daeba9140a42ef59e74a7debe66e8dde1c7e84e321fa7553e9207bbef429f",
+                                     "Figure_5.svg":  "457d1afcd1515a992d672934820f39f3b83648e587303d8579a41f4a17bc3336",
+                                     "Figure_5.png":  "52df56350d0b5428459afb7815413db70aea74c4c1919dda76f8f8d65c65415f",
+                                     "Figure_5.tiff":  "6e610c245ae77d5c68766d552373d3d9e460c5489224f7889c3eea87a19bd0a6"
+                                 }
+                },
+    "source_data":  {
+                        "Figure_1_source_data.tsv":  "6519f7144b34d74c121512b8d6090481798751a1c9f1bb37c3734942e93500cf",
+                        "Figure_2_source_data.tsv":  "b4884dbe7caab0338a7c7cb6baba4c124cf87f40c84f91c504004350e3d3c1ce",
+                        "Figure_3_source_data.tsv":  "5c04cb1e24be472364424b741ab755733680d67628058c69ef9da6329a587328",
+                        "Figure_4_source_data.tsv":  "61033d281ebfd3c43760ec12da297b7ee1fb783cbcfd4471ce5c02742a5930fc",
+                        "Figure_5_source_data.tsv":  "37ea0de8e1571c700432a4cc4c90e082c955be5c3930ccf98a7383401baae9ce"
+                    },
+    "text_bounds":  {
+                        "Figure_1_text_bounds_audit":  {
+                                                           "figure":  "Figure_1",
+                                                           "outside_canvas_count":  0,
+                                                           "outside_canvas_text":  [
+
+                                                                                   ]
+                                                       },
+                        "Figure_2_text_bounds_audit":  {
+                                                           "figure":  "Figure_2",
+                                                           "outside_canvas_count":  0,
+                                                           "outside_canvas_text":  [
+
+                                                                                   ]
+                                                       },
+                        "Figure_3_text_bounds_audit":  {
+                                                           "figure":  "Figure_3",
+                                                           "outside_canvas_count":  0,
+                                                           "outside_canvas_text":  [
+
+                                                                                   ]
+                                                       },
+                        "Figure_4_text_bounds_audit":  {
+                                                           "figure":  "Figure_4",
+                                                           "outside_canvas_count":  0,
+                                                           "outside_canvas_text":  [
+
+                                                                                   ]
+                                                       },
+                        "Figure_5_text_bounds_audit":  {
+                                                           "figure":  "Figure_5",
+                                                           "outside_canvas_count":  0,
+                                                           "outside_canvas_text":  [
+
+                                                                                   ]
+                                                       }
+                    }
+}

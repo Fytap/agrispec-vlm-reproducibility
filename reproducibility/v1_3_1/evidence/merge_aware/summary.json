@@ -1,0 +1,8 @@
+{
+  "status": "completed_merge_aware_geometric_sensitivity",
+  "analysis_class": "post_test_exploratory_operator_queue_audit",
+  "truth_instances": 1712,
+  "set_coverage_definition": "union_of_role_qualified_instance_edges_over_selected_candidates",
+  "one_to_one_definition": "maximum_cardinality_candidate_instance_matching",
+  "upper_bound_warning": "set coverage and edge memberships are geometric bounds, not observed per-plant operator output"
+}
