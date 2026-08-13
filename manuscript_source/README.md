@@ -33,4 +33,4 @@ visible.
 
 The operator analysis reports aggregate technical-review outcomes only.
 Operator identities and item-level responses are excluded. Timing was not
-analysed. The ethics statement is included with the manuscript declarations.
+analysed.
