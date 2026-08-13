@@ -1,0 +1,14 @@
+{
+  "status": "completed_anonymous_operator_agreement_extension",
+  "items": 518,
+  "scenes": 26,
+  "timing_used": false,
+  "operator_population_inference": false,
+  "raw_item_level_responses_public": false,
+  "ordered_localization_rule": "exclude_pairs_with_uncertain_before_weighted_kappa",
+  "bootstrap": {
+    "unit": "scene",
+    "replicates": 10000,
+    "seed": 20260813
+  }
+}

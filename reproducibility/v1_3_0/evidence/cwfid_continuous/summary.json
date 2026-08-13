@@ -1,0 +1,35 @@
+{
+  "run_id": "P2_CWFID_POST_LOCK_CONTINUOUS_SCORE_DIAGNOSTIC_20260813_v1",
+  "status": "completed_post_lock_continuous_score_diagnostic",
+  "analysis_class": "post_lock_exploratory_diagnostic",
+  "locked_primary_result_changed": false,
+  "external_threshold_selection_permitted": false,
+  "threshold_grid": [
+    0.01,
+    0.02,
+    0.05,
+    0.1,
+    0.2,
+    0.3,
+    0.4,
+    0.5,
+    0.6,
+    0.7,
+    0.8,
+    0.9,
+    0.95
+  ],
+  "calibration_bins": 20,
+  "images": 60,
+  "seeds": [
+    20260810,
+    20260811,
+    20260812,
+    20260813,
+    20260814
+  ],
+  "one_sided_bound_scope": "binomial_reference_for_60_image_candidate_presence_only; not a farm-population or component-recall bound",
+  "runtime_seconds": 223.09864638373256,
+  "config_sha256": "4ee548e9e03aa3760b8a462efb492cc7227266cb1a8e457e0ff9e0ac7eb807cc",
+  "script_sha256": "a243896a2b5d2bf00097b66b4b987dae92ea254cd639772ee9519796a1ac6d94"
+}

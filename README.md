@@ -1,46 +1,65 @@
-# From Candidate Scores to Plant Recovery
+# Bounded Instance-Support Evaluation
 
-Versioned computational archive for the manuscript **“From Candidate Scores to Plant Recovery in Finite Crop--Weed Review Queues.”**
+Versioned computational archive for the manuscript **Bounded Instance-Support
+Evaluation for Finite Crop--Weed Review Queues**.
 
-The archive evaluates finite crop--weed review queues as a proposal-to-budget chain. It separates spatial support, role-qualified support, candidate discrimination, and deterministic one-to-one plant recovery. The current release adds review-burden matching, target-trained strong baselines, a two-operator technical review, and a separately locked CWFID transfer test.
+The study treats a finite crop--weed review queue as a proposal-to-budget
+system. It separates spatial support, role qualification, candidate ranking,
+merge capacity, one-to-one instance support, and review truncation. The v1.3.0
+release adds ranker-source sensitivity, a 27-contract matching grid,
+merge-aware accounting, crossed seed-by-image uncertainty, standard instance
+metrics, extended aggregate operator agreement, and continuous diagnostics for
+the unchanged locked CWFID result.
 
 ## Repository contents
 
-- `reproducibility/v1_2_0/`: frozen configurations, training and evaluation entry points, evidence tables, checkpoint and public-weight hashes, external-test receipts, aggregate operator results, source data, and a compact verifier.
-- `reproducibility/`: earlier analysis layers retained for provenance and backward replay.
-- `manuscript_source/`: self-contained pdfLaTeX/BibTeX source for the manuscript and supplementary material.
-- `manuscript_pdfs/`: manuscript, supplement, and cover-letter PDFs.
-- `figures/`: Figures 1--5 in vector PDF, editable SVG, high-resolution TIFF, and PNG formats, with source-data and text-bound audit files.
-- `release_manifests/`: SHA-256 manifests for release assets.
+- `reproducibility/v1_3_0/`: manuscript-linked v1.3.0 evidence, analysis
+  scripts, preserved failures, figure source data, and a compact verifier.
+- `reproducibility/v1_2_0/`: frozen training/evaluation configurations,
+  checkpoint and public-weight records, matched-burden evidence, and the
+  previous compact replay layer.
+- `reproducibility/`: earlier append-only analysis layers retained for
+  provenance.
+- `manuscript_source/`: self-contained pdfLaTeX/BibTeX source for the
+  manuscript, supplement, and cover letter.
+- `manuscript_pdfs/`: compiled manuscript, supplement, and cover-letter PDFs.
+- `figures/`: Figures 1--5 in PDF, SVG, TIFF, and PNG formats.
+- `release_manifests/`: release-asset SHA-256 records.
 
-Public dataset imagery and upstream model weights are not redistributed. Item-level operator responses and operator identities are not included.
+Public dataset imagery and upstream model weights are not redistributed.
+Item-level operator responses and operator identities are not included.
 
 ## Fast verification
 
-The v1.2.0 compact verifier uses only Python's standard library:
+The v1.3.0 verifier uses only Python's standard library:
 
 ```bash
-python reproducibility/v1_2_0/scripts/replay_sat_v1_2_evidence.py \
-  --root reproducibility/v1_2_0 \
-  --output replay_v1_2
+python reproducibility/v1_3_0/scripts/verify_v1_3_evidence.py
 ```
 
-It verifies all public checksums and registered numerical invariants for the matched-burden comparison, U-Net/DeepLabV3+/Mask R-CNN contrasts, semantic-probability ranking, locked CWFID transfer, and two-operator agreement. A successful run reports `status: verified`.
+It checks 216 ranker/contract rows, 66 exact primary-endpoint replay checks,
+the merge-aware and operator aggregates, the locked 60-image CWFID outcome,
+and five figure text-bound audits. A successful run reports
+`status: verified`.
 
-See [`reproducibility/v1_2_0/README.md`](reproducibility/v1_2_0/README.md) for the evidence map and end-to-end command entry points. Earlier replay layers remain documented in [`reproducibility/README.md`](reproducibility/README.md).
+See [`reproducibility/v1_3_0/README.md`](reproducibility/v1_3_0/README.md) for
+the evidence map and replay boundary. Earlier layers remain documented in
+[`reproducibility/README.md`](reproducibility/README.md).
 
-## Data and model acquisition
+## Reproduction boundary
 
-SugarBeets2016, WeedsGalore, and CWFID must be obtained from their official public sources under their original licences. Dataset versions, acquisition boundaries, licences, model identifiers, and public-weight hashes are recorded in the reproducibility materials.
+The compact verifier replays archived numerical evidence without retraining.
+Re-extraction and full model training require the cited public SugarBeets2016,
+WeedsGalore, and CWFID data and the registered public model weights. Dataset
+versions, access boundaries, licences, model identifiers, and hashes are
+recorded in the archive.
 
-## Release
+## Release and citation
 
-Version `v1.2.1` is the manuscript-linked release:
+Version `v1.3.0` is the manuscript-linked release:
 
-<https://github.com/Fytap/agrispec-vlm-reproducibility/releases/tag/v1.2.1>
+<https://github.com/Fytap/agrispec-vlm-reproducibility/releases/tag/v1.3.0>
 
-Release-asset checksums are provided with the release and in `RELEASE_ASSETS_SHA256.txt`.
-
-## Citation and scope
-
-Citation metadata are provided in [`CITATION.cff`](CITATION.cff). Re-extraction and model training require the cited public datasets and public model weights. The compact replay verifies archived evidence without retraining. No credentials, internal addresses, private infrastructure logs, source imagery, or personal data are included.
+Citation metadata are provided in [`CITATION.cff`](CITATION.cff). No
+credentials, internal addresses, private infrastructure logs, source imagery,
+or personal data are included.

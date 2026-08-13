@@ -1,0 +1,2 @@
+intersection	human_consensus_positive	mask_positive	mask_precision_against_human_consensus	mask_recall_against_human_consensus	f1	jaccard	unresolved_human_items
+249	301	355	0.7014084507042253	0.8272425249169435	0.7591463414634146	0.6117936117936118	74

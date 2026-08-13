@@ -1,0 +1,16 @@
+panel	stage	detail	endpoint	interpretation
+a	RGB tile	inference input		
+a	Candidate formation	connected regions		
+a	Role qualification	coverage + purity		
+a	Ranking	frozen score		
+a	Queue	at most 20 regions		
+b			one_to_one	lower_endpoint_one_region_one_record
+b			set_coverage	geometric_upper_endpoint
+c	"Frozen
+primary"	U-Net protocol		
+c	"Official
+test"	one field		
+c	"Post-test
+audits"	models / metrics		
+c	"Locked
+transfer"	CWFID once		

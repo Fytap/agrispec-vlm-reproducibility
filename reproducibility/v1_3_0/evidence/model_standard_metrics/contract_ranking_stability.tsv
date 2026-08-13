@@ -1,0 +1,28 @@
+instance_coverage	candidate_labeled_coverage	same_role_purity	ranking_by_mean_one_to_one_recall	best_model	best_minus_second
+0.25	0.25	0.5	Mask R-CNN--ResNet50-FPN-v2 > ResNet18--U-Net > DeepLabV3+--ResNet50	Mask R-CNN--ResNet50-FPN-v2	0.010786604361370689
+0.25	0.25	0.75	Mask R-CNN--ResNet50-FPN-v2 > ResNet18--U-Net > DeepLabV3+--ResNet50	Mask R-CNN--ResNet50-FPN-v2	0.011137071651090347
+0.25	0.25	0.9	Mask R-CNN--ResNet50-FPN-v2 > ResNet18--U-Net > DeepLabV3+--ResNet50	Mask R-CNN--ResNet50-FPN-v2	0.010552959501557657
+0.25	0.5	0.5	Mask R-CNN--ResNet50-FPN-v2 > ResNet18--U-Net > DeepLabV3+--ResNet50	Mask R-CNN--ResNet50-FPN-v2	0.016199376947040545
+0.25	0.5	0.75	Mask R-CNN--ResNet50-FPN-v2 > ResNet18--U-Net > DeepLabV3+--ResNet50	Mask R-CNN--ResNet50-FPN-v2	0.016549844236760147
+0.25	0.5	0.9	Mask R-CNN--ResNet50-FPN-v2 > ResNet18--U-Net > DeepLabV3+--ResNet50	Mask R-CNN--ResNet50-FPN-v2	0.015965732087227402
+0.25	0.75	0.5	Mask R-CNN--ResNet50-FPN-v2 > ResNet18--U-Net > DeepLabV3+--ResNet50	Mask R-CNN--ResNet50-FPN-v2	0.02959501557632399
+0.25	0.75	0.75	Mask R-CNN--ResNet50-FPN-v2 > ResNet18--U-Net > DeepLabV3+--ResNet50	Mask R-CNN--ResNet50-FPN-v2	0.02959501557632399
+0.25	0.75	0.9	Mask R-CNN--ResNet50-FPN-v2 > ResNet18--U-Net > DeepLabV3+--ResNet50	Mask R-CNN--ResNet50-FPN-v2	0.029205607476635503
+0.5	0.25	0.5	Mask R-CNN--ResNet50-FPN-v2 > ResNet18--U-Net > DeepLabV3+--ResNet50	Mask R-CNN--ResNet50-FPN-v2	0.008722741433021819
+0.5	0.25	0.75	Mask R-CNN--ResNet50-FPN-v2 > ResNet18--U-Net > DeepLabV3+--ResNet50	Mask R-CNN--ResNet50-FPN-v2	0.00907320872274145
+0.5	0.25	0.9	Mask R-CNN--ResNet50-FPN-v2 > ResNet18--U-Net > DeepLabV3+--ResNet50	Mask R-CNN--ResNet50-FPN-v2	0.008489096573208704
+0.5	0.5	0.5	Mask R-CNN--ResNet50-FPN-v2 > ResNet18--U-Net > DeepLabV3+--ResNet50	Mask R-CNN--ResNet50-FPN-v2	0.013473520249221188
+0.5	0.5	0.75	Mask R-CNN--ResNet50-FPN-v2 > ResNet18--U-Net > DeepLabV3+--ResNet50	Mask R-CNN--ResNet50-FPN-v2	0.013823987538940818
+0.5	0.5	0.9	Mask R-CNN--ResNet50-FPN-v2 > ResNet18--U-Net > DeepLabV3+--ResNet50	Mask R-CNN--ResNet50-FPN-v2	0.013239875389408129
+0.5	0.75	0.5	Mask R-CNN--ResNet50-FPN-v2 > ResNet18--U-Net > DeepLabV3+--ResNet50	Mask R-CNN--ResNet50-FPN-v2	0.026401869158878502
+0.5	0.75	0.75	Mask R-CNN--ResNet50-FPN-v2 > ResNet18--U-Net > DeepLabV3+--ResNet50	Mask R-CNN--ResNet50-FPN-v2	0.026401869158878502
+0.5	0.75	0.9	Mask R-CNN--ResNet50-FPN-v2 > ResNet18--U-Net > DeepLabV3+--ResNet50	Mask R-CNN--ResNet50-FPN-v2	0.026012461059190042
+0.75	0.25	0.5	ResNet18--U-Net > DeepLabV3+--ResNet50 > Mask R-CNN--ResNet50-FPN-v2	ResNet18--U-Net	0.005412772585669773
+0.75	0.25	0.75	ResNet18--U-Net > DeepLabV3+--ResNet50 > Mask R-CNN--ResNet50-FPN-v2	ResNet18--U-Net	0.00506230529595017
+0.75	0.25	0.9	ResNet18--U-Net > DeepLabV3+--ResNet50 > Mask R-CNN--ResNet50-FPN-v2	ResNet18--U-Net	0.00506230529595017
+0.75	0.5	0.5	ResNet18--U-Net > DeepLabV3+--ResNet50 > Mask R-CNN--ResNet50-FPN-v2	ResNet18--U-Net	0.010591900311526514
+0.75	0.5	0.75	ResNet18--U-Net > DeepLabV3+--ResNet50 > Mask R-CNN--ResNet50-FPN-v2	ResNet18--U-Net	0.010241433021806856
+0.75	0.5	0.9	ResNet18--U-Net > DeepLabV3+--ResNet50 > Mask R-CNN--ResNet50-FPN-v2	ResNet18--U-Net	0.010241433021806856
+0.75	0.75	0.5	Mask R-CNN--ResNet50-FPN-v2 > ResNet18--U-Net > DeepLabV3+--ResNet50	Mask R-CNN--ResNet50-FPN-v2	0.010708722741433044
+0.75	0.75	0.75	Mask R-CNN--ResNet50-FPN-v2 > ResNet18--U-Net > DeepLabV3+--ResNet50	Mask R-CNN--ResNet50-FPN-v2	0.010708722741433044
+0.75	0.75	0.9	Mask R-CNN--ResNet50-FPN-v2 > ResNet18--U-Net > DeepLabV3+--ResNet50	Mask R-CNN--ResNet50-FPN-v2	0.010319314641744556

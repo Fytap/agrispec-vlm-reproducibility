@@ -1,5 +1,5 @@
-- Instance-support accounting separates proposal, ranking and plant recovery.
-- Matched review burden reveals a 1.87-point one-to-one recall gain.
-- Mask R-CNN leads internal queues; probability ranking remains competitive.
-- Two operators agree on weed reviewability for 94.2% of queued regions.
-- Locked CWFID transfer exposes complete threshold-transfer failure.
+- Finite-queue evaluation separates proposal, role, merge and ranking losses.
+- Set coverage and one-to-one support bound geometric plant recoverability.
+- Ranker source changes the queued effect of proposal commissioning.
+- Crossed seed-by-image intervals temper internal model comparisons.
+- Locked CWFID transfer fails before any review queue is formed.

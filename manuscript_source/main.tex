@@ -22,9 +22,10 @@
 \input{author_metadata}
 
 \begin{document}
+\raggedbottom
 \begin{frontmatter}
 
-\title{From Candidate Scores to Plant Recovery in Finite Crop--Weed Review Queues}
+\title{Bounded Instance-Support Evaluation for Finite Crop--Weed Review Queues}
 \ifAuthorMetadataReady
 \AuthorFrontmatter
 \else
@@ -33,48 +34,48 @@
 \fi
 
 \begin{abstract}
-Crop--weed models are commonly evaluated at pixel or candidate level, although a finite review queue succeeds only when distinct plants remain represented after proposal formation, role qualification, ranking, and budget truncation. We formulate an instance-support-aware evaluation that separates these losses and uses deterministic one-to-one matching as its primary endpoint. The framework was evaluated on the official WeedsGalore split (104/26/26 RGB tiles) and in a locked cross-dataset test on 60 CWFID images. At a common 471-candidate test budget, proposal commissioning increased one-to-one role-qualified weed recall from 0.0970 to 0.1157; the paired image-bootstrap difference was 0.0187 (95\% CI 0.0032--0.0347). Under fixed $K=20$ queues, Mask R-CNN reached one-to-one recall 0.2159, compared with 0.2027 for a ResNet-18 U-Net; validation-selected semantic-probability ordering reached 0.2117. Two independent operators agreed on weed reviewability for 94.2\% of 518 queued regions ($\kappa=0.893$). The locked CWFID transfer produced no candidates from any of five WeedsGalore-selected checkpoints, despite stable internal results. Instance-support-aware accounting therefore distinguishes improvements in recoverable plant support from improvements in candidate scores, while exposing threshold-transfer failures that internal validation cannot reveal.
+Fixed-capacity review is useful only when distinct plants remain represented after candidate formation, role qualification, ranking, and truncation. We present an evaluation contract for finite crop--weed review queues that separates these losses. One-to-one support is a lower endpoint for workflows that create one quality-assurance record per region, whereas set coverage provides a merge-aware geometric upper endpoint. On the official WeedsGalore split, proposal operating-point commissioning increased raw spatial support but produced ranker- and contract-dependent queued effects. Under the commissioned-only ranker, one-to-one support increased by 0.0187 at matched burden. Mask R-CNN had the highest point estimate at $K=20$ (0.2159), although crossed seed-by-image intervals for its contrast with U-Net included zero. Standard AP, AR, and a queue-level PQ-style diagnostic did not expose the 105-instance merge-capacity gap. Two independent operators showed high category agreement, while human reviewability and mask qualification remained non-equivalent. A locked transfer to 60 CWFID images produced no candidates from five U-Net checkpoints; post-lock continuous scores showed weak, checkpoint-variable ranking and poor role qualification at low thresholds. The contract therefore supports executable offline quality assurance while making model, matching, and transfer boundaries explicit.
 \end{abstract}
 
 \begin{keyword}
-crop--weed segmentation \sep instance matching \sep review queue \sep review budget \sep cross-dataset evaluation \sep precision agriculture
+crop--weed segmentation \sep instance evaluation \sep review queue \sep matching contract \sep quality assurance \sep precision agriculture
 \end{keyword}
 \end{frontmatter}
 
 \section{Introduction}
 
-Site-specific weed management connects sensing, plant localisation, crop--weed discrimination, and intervention \cite{slaughter2008robotic,swinton2005economics}. Segmentation quality is usually summarised by pixel overlap, while instance systems are commonly evaluated by average precision. These metrics describe model output, but they do not establish how many distinct plants remain available to a reviewer when only a finite number of regions can be inspected.
+Site-specific weed management links sensing, plant localisation, crop--weed discrimination, and intervention \cite{slaughter2008robotic,swinton2005economics}. Field-scale mapping protocols must align imaging, ground validation, and the management question \cite{casanova2025protocols}. The same alignment is needed when predicted regions enter an offline review queue. A high pixel score does not establish how many distinct plants remain available when only a finite number of regions can be inspected.
 
-Finite review introduces a sequence of losses. A plant can be absent from the proposal pool, contained in a mixed crop--weed region, merged with neighbouring plants, ranked below the review cut-off, or duplicated by several candidates. Object-proposal research relates recall to overlap and proposal count \cite{hosang2016proposals}, and precision-at-the-top learning studies ranking under restricted capacity \cite{kar2015precision}. Neither candidate discrimination nor many-to-one coverage alone resolves duplication and merge effects. A plant-level queue therefore requires an explicit matching contract between selected regions and distinct truth instances.
+Standard instance metrics answer complementary questions. COCO-style average precision and average recall evaluate detection and mask quality across intersection-over-union thresholds and detection limits \cite{lin2014coco}. Panoptic Quality combines recognition and segmentation quality after one-to-one matching \cite{kirillov2019panoptic}. Recent analyses show that average precision can obscure duplicate predictions and can change abruptly with matching thresholds \cite{jena2023beyondmap,chen2023sortedap}. These metrics are essential for model comparison, but they do not encode an agricultural review budget or the sequence by which a plant disappears from a queue.
 
-The queue studied here is a post-inference tool for offline agronomic quality assurance and annotation triage. A reviewer may retain a region as weed evidence, reject it, or escalate an ambiguous crop--weed mixture. Crop overlap matters because it identifies regions that require additional scrutiny before they enter an annotation or quality-control record; it is not interpreted as an agronomic treatment risk. This differs from active learning, which chooses observations for model annotation or retraining \cite{sheikh2020gradient,vanmarrewijk2024active}; selective prediction, which abstains from automated outputs \cite{geifman2017selective,geifman2019selectivenet}; and learning to defer, which learns assignment between a model and an expert \cite{mozannar2020defer,mozannar2023whoshould}. The present queue orders already generated regions and does not issue an actuation decision.
+Finite review introduces several loss mechanisms. A plant can be absent from the proposal pool, contained in a mixed crop--weed region, merged with neighbours, ranked below the cut-off, or duplicated by several candidates. Object-proposal research relates recall to overlap and proposal count \cite{hosang2016proposals}. Precision-at-the-top methods address ranking under restricted capacity \cite{kar2015precision}. An operational audit still needs a contract that connects proposal support, role evidence, multiplicity, ranking, and the number of records available for inspection.
 
-Agricultural imagery adds spatial, temporal, and cross-dataset dependence. Random image partitions can overstate generalisation when neighbouring observations share soil, illumination, canopy structure, or management \cite{roberts2017spatial}. Public crop--weed datasets also differ in crop, sensor, viewpoint, scale, and annotation contract \cite{haug2015cwfid,chebrolu2017sugarbeets,steininger2023cropandweed,weyler2024phenobench,celikkan2025weedsgalore}. Internal optimisation stability must therefore be separated from transfer across acquisition systems.
+The queue studied here supports offline annotation quality assurance and model-failure review. An operator can retain a region, reject it, or escalate an ambiguous mixture. The queue does not issue an actuation command. This task differs from active learning, which selects observations for annotation or retraining \cite{sheikh2020gradient,vanmarrewijk2024active}; selective prediction, which abstains from automated outputs \cite{geifman2017selective,geifman2019selectivenet}; and learning to defer, which assigns cases between a model and an expert \cite{mozannar2020defer,mozannar2023whoshould}.
 
-We address this gap through an instance-support-aware evaluation of finite crop--weed review queues. The framework distinguishes spatial proposal recall, role-qualified proposal recall, and queued one-to-one plant recovery. It also matches review burden when proposal settings are compared, discloses every source of supervision, and treats candidate AUC and average precision as diagnostic measures. We evaluate source-transfer rankers, target-trained semantic models, an instance segmenter, and simple probability or entropy ordering under the same $K=20$ capacity. A frozen CWFID protocol then tests whether validation-selected WeedsGalore checkpoints and thresholds transfer without external tuning. The resulting analysis identifies where recoverable support is gained, where it is lost, and when an internally stable queue fails across datasets.
+We present a bounded instance-support evaluation for finite crop--weed review queues. It has four contributions. First, it separates spatial, role-qualified, set-coverage, and one-to-one endpoints. Second, it tests proposal effects across 27 matching contracts and four ranker-training schemes. Third, it combines seed and test-image variation and compares the queue endpoint with standard AP, AR, and PQ-style diagnostics. Fourth, it records human category agreement and a locked cross-dataset transfer. The contribution is an agricultural evaluation contract and evidence decomposition, not a new segmentation architecture or an operational control system.
 
 \section{Materials and methods}
 
-\subsection{Review task and information contract}
+\subsection{Review task and endpoint bounds}
 
-The unit presented for review was an RGB region associated with one connected proposal component and a model score. Each tile contributed at most $K=20$ regions. The value $K=20$ defines a standardised experimental capacity; it is not a measured time optimum or a per-hectare workload. The intended reviewer action is retain, reject, or escalate. No autonomous treatment command, operator timing, or labour-cost claim is evaluated.
+Each review item contained one RGB tile, one highlighted connected region, and a local RGB view. The intended output was one quality-assurance record: retain, reject, or escalate. Each tile contributed at most $K=20$ regions. This value standardised capacity across systems. It was not derived from operator time, labour cost, or hectares covered.
 
-Figure~\ref{fig:workflow} separates model input from offline scoring. Queue construction can use RGB, model outputs, component geometry, tile identity, and a preselected policy. Target truth can enter training, validation selection, or offline scoring only in its declared data role. Test masks and instance identifiers cannot enter proposal generation, ranking features, or queue allocation.
+One-to-one support reflects the record contract. A selected region can generate at most one matched plant record. This endpoint penalises duplicate regions and merged regions. It is therefore a conservative geometric endpoint, not a claim that a person cannot see several plants in one region. Set coverage counts every truth instance that has at least one qualified edge. It permits a merged region to support several instances and supplies a geometric upper endpoint. Actual multi-plant recovery from one region was not measured.
 
-Taxonomic identity, agricultural role, and management morphotype are distinct output axes. Family, genus, and species form the taxonomic axis. Crop, weed, volunteer crop, and unknown role are scene-dependent agricultural roles. Grass-like, broadleaf, sedge, and other describe management morphotype. The experiments in this paper evaluate only the crop--weed role axis.
+Figure~\ref{fig:workflow} separates inference from offline scoring and places the endpoints within the evidence chronology. Target truth can enter declared training or validation roles. Test masks and instance identifiers cannot enter proposal generation, ranking features, or queue allocation. Taxonomic identity, agricultural role, and management morphotype remain distinct axes. The experiments evaluate only the crop--weed role axis.
 
 \begin{figure}[!t]
 \centering
 \includegraphics[width=\textwidth]{figures/Figure_1.pdf}
-\caption{Instance-support-aware evaluation of a finite crop--weed review queue. RGB images pass through candidate formation, role scoring, ranking, and a fixed $K=20$ budget. Offline truth first measures spatial support, then role-qualified support, and finally deterministic one-to-one plant recovery. Training and validation truth remain separated from locked test scoring. The external branch transfers WeedsGalore-selected checkpoints and thresholds to CWFID without external tuning.}
+\caption{Evaluation contract and evidence chronology. (a) RGB inference produces a finite queue before test masks enter offline scoring. (b) One-to-one support is the lower endpoint for one-region-to-one-record quality assurance. Set coverage is a merge-aware geometric upper endpoint. Actual human plant counts remain unmeasured. (c) The frozen U-Net analysis preceded official-test access. Model, ranker, contract, and standard-metric audits followed that access. CWFID was separately locked and opened once.}
 \label{fig:workflow}
 \end{figure}
 
-\subsection{Datasets, splits, and external lock}
+\subsection{Datasets, splits, and evidence classes}
 
-The source specialists used public SugarBeets2016 RGB images and masks \cite{chebrolu2017sugarbeets}. The target development study used 156 annotated $600\times600$ pixel WeedsGalore tiles from one maize field \cite{celikkan2025weedsgalore}. The official spatial allocation contains 104 training, 26 validation, and 26 test tiles. Raster enumeration yielded 2,168 crop and 10,029 weed instances across all 156 tiles. The official test masks contained 256 crop and 1,712 weed instances.
+The source specialists used public SugarBeets2016 RGB images and masks \cite{chebrolu2017sugarbeets}. Target development used 156 annotated $600\times600$ pixel WeedsGalore tiles from one maize field \cite{celikkan2025weedsgalore}. The official allocation contains 104 training, 26 validation, and 26 test tiles. Raster enumeration yielded 2,168 crop and 10,029 weed instances. The official test masks contained 256 crop and 1,712 weed instances.
 
-The test tiles represented four acquisition dates (Table~\ref{tab:dates}). The first three dates contributed eight tiles each, whereas 15 June contributed two. Date-macro and worst-date summaries therefore complement pooled counts. Capture-index groups are reported as released grouping variables, without assigning unverified physical field identities.
+The test split represents four acquisition dates (Table~\ref{tab:dates}). The first three dates contribute eight tiles each. The last date contributes two. Date-block resampling treats the four dates as observed groups, but their physical independence is unknown. Capture indices cannot be mapped to verified field units. Image-bootstrap intervals therefore describe variation within this official image set, not a farm population.
 
 \begin{table}[!t]
 \centering
@@ -95,11 +96,13 @@ Total & 26 & 1,712 & 256 \\
 \end{tabular}
 \end{table}
 
-Cross-dataset evaluation used the official CWFID v1.0 release \cite{haug2015cwfid}. Its 60 RGB images and paired public annotations were fixed at source commit \texttt{176612f3}. Before image or annotation access, the protocol fixed preprocessing, five existing WeedsGalore checkpoints, their validation-selected component settings, fixed $K=20$, the ranking score, truth-component definition, and endpoints. All 242 upstream blobs were verified by byte count and Git blob SHA-1 before one recorded opening. Images were scaled so the longer side measured 600 pixels, reflection-padded to $600\times600$, and normalised as in training. Public annotation colours were transformed by nearest-neighbour interpolation and zero padding. Weed truth units were eight-connected annotation components of at least 16 pixels; they are component proxies rather than persistent plant identities. No CWFID label was used for fitting or selection.
+Evidence was assigned to three analysis classes before interpretation. The frozen primary experiment transferred five validation-selected U-Net checkpoints to CWFID. The matched-burden, strong-model, ranker-source, contract-grid, merge-aware, operator, and standard-metric analyses are post-test engineering audits on the official WeedsGalore split. Threshold sweeps of CWFID scores are post-lock diagnostics. Post-test and post-lock analyses are descriptive and exploratory. They cannot restore a previously unseen confirmatory status.
+
+Cross-dataset evaluation used the official CWFID v1.0 release \cite{haug2015cwfid}. Its 60 RGB images and public annotations were fixed at source commit \texttt{176612f3}. The protocol fixed preprocessing, five existing U-Net checkpoints, validation-selected settings, $K=20$, and endpoints before data access. All 242 upstream blobs were verified before one recorded opening. Weed truth units were eight-connected annotation components of at least 16 pixels. They are component proxies, not persistent plant identities. No CWFID label was used for fitting or selection.
 
 \subsection{Supervision ledger}
 
-Table~\ref{tab:supervision} reports the complete supervision burden. Proposal generation itself is image-only at inference, but selecting its operating point requires target-training masks. Candidate labels are derived from dense masks. A separate 300-candidate training-label ablation therefore restricts sampled training candidates while retaining all 2,436 labelled validation candidates; it is not a 300-label end-to-end regime.
+Table~\ref{tab:supervision} reports the supervision burden. Proposal generation is image-only during inference, but proposal operating-point commissioning uses target-training masks. Candidate role labels are also derived from dense masks. A 300-candidate ablation limits sampled training candidates while retaining all 2,436 labelled validation candidates. It is not a 300-label end-to-end regime.
 
 \begin{table}[!t]
 \centering
@@ -107,7 +110,7 @@ Table~\ref{tab:supervision} reports the complete supervision burden. Proposal ge
 \label{tab:supervision}
 \footnotesize
 \setlength{\tabcolsep}{3.5pt}
-\begin{tabularx}{\textwidth}{L{3.2cm}L{3.2cm}L{3.4cm}X}
+\begin{tabularx}{\textwidth}{L{3.1cm}L{3.1cm}L{3.5cm}X}
 \toprule
 System or stage & Training supervision & Selection supervision & Test use \\
 \midrule
@@ -117,193 +120,189 @@ Source-transfer rankers & 9,887 target-training candidate labels & 2,436 validat
 U-Net and DeepLabV3+ & 104 target RGB dense masks & 26 validation RGB dense masks & Queue formed before scoring \\
 Mask R-CNN & 104 target RGB semantic and instance masks & 26 validation semantic and instance masks & Queue formed before scoring \\
 CWFID transfer & No external labels & No external labels & 60 annotations for locked scoring only \\
-Two-operator review & No model training & Frozen 518-region queue and common instructions & Aggregate technical-review analysis only \\
+Two-operator review & No model training & Frozen 518-region queue and common instructions & Aggregate technical-review analysis \\
 \bottomrule
 \end{tabularx}
 \end{table}
 
-\subsection{Two-operator technical review}
+\subsection{Candidate formation, rankers, and model families}
 
-A frozen target-semantic $K=20$ queue containing 518 regions from the 26 WeedsGalore test tiles was used to assess whether the review categories could be applied consistently. Each item showed the RGB tile, a highlighted candidate box, and a local RGB crop. Acquisition date, scene identity, candidate identifier, model score, rank, model identity, allocation policy, and mask-derived truth were hidden. Two operators completed all items independently under common written instructions and without access to one another's responses.
+Two ResNet-18 U-Net-style source specialists were initialised with ImageNet-1K weights \cite{he2016resnet}. One estimated plant foreground and the other estimated crop and weed probabilities. Thresholding foreground probability at $T$, applying eight-connectivity, and removing components below $A$ pixels defined setting $(T,A)$. Full training details appear in the supplement.
 
-For each region, the operators recorded primary content (weed-dominant, crop-dominant, background, or uncertain), weed reviewability (yes, no, or uncertain), crop presence (yes, no, or uncertain), localisation usability (adequate, partial, unusable, or uncertain), and confidence on a five-point scale. Timing was neither required nor analysed. Exact agreement and Cohen's $\kappa$ were computed for the categorical fields. A 10,000-replicate scene-cluster bootstrap resampled the 26 source tiles. The analysis characterises these two fixed operators and was not used to select a model, threshold, or queue policy.
+The original operating point was $(0.95,32)$. Proposal operating-point commissioning searched 12 settings on the 104 official-training tiles. Feasible settings produced no more than 100 candidates per tile on average. This limit bounded offline feature extraction and prevented unconstrained proposal expansion. It was deliberately wider than $K=20$, which defined the downstream review capacity. Training role-qualified proposal recall was maximised, followed by lower burden, higher threshold, and larger area. The selected setting was $(0.70,32)$.
 
-\subsection{Candidate formation and model families}
+Five candidate rankers used source weed score, geometry, role-plus-local features, frozen DINOv2 features, or component-masked DINOv2 features \cite{oquab2024dinov2}. Logistic regularisation was selected on official validation. The burden-matched proposal audit tested four training schemes: commissioned-only, original-only, the union of both pools, and reciprocal cross-pool transfer. The reciprocal scheme trained on one pool and applied that ranker to the other pool.
 
-Two source ResNet-18 U-Net-style specialists were initialised with ImageNet-1K weights \cite{he2016resnet}. One estimated plant foreground and the other estimated crop and weed role probabilities. The source-training procedures used deterministic $128\times128$ patches, AdamW, and combined cross-entropy and soft-Dice losses. Full hyperparameters and source diagnostics are reported in the supplement. A target tile produced foreground probability $f(u)$ and role probabilities $p_c(u)$ and $p_w(u)$. Thresholding $f(u)$ at $T$, applying eight-connectivity, and removing components smaller than $A$ pixels defined each proposal setting $(T,A)$.
+Target semantic models comprised a ResNet-18 U-Net and DeepLabV3+ with a ResNet-50 encoder \cite{chen2018deeplabv3plus}. The instance model was Mask R-CNN with a ResNet-50 FPN backbone \cite{he2017maskrcnn}. U-Net used five training seeds. DeepLabV3+ and Mask R-CNN used three. Validation selected each checkpoint and component policy. All model families used the same $K=20$ endpoint. Training used one NVIDIA H200 accelerator per seed.
 
-The original operating point was $(0.95,32)$. Commissioning searched 12 settings on the 104 official-training tiles. Feasible settings had no more than 100 candidates per tile on average. Training role-qualified weed proposal recall was maximised, followed by lower burden, higher threshold, and larger area. The selected setting was $(0.70,32)$.
-
-Five all-candidate rankers were evaluated: the source weed score, geometry, role-plus-local specialist features, frozen DINOv2 ViT-S/14 features, and component-masked DINOv2 features \cite{oquab2024dinov2}. The masked view retained component pixels and filled the surrounding bounding box with the image median. Logistic regularisation was selected on official validation. The target-trained semantic family comprised a ResNet-18 U-Net and DeepLabV3+ with a ResNet-50 encoder \cite{chen2018deeplabv3plus}. The instance family used Mask R-CNN with a ResNet-50 FPN backbone \cite{he2017maskrcnn}. U-Net used five training seeds; DeepLabV3+ and Mask R-CNN used three each. Each seed selected its epoch and component setting on the official validation split.
-
-Semantic components were ranked by conditional weed probability, mean weed probability, or mean predictive entropy. The policy for each checkpoint was selected on validation by one-to-one role-qualified recall, then candidate precision, then policy name. Mask R-CNN ranked predicted weed instances before other detections and then used detection confidence. All model families used the same fixed $K=20$ queue endpoint. Training ran on one NVIDIA H200 accelerator per seed; hardware details, exact software versions, public-weight hashes, and checkpoint hashes are provided in the reproducibility archive.
-
-\subsection{Support, matching, and queue metrics}
+\subsection{Support, matching, and standard metrics}
 
 For truth instance $I_j$ and candidate $C_i$, instance coverage is
 \begin{equation}
 \operatorname{cov}(I_j,C_i)=\frac{|I_j\cap C_i|}{|I_j|}.
 \end{equation}
-Spatial proposal recall counts $I_j$ when at least one candidate has coverage of 0.50 or greater. Role-qualified support additionally requires the candidate to contain at least 0.50 labelled-pixel coverage and 0.90 same-role purity. These thresholds define an offline matching contract rather than an agronomic treatment threshold.
+Spatial support requires at least one candidate with coverage of 0.50. Role-qualified support additionally requires 0.50 labelled-pixel coverage and 0.90 same-role purity. These values form the primary matching contract. A $3\times3\times3$ grid used instance coverage, labelled coverage, and purity values of 0.25, 0.50, and 0.75, with 0.90 replacing 0.75 at the highest purity level.
 
-Many-to-one recall permits one candidate to recover several truth instances. The primary endpoint instead uses maximum-cardinality one-to-one matching between selected candidates and weed instances that satisfy the role-qualified contract. Lexicographic candidate and instance identifiers resolve deterministic ties. Candidate precision is the fraction of selected regions that satisfy the role-qualified weed contract. Crop exposure is the fraction of tiles with any selected region overlapping crop truth. Standard IoU and threshold sensitivity are reported separately.
+Set coverage is the union of truth instances with at least one role-qualified candidate edge. One-to-one support uses maximum-cardinality bipartite matching between selected candidates and qualified weed instances. Candidate and instance identifiers resolve ties. The difference between set and one-to-one numerators is the merge-capacity gap after duplicate memberships are removed. Candidate precision is the fraction of selected regions satisfying the role-qualified weed contract.
 
-\subsection{Matched review burden and uncertainty}
+Crop exposure is the fraction of tiles with a queued region overlapping crop truth. We report any positive overlap and candidate-area overlap thresholds of 1\% and 10\%. Standard diagnostics include mAP over IoU 0.50--0.95, AP50, AP75, AR100, and queue AR20. A PQ-style diagnostic is computed on the predicted-weed subset of the $K=20$ queue. It is not full panoptic quality because background and crop segments do not form a complete panoptic partition.
 
-Commissioning changes both proposal support and candidate burden. To isolate formation quality at a common review burden, the paired comparison used
+\subsection{Matched burden and uncertainty}
+
+Commissioning changes candidate support and burden. A common per-tile capacity used
 \begin{equation}
 k_i=\min(20,n_i^{\mathrm{original}},n_i^{\mathrm{commissioned}})
 \end{equation}
-for each test tile $i$. Both settings therefore contributed the same 471 selected candidates under identical ranker weights. A global equal-$N$ analysis also ranked 471 candidates for each setting. Recall--burden curves for $K\in\{1,5,10,20,50\}$ were summarised by their normalised area (AURBC).
+for test tile $i$. Both settings contributed 471 candidates. Ranker-free proposal-set ceilings and per-tile $K=20$ one-to-one oracles separate formation capacity from achieved ranking.
 
-Uncertainty was estimated with 10,000 paired bootstrap resamples of the 26 test images. Training-seed means and sample standard deviations quantify optimisation variation. Image-cluster percentile intervals quantify test-image heterogeneity. Two prespecified strong-baseline contrasts compare DeepLabV3+ and Mask R-CNN with the ResNet-18 U-Net. Candidate AUC and average precision are diagnostic and are not treated as plant-recovery endpoints. The provenance class of each analysis and the recorded freeze and opening times for the external experiment are reported in Supplementary Table~S1.
+The primary model comparison uses 20,000 crossed bootstrap replicates. Each replicate samples a training seed within each model and resamples the 26 test images with replacement. The two prespecified one-to-one contrasts are DeepLabV3+ minus U-Net and Mask R-CNN minus U-Net. We report 95\% intervals and Bonferroni-adjusted familywise 97.5\% intervals. A date-block plus seed bootstrap is a sensitivity analysis over four observed dates. No interval is interpreted as a farm-population interval.
+
+\subsection{Two-operator technical review}
+
+Two different human operators independently reviewed the frozen 518-region U-Net queue. They used common written instructions and 12 practice items from validation data. They did not discuss formal items, view peer responses, use automated labels, or conduct external searches. Acquisition date, tile identity, candidate identifiers, scores, ranks, model identity, and mask-derived truth were hidden.
+
+The operators recorded primary content, weed reviewability, crop presence, localisation usability, and five-point confidence. Timing was not collected or analysed. Exact agreement, Cohen's $\kappa$, Gwet's AC1, and scene-cluster intervals were computed. Linear and quadratic weighted $\kappa$ were added for ordered fields. Human consensus and mask qualification were compared through a three-by-two contingency table, precision, recall, F1, and Jaccard index.
 
 \section{Results}
 
-\subsection{Commissioning improved recovery under a matched review burden}
+\subsection{Commissioning expanded raw support, while queued effects depended on ranker training}
 
-Before budget matching, the original setting produced 802 candidates (30.85 per tile), while the commissioned setting produced 2,351 (90.42 per tile). Spatial proposal recall increased from 509/1,712 (0.2973) to 978/1,712 (0.5713). Role-qualified proposal recall increased from 330/1,712 (0.1928) to 518/1,712 (0.3026).
+The original setting produced 802 test candidates, or 30.85 per tile. The commissioned setting produced 2,351, or 90.42 per tile. Spatial proposal recall increased from 0.2973 to 0.5713. Role-qualified proposal recall increased from 0.1928 to 0.3026. These ranker-free changes establish greater raw geometric support.
 
-The gain remained after review burden was matched (Table~\ref{tab:commissioning}). Both settings selected 471 candidates. One-to-one role-qualified recall increased from 0.0970 to 0.1157, a paired difference of 0.0187 (95\% image-bootstrap CI 0.0032--0.0347). Spatial recall increased by 0.0818 (95\% CI 0.0560--0.1098). Candidate precision decreased by 0.0679 (95\% CI $-0.1384$--0.0064), and crop-exposed tile frequency increased by 0.0385 (95\% CI 0--0.1154). Under global equal-$N$, one-to-one recall increased from 0.0970 to 0.1174. AURBC increased from 0.0598 to 0.0750. Commissioning therefore added recoverable support, but also introduced more ambiguous regions and crop overlap.
+At the common 471-candidate burden, the commissioned-only ranker increased spatial recall by 0.0818, set coverage by 0.0374, and one-to-one recall by 0.0187. Precision decreased by 0.0679. The primary-contract one-to-one change was 0.0210 with the union ranker, $-0.0514$ with the original-only ranker, and $-0.0625$ under reciprocal transfer (Table~\ref{tab:commissioning}). Commissioning therefore did not produce a ranker-independent queue improvement.
 
 \begin{table}[!t]
 \centering
-\caption{Proposal settings compared at the same 471-candidate review burden. Recall denominators are 1,712 weed instances; crop exposure denominators are 26 tiles.}
+\caption{Commissioned-minus-original effects at the common 471-candidate burden under the primary matching contract.}
 \label{tab:commissioning}
-\footnotesize
-\setlength{\tabcolsep}{3pt}
-\resizebox{\textwidth}{!}{%
-\begin{tabular}{lrrrrrr}
+\small
+\setlength{\tabcolsep}{4pt}
+\begin{tabular}{lrrrr}
 \toprule
-Setting & Raw candidates/tile & Selected & Precision & Spatial recall & Qualified recall & 1:1 recall \\
+Ranker training pool & Precision & Spatial & Set coverage & One-to-one \\
 \midrule
-Original $(0.95,32)$ & 30.85 & 471 & 0.5860 & 0.1875 & 0.1197 & 0.0970 \\
-Commissioned $(0.70,32)$ & 90.42 & 471 & 0.5180 & 0.2693 & 0.1571 & \textbf{0.1157} \\
+Commissioned only & $-0.0679$ & $+0.0818$ & $+0.0374$ & $+0.0187$ \\
+Original only & $-0.3503$ & $-0.1268$ & $-0.0695$ & $-0.0514$ \\
+Union & $-0.0701$ & $+0.0847$ & $+0.0380$ & $+0.0210$ \\
+Reciprocal cross-pool & $-0.3482$ & $-0.1460$ & $-0.0847$ & $-0.0625$ \\
 \bottomrule
-\end{tabular}}
+\end{tabular}
 \end{table}
+
+The same dependence appeared across 27 contracts (Figure~\ref{fig:commissioning}). Spatial support increased in all contracts for commissioned-only and union rankers. One-to-one support increased in 15 and 16 contracts, respectively. It decreased in every contract for original-only and reciprocal rankers. Under the primary contract, the original and commissioned proposal-set ceilings were 0.1928 and 0.3026. Their per-tile $K=20$ oracles were 0.1396 and 0.1618. Achieved one-to-one support was 0.0970 and 0.1157.
 
 \begin{figure}[!t]
 \centering
 \includegraphics[width=\textwidth]{figures/Figure_2.pdf}
-\caption{Matched-burden commissioning analysis. (a) Raw proposal recall and candidate burden. (b) Original and commissioned queues after applying a common per-tile capacity, with 95\% image-bootstrap intervals. (c) Paired commissioned-minus-original effects. (d) One-to-one recall--burden curves and normalised AURBC.}
+\caption{Proposal and ranker sensitivity. (a) Raw spatial and role-qualified proposal support before ranking. (b) Commissioned-minus-original effects under four ranker-training schemes. (c) Number of positive effects across 27 matching contracts. (d) Ranker-free set ceiling, per-tile $K=20$ oracle, and achieved one-to-one support for the commissioned-only ranker.}
 \label{fig:commissioning}
 \end{figure}
 
-\subsection{Candidate discrimination did not determine plant recovery}
+\subsection{Set coverage exposed a merge-capacity gap}
 
-Changing the fitting target from eligible candidates to the complete deployed candidate pool increased role-plus-local candidate AUC from 0.4420 to 0.9049. Frozen DINOv2 reached AUC/AP of 0.9630/0.8684, while component masking reached 0.9665/0.8813. The absolute masking differences were 0.0035 in AUC and 0.0129 in AP.
+The 518-region U-Net queue contained 170 regions with no qualified weed instance, 286 with one, and 62 with two or more. One merged region covered nine qualified instances. The union of qualified memberships contained 453 distinct instances. One-to-one matching retained 348. Set coverage was therefore 0.2646, whereas one-to-one support was 0.2033. The 105-instance difference arose from merged capacity; no duplicate membership remained after the set union.
 
-High candidate discrimination did not translate directly to distinct-plant recovery. At $K=20$, the masked DINOv2 queue achieved candidate precision 0.5346 and many-to-one qualified recall 0.1863. One-to-one matching reduced recall to 0.1343 because merged candidates and duplicate support could not be counted repeatedly. The role-qualified proposal ceiling was 0.3026, and an exact per-tile budget oracle reached 0.2488. Proposal formation therefore removed most plants before ranking, while candidate multiplicity created an additional gap between many-to-one and one-to-one evaluation.
+Among 301 consensus-reviewable regions, set coverage was 0.2021 and one-to-one support was 0.1454. Their 97-instance gap again reflected merges. Reviewability increased with geometric multiplicity: 0.3059 for no qualified instance, 0.6818 for one, 0.8140 for two, and 1.0000 for three or more. Merged regions can be useful evidence. Set coverage remains an upper endpoint because the operators did not count independently recoverable plants.
 
-The qualitative atlas in Figure~\ref{fig:failures} shows four mechanisms selected deterministically from the 26 test tiles: fragmentation of one weed into two candidates, merger of five weeds into one candidate, a background component with no labelled support, and a crop--weed mixture. Each mechanism changes plant recovery without being fully described by a single candidate score.
+\subsection{Standard metrics and crossed uncertainty changed the model comparison}
 
-\begin{figure}[!t]
-\centering
-\includegraphics[width=\textwidth]{figures/Figure_4.pdf}
-\caption{Instance-support failure atlas from WeedsGalore test tiles. Coloured contours show proposal components and truth support. (a) One weed split into two fragments. (b) One candidate merged five weed instances. (c) A background-dominated component contained no labelled plant pixels. (d) A mixed component contained both crop and weed support. Selection rules and source identifiers are provided in the source-data table.}
-\label{fig:failures}
-\end{figure}
+Mask R-CNN had the highest one-to-one point estimate at $K=20$: $0.2159\pm0.0038$ across three seeds. U-Net reached $0.2027\pm0.0057$ across five seeds, and DeepLabV3+ reached $0.1924\pm0.0032$ across three. The crossed seed-by-image contrast was $+0.0132$ for Mask R-CNN versus U-Net. Its 95\% interval was $-0.0009$ to 0.0300. The familywise interval was $-0.0027$ to 0.0329. DeepLabV3+ minus U-Net was $-0.0103$, with a 95\% interval of $-0.0237$ to 0.0026. Neither contrast excluded zero.
 
-\subsection{Strong baselines changed the ordering of queue systems}
+The date-block plus seed interval was 0.0023 to 0.0341 for Mask R-CNN minus U-Net and $-0.0244$ to 0.0133 for DeepLabV3+ minus U-Net. These four-date intervals were more favourable to Mask R-CNN but remain conditional on the observed dates and limited seed counts. We therefore report Mask R-CNN as the highest point estimate, not as a statistically established winner.
 
-Under the same $K=20$ contract, Mask R-CNN achieved the highest one-to-one recall and candidate precision (Table~\ref{tab:strong}). Its mean one-to-one recall was 0.2159 across three seeds, compared with 0.2027 across five U-Net seeds. The paired image-bootstrap contrast was 0.0132 (95\% CI 0.0015--0.0284). DeepLabV3+ reached 0.1924; its contrast with U-Net was $-0.0103$ (95\% CI $-0.0216$ to $-0.0002$). Mask R-CNN simultaneously reduced many-to-one spatial recall relative to U-Net by 0.0254 (95\% CI $-0.0485$ to $-0.0015$), illustrating that candidate compactness and one-to-one separability favour different endpoints.
-
-Validation selected mean weed probability for four U-Net seeds and conditional weed probability for one. These simple semantic scores achieved one-to-one recall $0.2117\pm0.0047$ and precision $0.7440\pm0.0185$. Their queue recall was close to Mask R-CNN and above the default U-Net score. Predictive entropy was evaluated within the same candidate pool but was not selected. The internal comparison therefore supports explicit plant matching and model-family choice, rather than added feature complexity, as the main determinants of queue performance.
+Standard metrics on the same predictions also favoured Mask R-CNN (Table~\ref{tab:models}). Its mAP was 0.1064 and AP50 was 0.3189. U-Net reached 0.0853 and 0.2616, respectively. At the queue limit, Mask R-CNN reached AR20@50 of 0.1861 and a PQ-style score of 0.1936. The matching-contract grid was less uniform: Mask R-CNN ranked first in 21 of 27 contracts, while U-Net ranked first in six. U-Net led when instance coverage was 0.75 with labelled coverage of 0.25 or 0.50.
 
 \begin{table}[!t]
 \centering
-\caption{Fixed $K=20$ WeedsGalore queues. Values are mean $\pm$ sample SD across independently trained seeds. The probability row reorders the five U-Net component pools using validation-selected semantic scores.}
-\label{tab:strong}
+\caption{WeedsGalore instance metrics on the same predicted-weed regions. Each cell reports the seed mean with the sample SD in parentheses.}
+\label{tab:models}
 \footnotesize
-\setlength{\tabcolsep}{3pt}
-\resizebox{\textwidth}{!}{%
-\begin{tabular}{lrrrrrr}
+\setlength{\tabcolsep}{3.0pt}
+\begin{tabular}{lcccccc}
 \toprule
-System & Seeds & Precision & Spatial recall & Qualified recall & 1:1 recall & Crop-exposed tiles \\
+Model & Seeds & \shortstack{One-to-one\\$K=20$} & mAP & AP50 & AR100@50 & \shortstack{Queue\\AR20@50} \\
 \midrule
-ResNet-18 U-Net & 5 & $0.7168\pm0.0260$ & $0.2668\pm0.0211$ & $0.2468\pm0.0231$ & $0.2027\pm0.0057$ & $0.2462\pm0.0439$ \\
-DeepLabV3+--ResNet-50 & 3 & $0.6832\pm0.0042$ & $0.2710\pm0.0107$ & $0.2420\pm0.0094$ & $0.1924\pm0.0032$ & $0.2436\pm0.0222$ \\
-Mask R-CNN--ResNet-50-FPN & 3 & $\mathbf{0.7891\pm0.0142}$ & $0.2414\pm0.0041$ & $0.2259\pm0.0053$ & $\mathbf{0.2159\pm0.0038}$ & $0.2308\pm0.0769$ \\
-Validation-selected probability ranking & 5 & $0.7440\pm0.0185$ & $\mathbf{0.3391\pm0.0249}$ & $\mathbf{0.2873\pm0.0082}$ & $0.2117\pm0.0047$ & $0.2846\pm0.0516$ \\
+U-Net & 5 & \shortstack{$0.2027$\\$(0.0057)$} & \shortstack{$0.0853$\\$(0.0037)$} & \shortstack{$0.2616$\\$(0.0157)$} & \shortstack{$0.3412$\\$(0.0207)$} & \shortstack{$0.1672$\\$(0.0070)$} \\
+DeepLabV3+ & 3 & \shortstack{$0.1924$\\$(0.0032)$} & \shortstack{$0.0499$\\$(0.0026)$} & \shortstack{$0.1937$\\$(0.0060)$} & \shortstack{$0.2950$\\$(0.0081)$} & \shortstack{$0.1456$\\$(0.0045)$} \\
+Mask R-CNN & 3 & \shortstack{$0.2159$\\$(0.0038)$} & \shortstack{$0.1064$\\$(0.0082)$} & \shortstack{$0.3189$\\$(0.0248)$} & \shortstack{$0.3904$\\$(0.0266)$} & \shortstack{$0.1861$\\$(0.0079)$} \\
 \bottomrule
-\end{tabular}}
+\end{tabular}
 \end{table}
 
 \begin{figure}[!t]
 \centering
 \includegraphics[width=\textwidth]{figures/Figure_3.pdf}
-\caption{Strong-baseline comparison on the 26 WeedsGalore test tiles. (a) Candidate precision and (b) one-to-one role-qualified recall; bars show seed means and points show individual seeds. (c) Paired image-bootstrap contrasts with the ResNet-18 U-Net. (d) U-Net one-to-one recall by acquisition date, with tile and weed-instance denominators shown above each group.}
-\label{fig:strong}
+\caption{Model comparison on the 26 WeedsGalore test tiles. (a) Seed-level one-to-one support. (b) Crossed seed-by-image contrasts with U-Net. Thick lines show 95\% intervals; thin lines show Bonferroni-adjusted familywise 97.5\% intervals. (c) Standard metrics on identical predictions. (d) Best one-to-one model across 27 matching contracts.}
+\label{fig:models}
 \end{figure}
 
-Internal performance varied by acquisition date. The five U-Net seeds achieved mean one-to-one recall of 0.1378, 0.2864, 0.2061, and 0.1130 on 25 May, 30 May, 6 June, and 15 June, respectively. Corresponding precision was 0.4035, 0.8163, 0.9513, and 0.5650. The 15 June estimate represents only two tiles and 154 weed instances. Pooled performance therefore combines materially different date-specific conditions.
+Failure cases show why the endpoints diverge (Figure~\ref{fig:failures}). A split plant can occupy several reviews. A merged candidate can support several truth instances but create one record. Background regions and crop--weed mixtures consume capacity without satisfying the primary role contract.
 
-\subsection{Independent operators applied the review categories consistently}
-
-Both operators completed all 518 queued regions. They agreed on weed reviewability for 488 regions (0.9421), with Cohen's $\kappa=0.8930$ (Table~\ref{tab:operators}). The scene-cluster bootstrap interval was 0.9228--0.9611 for exact agreement and 0.8474--0.9249 for $\kappa$. Both marked 301 regions as reviewable weed evidence and 143 as not reviewable; 74 were disputed or included at least one uncertain response. Agreement exceeded 0.94 for primary content, crop presence, and localisation usability.
-
-Of the 301 consensus-reviewable regions, 249 also satisfied the mask-derived role-qualified weed contract (0.8272). Human reviewability and geometric mask qualification therefore overlapped strongly but were not equivalent: a reviewer can recognise useful weed evidence in a partial or mixed crop, while the offline contract applies fixed coverage and purity thresholds.
-
-\begin{table}[!t]
+\begin{figure}[!t]
 \centering
-\caption{Agreement between two independent operators on the frozen 518-region review queue.}
-\label{tab:operators}
-\small
-\begin{tabular}{lrr}
-\toprule
-Review field & Exact agreement & Cohen's $\kappa$ \\
-\midrule
-Primary content & 0.9479 & 0.9095 \\
-Weed reviewability & 0.9421 & 0.8930 \\
-Crop presence & 0.9459 & 0.8492 \\
-Localisation usability & 0.9402 & 0.9049 \\
-\bottomrule
-\end{tabular}
-\end{table}
+\includegraphics[width=0.96\textwidth]{figures/Figure_4.pdf}
+\caption{Representative proposal failures from the official WeedsGalore test split. (a) A weed split into two candidates. (b) One candidate covering five weed instances, with a local enlargement. (c) A background component. (d) A crop--weed mixture. Truth contours are used only for offline illustration.}
+\label{fig:failures}
+\end{figure}
 
-\subsection{Locked cross-dataset evaluation exposed complete threshold-transfer failure}
+\subsection{Operators agreed on categories, but human and geometric criteria differed}
 
-The CWFID lock was opened once after all 242 upstream blobs, five checkpoint hashes, and 60 RGB--annotation pairs passed audit. The primary truth definition yielded 331 weed components across 60 images. Every WeedsGalore-selected checkpoint classified all CWFID pixels as background at its frozen operating point. Consequently, all five seeds generated zero candidates, selected zero regions, and recovered zero weed components. One-to-one role-qualified recall was 0 with an image-bootstrap 95\% interval of 0--0. Weed and crop IoU were both 0; background IoU was 0.9450.
+Both operators completed all 518 regions. Weed-reviewability agreement was 0.9421, Cohen's $\kappa$ was 0.8930, and Gwet's AC1 was 0.9206. The scene-bootstrap interval for AC1 was 0.8918 to 0.9483. Primary content, crop presence, and localisation AC1 values were 0.9355, 0.9341, and 0.9243.
 
-The identical result across five checkpoints separates optimisation stability from acquisition transfer. The internal U-Net queue varied only from 0.1951 to 0.2097 in one-to-one recall, yet none of those validation-selected component thresholds transferred to CWFID. This outcome rules out a cross-dataset performance claim for the present queue and identifies component calibration as a prerequisite for deployment beyond the development dataset.
+Confidence matched exactly for 0.9440 of items. Linear weighted $\kappa$ was 0.9366 and quadratic weighted $\kappa$ was 0.9589. Mean confidence was 3.523 for one operator and 3.510 for the other. Both medians were 4, with interquartile ranges of 3--4. Among 445 determinate localisation pairs, exact agreement was 0.9955 and quadratic weighted $\kappa$ was 0.9966.
+
+The operators reached consensus that 301 regions were reviewable and 143 were not. Seventy-four were disputed or contained uncertainty. Mask qualification agreed with consensus reviewability on 249 positive and 76 negative regions. It produced 67 mask-positive/human-negative and 52 mask-negative/human-positive regions. Thirty-nine unresolved regions were mask-positive and 35 were mask-negative. Against human consensus, mask precision was 0.7014, recall was 0.8272, F1 was 0.7591, and Jaccard was 0.6118. Human reviewability and fixed geometry are related but non-equivalent evidence.
+
+\subsection{Locked CWFID transfer failed before queue formation}
+
+The locked primary CWFID evaluation contained 60 images and 331 weed-component proxies. Every U-Net checkpoint produced zero candidates at its frozen validation-selected threshold. Thus no queue item or component recovery was observed. The empirical all-zero bootstrap was degenerate and is not reported as a 0--0 population interval. For candidate occurrence across 60 images, the one-sided 95\% binomial reference upper bound was 0.0487. This bound is not a component-recall or farm-population guarantee.
+
+Post-lock diagnostics retained the frozen result and did not select an external threshold. Image-macro plant-pixel AUROC ranged from 0.3871 to 0.6374 across checkpoints. Pixel AP ranged from 0.0438 to 0.0715. These scores show weak and checkpoint-variable ranking. Calibration bins placed nearly all pixels below 0.05, while observed plant prevalence in the lowest bin was about 0.055.
+
+At diagnostic threshold 0.01, spatial recall ranged from 0.0363 to 1.0000. Role-qualified one-to-one support was nonzero for only one checkpoint and reached 0.0423. Some thresholds generated broad or mixed regions, including one checkpoint with spatial recall 1.0 but qualified recall 0. This pattern does not isolate a single failure mechanism. Threshold mismatch, role semantics, scale, viewpoint, crop type, and annotation proxies may all contribute.
 
 \begin{figure}[!t]
 \centering
 \includegraphics[width=\textwidth]{figures/Figure_5.pdf}
-\caption{Locked CWFID transfer without external tuning. (a) WeedsGalore fixed-queue one-to-one recall across five U-Net seeds. (b) CWFID candidate burden for the same checkpoints. (c) CWFID weed-component recovery. (d) CWFID semantic IoU. All 60 images and 331 weed components contributed to every external seed result.}
+\caption{Locked CWFID transfer and post-lock diagnostics. (a) Frozen checkpoints produced no candidates in any image; the one-sided reference bound concerns image-level candidate occurrence only. (b) Continuous plant-pixel AUROC and AP varied across checkpoints. (c) foreground scores remained below frozen validation thresholds. (d) At diagnostic threshold 0.01, spatial coverage could be high while role-qualified support remained absent or small.}
 \label{fig:external}
 \end{figure}
 
 \section{Discussion}
 
-Instance-support-aware evaluation changes how a crop--weed queue is judged. Candidate AUC described ordering inside a generated pool, whereas one-to-one recall measured whether distinct plants survived the full proposal-to-budget chain. The difference was substantial: the masked DINOv2 ranker reached candidate AUC 0.9665, yet recovered 0.1343 of weed instances under one-to-one matching. Direct target-trained models recovered approximately 0.19--0.22 under the same budget. Candidate scores and plant recovery are therefore related but non-interchangeable evidence levels.
+The evaluation contract reveals information that candidate discrimination and standard instance scores do not provide alone. AP, AR, and PQ-style diagnostics measure localisation, segmentation, ranking, and duplicate errors under established conventions. The finite-queue contract adds an explicit agricultural capacity and decomposes losses before and after that capacity. Set coverage and one-to-one support further separate merged capacity from duplicate capacity.
 
-The burden-matched commissioning analysis isolates a genuine proposal effect. Lowering the foreground threshold increased raw candidate burden almost threefold, but the commissioned pool still recovered more plants when both settings were restricted to 471 reviews. The gain was modest in absolute terms and accompanied by lower precision and greater crop exposure. Recall--burden curves provide a weight-free way to represent this trade-off without assigning an arbitrary utility to a recovered weed, an ambiguous region, or a crop overlap.
+The merge-aware analysis changes the interpretation of recovery. One-to-one support is appropriate when every reviewed region creates one QA record. It is a lower endpoint when an operator may extract several plant records from one region. Set coverage is an upper endpoint because geometric overlap does not prove that each plant is visually distinguishable. The observed gap of 105 weed instances quantifies the unresolved workflow range. It does not estimate human multi-plant recovery.
 
-Strong baselines refine the technical conclusion. Mask R-CNN provided the highest internal one-to-one recall and precision, while DeepLabV3+ did not improve on the smaller U-Net for the queue endpoint. A simple validation-selected semantic-probability score nearly matched Mask R-CNN. Frozen DINOv2 remained useful as a diagnostic ranker, but its small masking ablation and lower one-to-one recovery do not establish a need for an additional representation stage. The reusable contribution is the evaluation contract that exposes support, multiplicity, and review burden across model families.
+Proposal operating-point commissioning improved ranker-free spatial and role-qualified support. Its queued benefit depended on which proposal distribution trained the ranker. Commissioned-only and union training produced positive median effects, whereas original-only and reciprocal transfer reversed them. This result distinguishes a proposal ceiling from an achieved queue. A larger candidate pool can contain more recoverable support while remaining poorly ordered by a mismatched ranker.
 
-The two-operator study shows that the queue categories are interpretable in a concrete review setting. High agreement coexisted with a measurable difference between consensus reviewability and the mask-derived contract, supporting separate reporting of human decisions and geometric matching. The study records category consistency rather than operator-population performance or labour cost; review-time and area-normalised workload remain separate evaluation targets.
+The model comparison is similarly conditional. Mask R-CNN led most matching contracts and all reported standard metrics. Crossed uncertainty still included zero for its one-to-one contrast with U-Net. Only three Mask R-CNN seeds and five U-Net seeds were available. The four acquisition dates came from one field. These results support a model-ranking hypothesis for future evaluation, not a general population claim.
 
-The locked CWFID result defines the transfer boundary directly. Five internally stable checkpoints produced the same all-background outcome on a different crop, camera geometry, image scale, and acquisition distribution. Because no external label changed a threshold, the result measures the frozen system rather than a retuned variant. Cross-dataset calibration or unsupervised operating-point adaptation is therefore a separate technical problem. It cannot be inferred from seed stability within one field.
+The two-operator study establishes that the review categories can be applied consistently by these two operators. It does not establish operator-population performance, plant-count recovery, review speed, or labour economics. Disputed and uncertain regions would enter the escalation branch of the workflow. The human--mask Jaccard index of 0.6118 also shows why geometric qualification should remain an offline measurement rather than a surrogate for human usefulness.
 
-The intended queue supports offline image quality assurance and annotation triage. A region can be retained, rejected, or escalated, and the finite budget makes omissions auditable. The current evidence does not measure operator time or agronomic treatment value, so $K=20$ should be read as a controlled capacity unit. WeedsGalore supplies multitemporal internal evidence from one maize field; CWFID supplies an independently acquired carrot-field stress test but uses connected components rather than persistent plant identities. Evaluation across additional farms, seasons, sensors, and reviewer workflows is needed to relate plant recovery to operational cost.
+The CWFID experiment defines a clear transfer boundary. The frozen system failed before queue construction. Continuous diagnostics found some ranking signal in selected checkpoints but weak AP and unstable threshold behaviour. The evidence cannot assign the failure solely to calibration. External evaluation covered U-Net because those five checkpoints and their thresholds were fixed before CWFID opening. Mask R-CNN and semantic reordering were developed after official-test access and were not inserted retrospectively into the locked protocol.
+
+The contract can enter an executable annotation-QA workflow. A team first fixes a candidate source, role criterion, review budget, and escalation rule. It then measures proposal ceilings, achieved set and one-to-one support, crop exposure, and standard AP/AR. Ranker-source and contract grids identify fragile improvements. A separately locked acquisition tests whether the queue still forms. Timing, plant-count extraction, and cost can be added as independent workflow endpoints when collected.
+
+\subsection{Limitations}
+
+WeedsGalore supplies one field and four acquisition dates. Capture groups do not identify independent plots. All post-test WeedsGalore extensions are exploratory engineering audits. Image and date-block intervals do not support farm-level inference. CWFID differs in crop, sensor geometry, scale, and annotation contract, and its components are plant proxies. The operator study involved two fixed individuals and omitted timing and recoverable-plant counts. The $K=20$ capacity is experimental rather than economically optimised. Public weights and datasets support computational replay, but full retraining requires the upstream data and model assets listed in the archive.
 
 \section{Conclusion}
 
-This study establishes an instance-support-aware evaluation for finite crop--weed review queues. Matched-burden analysis showed that proposal commissioning increased recoverable plant support, strong baselines identified Mask R-CNN and simple semantic-probability ordering as effective internal systems, and independent operators applied the review categories consistently. The locked CWFID test then exposed complete failure of the transferred component thresholds. Separating spatial support, role qualification, one-to-one matching, human reviewability, and review capacity makes both internal improvements and cross-dataset failures visible before a queue is assigned operational meaning.
+Bounded instance-support evaluation connects crop--weed predictions to a finite offline review queue. Spatial and role-qualified proposal support locate formation losses. Set coverage and one-to-one matching bound the effect of merges under a one-record workflow. Contract and ranker grids expose conditional improvements, while crossed uncertainty prevents seed variation from being hidden. Standard instance metrics remain complementary. The locked external test shows that an internally stable model may fail before producing any review item. Together, these components form an auditable quality-assurance protocol for comparing agricultural vision queues without assigning them unmeasured deployment value.
 
 \section*{Data availability}
-SugarBeets2016, WeedsGalore, and CWFID are public datasets available from their cited official sources. The reproducibility archive records source URLs, access dates, release identifiers, licence information, exact source revisions, and integrity hashes. Public imagery remains with the original repositories. Derived source-data tables, result manifests, and verification hashes accompany the code release.
+SugarBeets2016, WeedsGalore, and CWFID are public datasets available from their cited sources. The reproducibility release records source URLs, access dates, release identifiers, licence information, versions, and integrity hashes. Public imagery remains with its original repositories. Derived aggregate tables, matching outputs, and verification manifests accompany the code release.
 
 \section*{Code availability}
-The versioned reproducibility materials are maintained at \url{https://github.com/Fytap/agrispec-vlm-reproducibility}. The release contains frozen configurations, environment specifications, model acquisition records, training and evaluation source, archived predictions and matching outputs, source tables for every figure, failure records, and clean-room replay commands. Public dataset imagery and public model weights remain at their upstream sources.
+Versioned reproducibility materials are maintained at \url{https://github.com/Fytap/agrispec-vlm-reproducibility}. The compact verifier replays archived tables, figures, and numerical invariants. It does not retrain every model from raw imagery. Full end-to-end reproduction uses the supplied training and evaluation scripts, public data instructions, environment specification, checkpoint hashes, and model acquisition records. Failed runs and their causes are preserved.
 
 \section*{Declaration of Generative AI and AI-Assisted Technologies in the Manuscript Preparation Process}
 During the preparation of this work, the authors used OpenAI Codex for code review, reproducibility checks, and language editing, including checks of sentence clarity, grammar, and wording. The authors reviewed and edited all affected content and take full responsibility for the content of the publication.
 
 \section*{Ethics declaration}
-This study analysed public agricultural image datasets. Two operators performed technical quality assurance on model-generated agricultural image regions; no personal, sensitive, demographic, or behavioural data were collected, and no operator identity is reported. This annotation and software-quality activity did not constitute human-subject research and did not require formal ethical approval. No animals were involved.
+This study analysed public agricultural images. Two operators performed technical quality assurance on model-generated agricultural regions. No personal, sensitive, demographic, or behavioural information was collected or reported. The activity did not involve patients, animals, clinical intervention, or collection of human-subject data. Formal ethical approval was not required.
 
 \section*{Declaration of competing interest}
 Zhi Ling, Yu Yan, and Ziyi Kuang report an affiliation with Kiwiar Co., Ltd. No proprietary dataset or commercial product was evaluated in this study.
@@ -319,7 +318,7 @@ Zhi Ling, Yu Yan, and Ziyi Kuang report an affiliation with Kiwiar Co., Ltd. No 
 \fi
 
 \setlength{\bibsep}{0pt}
-\small
+\footnotesize
 \bibliographystyle{elsarticle-num}
 \bibliography{references}
 

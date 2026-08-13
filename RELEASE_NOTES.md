@@ -1,21 +1,31 @@
-# v1.2.1 — Instance-support-aware queue evaluation
+# v1.3.0 -- Bounded instance-support evaluation
 
-This release accompanies *From Candidate Scores to Plant Recovery in Finite Crop--Weed Review Queues*.
+This release accompanies *Bounded Instance-Support Evaluation for Finite
+Crop--Weed Review Queues*.
 
 It includes:
 
-- the manuscript, supplement, cover letter, highlights, and self-contained LaTeX source;
-- Figures 1--5 in vector PDF, editable SVG, high-resolution TIFF, and PNG formats;
-- matched-burden commissioning at paired per-image capacity and global equal candidate count;
-- recall--burden curves, per-image distributions, and 10,000-replicate image-cluster intervals;
-- five U-Net seeds and three seeds each for DeepLabV3+ and Mask R-CNN, with checkpoint hashes and validation-selected policies;
-- semantic probability and entropy ranking diagnostics under the same fixed $K=20$ contract;
-- a separately frozen 60-image CWFID transfer test with all 242 upstream blobs verified;
-- the preserved zero-candidate external result and its non-destructive post-failure consolidation;
-- aggregate two-operator agreement for 518 queued regions, without identities or item-level responses;
-- frozen configurations, environment records, source-data tables, failure records, and SHA-256 manifests;
-- a standard-library verifier covering 79 versioned public evidence files and the registered numerical invariants.
+- a 27-contract sensitivity grid crossing instance coverage, candidate
+  labelled coverage, and same-role purity;
+- commissioned-only, original-only, union, and reciprocal ranker-source
+  schemes at an equal 471-candidate test burden;
+- ranker-free proposal ceilings, per-tile queue oracles, set coverage, maximum
+  matching, and merge-capacity accounting;
+- five U-Net seeds and three seeds each for DeepLabV3+ and Mask R-CNN, with
+  crossed seed-by-image uncertainty and date-block sensitivity;
+- COCO-style AP/AR and explicitly labelled queue-specific PQ-style diagnostics
+  on the same predicted-weed regions;
+- aggregate two-operator nominal and ordered agreement, confidence summaries,
+  full contingencies, and human--mask precision, recall, F1, and Jaccard;
+- the unchanged locked 60-image CWFID zero-candidate endpoint plus continuous
+  post-lock score diagnostics;
+- Figures 1--5 in PDF, SVG, TIFF, and PNG formats with source-data and
+  text-bound audits;
+- a rewritten manuscript, supplement, cover letter, and highlights; and
+- a standard-library verifier for the v1.3.0 evidence layer.
 
-The verifier canonicalises line endings for registered text artifacts so that GitHub source archives and Windows checkouts reproduce the same manifest. Binary artifacts remain byte-exact. Scientific results and manuscript content are unchanged from v1.2.0.
-
-The release does not redistribute source imagery, dataset masks, public model weights, private infrastructure records, credentials, internal addresses, operator identities, or item-level operator responses. Re-extraction and training require the cited public datasets and public weights.
+Two superseded standard-metric attempts remain in `failures/`. The release does
+not redistribute source imagery, dataset masks, public model weights, private
+infrastructure records, credentials, internal addresses, operator identities,
+or item-level operator responses. Full model training requires the cited
+public datasets and registered upstream weights.

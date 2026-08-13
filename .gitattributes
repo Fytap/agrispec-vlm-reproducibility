@@ -4,3 +4,4 @@
 *.tif binary
 *.tiff binary
 *.zip binary
+*.tsv -whitespace

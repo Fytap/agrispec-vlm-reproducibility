@@ -1,0 +1,146 @@
+{
+  "run_id": "P2_WEEDSGALORE_COMMISSIONING_RANKER_CONTRACT_SENSITIVITY_20260813_v1",
+  "status": "completed_post_test_ranker_and_contract_sensitivity",
+  "analysis_class": "post_test_exploratory_sensitivity_analysis",
+  "ranker_schemes": [
+    "commissioned_only_shared",
+    "original_only_shared",
+    "union_shared",
+    "reciprocal_cross_pool"
+  ],
+  "contract_grid": {
+    "instance_coverage": [
+      0.25,
+      0.5,
+      0.75
+    ],
+    "candidate_labeled_coverage": [
+      0.25,
+      0.5,
+      0.75
+    ],
+    "same_role_purity": [
+      0.5,
+      0.75,
+      0.9
+    ]
+  },
+  "ranker_training_audit": {
+    "original_only": {
+      "selected_C": 0.1,
+      "sensitivity": [
+        {
+          "C": 0.001,
+          "validation_auc": 0.8340266452914675,
+          "validation_ap": 0.757772779783074
+        },
+        {
+          "C": 0.01,
+          "validation_auc": 0.8460432847784626,
+          "validation_ap": 0.7784546502715209
+        },
+        {
+          "C": 0.1,
+          "validation_auc": 0.8485309157245916,
+          "validation_ap": 0.7806766301121144
+        },
+        {
+          "C": 1.0,
+          "validation_auc": 0.8482268719422869,
+          "validation_ap": 0.7785285843847617
+        },
+        {
+          "C": 10.0,
+          "validation_auc": 0.8465166256668233,
+          "validation_ap": 0.7759675934650012
+        },
+        {
+          "C": 100.0,
+          "validation_auc": 0.8457046905663507,
+          "validation_ap": 0.7750341614340774
+        }
+      ],
+      "rows": 5713
+    },
+    "commissioned_only": {
+      "selected_C": 100.0,
+      "sensitivity": [
+        {
+          "C": 0.001,
+          "validation_auc": 0.9159994567819485,
+          "validation_ap": 0.7270276306674313
+        },
+        {
+          "C": 0.01,
+          "validation_auc": 0.9219490822291369,
+          "validation_ap": 0.7491577555860405
+        },
+        {
+          "C": 0.1,
+          "validation_auc": 0.923649116824593,
+          "validation_ap": 0.7549683128197175
+        },
+        {
+          "C": 1.0,
+          "validation_auc": 0.9270749591347369,
+          "validation_ap": 0.7594472328728746
+        },
+        {
+          "C": 10.0,
+          "validation_auc": 0.9299328015479732,
+          "validation_ap": 0.7614151582854921
+        },
+        {
+          "C": 100.0,
+          "validation_auc": 0.9305354960284615,
+          "validation_ap": 0.7617313448609583
+        }
+      ],
+      "rows": 14674
+    },
+    "union": {
+      "selected_C": 100.0,
+      "sensitivity": [
+        {
+          "C": 0.001,
+          "validation_auc": 0.8746038032523304,
+          "validation_ap": 0.6823973315390132
+        },
+        {
+          "C": 0.01,
+          "validation_auc": 0.8805074943893062,
+          "validation_ap": 0.6950087965250359
+        },
+        {
+          "C": 0.1,
+          "validation_auc": 0.8825878351884583,
+          "validation_ap": 0.6970891318665386
+        },
+        {
+          "C": 1.0,
+          "validation_auc": 0.8868115693588147,
+          "validation_ap": 0.6951689602617839
+        },
+        {
+          "C": 10.0,
+          "validation_auc": 0.8886412761840583,
+          "validation_ap": 0.6910209895448783
+        },
+        {
+          "C": 100.0,
+          "validation_auc": 0.8887583175209305,
+          "validation_ap": 0.6901247165622225
+        }
+      ],
+      "rows": 20387
+    }
+  },
+  "truth_use": "training_and_validation_labels_for_ranker_fit; official_test_labels_for_offline_scoring_only",
+  "input_hashes": {
+    "archive": "5d8395c274d990cd8fbfa728445f65c398be2b5d777bd5145eb9ae5ca4d9b68c",
+    "manifest": "3a577a747934069d2f50f6d5732cea019b554d557c98a01e796b000ea4f2085e",
+    "original_candidates": "e4474f3c469b153b3a79c731f00cf11d723fa0eae760ab162d02f734b0773c28",
+    "commissioned_candidates": "be90fff3d380b6ca7e968e0652f5beff17905ff016a2f96da0ea6331a3f99a88",
+    "script": "031d076acee24f24ff0c803960dbb5f70f771f25a5a58d6a19683ea8594826aa"
+  }
+}

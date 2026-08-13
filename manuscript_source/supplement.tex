@@ -13,6 +13,9 @@
 \usepackage[hidelinks]{hyperref}
 \newcolumntype{L}[1]{>{\raggedright\arraybackslash}p{#1}}
 \setlength{\emergencystretch}{3em}
+\makeatletter
+\setlength{\@fptop}{0pt}
+\makeatother
 \setcounter{secnumdepth}{0}
 \setcounter{topnumber}{5}
 \setcounter{bottomnumber}{5}
@@ -27,7 +30,7 @@
 \begin{document}
 \raggedbottom
 \begin{frontmatter}
-\title{Supplementary material: From Candidate Scores to Plant Recovery in Finite Crop--Weed Review Queues}
+\title{Supplementary material: Bounded Instance-Support Evaluation for Finite Crop--Weed Review Queues}
 \ifAuthorMetadataReady
 \AuthorFrontmatter
 \else
@@ -35,42 +38,44 @@
 \fi
 \end{frontmatter}
 
-\section{S1. Analysis chronology and truth-access governance}
+\section{S1. Evidence chronology and truth-access governance}
 
-WeedsGalore and CWFID serve different evidential roles. WeedsGalore supports internal development on its official train, validation, and test split. Several extended WeedsGalore analyses were conducted after the initial official-test archive existed and are interpreted as within-dataset engineering analyses. CWFID was separately frozen and opened once, without external fitting, threshold selection, or policy search. Table~S1 records this chronology. Test truth was unavailable to every queue-forming stage and entered only the offline scorer.
+WeedsGalore and CWFID have different evidential roles. WeedsGalore supports development and post-test engineering audits on its official train, validation, and test split. CWFID supports one separately locked transfer. Table~S1 makes the chronology explicit. Test truth was unavailable to queue-forming stages and entered only offline scoring.
 
 \begin{table}[htbp]
 \centering
-\caption{Chronology and data roles. Times are local time (UTC+08:00) where an electronic freeze or open receipt exists.}
+\caption{Evidence chronology and analysis class. Recorded electronic times use UTC+08:00.}
 \label{tab:s1chronology}
 \footnotesize
-\begin{tabularx}{\textwidth}{L{3.2cm}L{2.7cm}L{3.2cm}X}
+\begin{tabularx}{\textwidth}{L{3.0cm}L{2.4cm}L{3.5cm}X}
 \toprule
-Event & Recorded time & Analysis role & Truth access \\
+Event & Recorded time & Analysis class & Truth access \\
 \midrule
-Core WeedsGalore archive & Earlier archived analysis & Internal development and official-split scoring & Train for fitting; validation for selection; test for offline scoring \\
-Target-semantic and queue extensions & 10--12 Aug 2026 & Within-dataset engineering analysis & Validation selected epochs and policies; test remained scoring-only \\
-CWFID protocol freeze & 12 Aug 2026, 18:46:11 & Locked cross-dataset design & Public metadata only; images and annotations unopened \\
-Strong-baseline freeze & 12 Aug 2026, 18:58:00 & Model-family extension with validation-only selection & No CWFID image or annotation access \\
-Matched-burden freeze & 12 Aug 2026, 19:08--19:17 & Paired image-level audit & Existing test outputs only; no fitting on test truth \\
-CWFID opening & 12 Aug 2026, 19:54:27 & Single locked external evaluation & Annotations used only after all model outputs were fixed \\
-Two-operator review & 12 Aug 2026 & Technical review of one frozen queue & Operators saw RGB views only; mask truth and model metadata were hidden \\
+WeedsGalore U-Net protocol & Earlier frozen archive & Initial official-split analysis & Train for fitting; validation for selection; test for scoring \\
+Target-semantic seed runs & 10--12 Aug 2026 & Post-test engineering audit & Validation selected checkpoints; test scoring only \\
+CWFID protocol freeze & 12 Aug 2026, 18:46:11 & Locked external design & Public metadata only \\
+Strong-model configuration & 12 Aug 2026, 18:58:00 & Post-test model-family audit & WeedsGalore validation selection; no CWFID access \\
+Matched-burden configuration & 12 Aug 2026, 19:08--19:17 & Post-test proposal audit & Existing test outputs; no fitting on test truth \\
+CWFID opening & 12 Aug 2026, 19:54:27 & Frozen external execution & Annotations used after model outputs were fixed \\
+Operator review & 12 Aug 2026 & Post-test technical-review audit & RGB views only; mask truth and scores hidden \\
+Contract, merge, and uncertainty analyses & 13 Aug 2026 & Post-test exploratory diagnostics & Immutable predictions and offline matches \\
+CWFID continuous-score analysis & 13 Aug 2026 & Post-lock exploratory diagnostic & Frozen result unchanged; no external selection \\
 \bottomrule
 \end{tabularx}
 \end{table}
 
-The CWFID receipt records one opening against a maximum of one. The external protocol, dataset contract, model list, preprocessing, component definition, matching thresholds, fixed $K=20$, ranking rule, endpoints, and 10,000-replicate image bootstrap were fixed before that opening. The later zero-candidate consolidation read only the already written per-image tables and did not reopen images or annotations.
+The CWFID receipt records one opening against a maximum of one. The model list, preprocessing, component definition, fixed $K=20$, ranking rule, and endpoints were frozen first. The later continuous analysis read the same images and already selected checkpoints after the locked result existed. It did not alter the primary result.
 
-\section{S2. Public-data lineage, split denominators, and annotation audit}
+\section{S2. Public-data lineage and denominators}
 
-All imagery used in the reported experiments is public. SugarBeets2016 supplied source-specialist masks; WeedsGalore supplied the internal development study; CWFID supplied the locked cross-dataset test. Public images and public model weights remain at their upstream repositories. The reproducibility release records source URLs, access dates, licences, revisions, byte counts, and hashes.
+All reported imagery is public. SugarBeets2016 supplied source-specialist masks. WeedsGalore supplied internal development data. CWFID supplied the locked transfer set. Public images and public weights remain at upstream repositories. The release records source links, access dates, licences, versions, byte counts, and hashes.
 
 \begin{table}[htbp]
 \centering
-\caption{Official WeedsGalore split by acquisition date. Instance counts are obtained by enumerating the released rasters.}
+\caption{Official WeedsGalore split by acquisition date. Instance counts were enumerated from released rasters.}
 \label{tab:s2split}
 \small
-\resizebox{\textwidth}{!}{%
+\setlength{\tabcolsep}{5pt}
 \begin{tabular}{lrrrrr}
 \toprule
 Date & Train tiles & Validation tiles & Test tiles & Test crop & Test weed \\
@@ -82,74 +87,74 @@ Date & Train tiles & Validation tiles & Test tiles & Test crop & Test weed \\
 \midrule
 Total & 104 & 26 & 26 & 256 & 1,712 \\
 \bottomrule
-\end{tabular}}
+\end{tabular}
 \end{table}
 
-The public release describes one maize field, 48 recorded locations, and an 8/2/2 spatial allocation. The machine-readable release provides official split labels and capture indices, but not a verified mapping from each capture index to an independently sampled physical field unit. We therefore retain the official split and acquisition dates and do not treat capture-index groups as independent farms. Across all 156 rasters, enumeration yielded 2,168 crop and 10,029 weed instances. The annotation audit found no role disagreement between semantic and instance rasters and no excluded tile identifier.
+The WeedsGalore release describes one maize field, 48 recorded locations, and an 8/2/2 spatial allocation. It provides capture indices but no verified mapping to independent field units. Capture indices were not treated as farms. Across all 156 rasters, enumeration yielded 2,168 crop and 10,029 weed instances. Semantic and instance rasters agreed on role labels for every enumerated instance.
 
-CWFID v1.0 was fixed at upstream commit \nolinkurl{176612f3506c0ce70d85518cb82ddd938a6206c8}. All 242 expected upstream blobs passed byte-count and Git-blob SHA-1 verification. The 60 RGB--annotation pairs passed dimension, colour-semantics, and pairing audits. After the frozen resize and padding transformation, the primary truth rule produced 331 weed components of at least 16 pixels. These connected components are evaluation proxies; they are not persistent plant identifiers.
+CWFID was fixed at upstream commit \nolinkurl{176612f3506c0ce70d85518cb82ddd938a6206c8}. All 242 expected blobs passed byte-count and Git-blob SHA-1 checks. Sixty RGB--annotation pairs passed pairing, dimension, and colour-semantics audits. The frozen transformation produced 331 weed components of at least 16 pixels. These connected components are evaluation proxies rather than persistent plant identifiers.
 
 \section{S3. Supervision ledger and model construction}
 
 \begin{table}[htbp]
 \centering
-\caption{Complete supervision ledger. ``Read by selection'' distinguishes labels present in a public dataset from labels actually used to choose an operating point.}
+\caption{Complete supervision ledger. ``Selection access'' identifies labels used to choose an operating point.}
 \label{tab:s3ledger}
 \footnotesize
 \begin{tabularx}{\textwidth}{L{3.0cm}L{2.5cm}L{3.5cm}X}
 \toprule
-Information & Available amount & Read by selection & Purpose \\
+Information & Available amount & Selection access & Purpose \\
 \midrule
-SugarBeets pixel masks & 7,050 train; 901 validation & Source training and source diagnostics & Foreground and crop--weed specialists \\
-WeedsGalore train masks & 104 tiles & Proposal setting and target-model fitting & Dense loss, component generation, candidate labels \\
-WeedsGalore validation masks & 26 tiles & Epoch, component, regularisation, and ranking-policy selection & Model and queue selection \\
-WeedsGalore test masks & 26 tiles & None & Offline proposal, queue, IoU, matching, and crop-overlap scoring \\
-Restricted candidate-label experiment & 300 sampled train candidates per draw & All 2,436 labelled validation candidates remain available & Training-label acquisition comparison, not end-to-end 300-label learning \\
-CWFID annotations & 60 images & None & Single locked external score \\
-Operator responses & 518 regions per operator & None & Agreement and reviewability analysis; no model update \\
+SugarBeets pixel masks & 7,050 train; 901 validation & Source fitting and diagnostics & Foreground and role specialists \\
+WeedsGalore training masks & 104 tiles & Proposal commissioning and model fitting & Dense loss, components, candidate labels \\
+WeedsGalore validation masks & 26 tiles & Epoch, threshold, area, regularisation, rank policy & Model and queue selection \\
+WeedsGalore test masks & 26 tiles & None & Offline proposal, matching, IoU, and exposure scores \\
+Restricted candidate draw & 300 training candidates per draw & All 2,436 validation candidates retained & Restricted training reveal, not a 300-label pipeline \\
+CWFID annotations & 60 images & None & One locked score and post-lock diagnostics \\
+Operator responses & 518 regions per operator & None & Agreement and human--mask comparison \\
 \bottomrule
 \end{tabularx}
 \end{table}
 
-The source foreground and semantic specialists were ResNet-18 U-Net models initialised from public ImageNet-1K weights. They used ImageNet RGB normalisation, AdamW, bfloat16 autocasting, gradient clipping at 5, and deterministic $128\times128$ patches. The foreground model used 32,768 patches, binary cross-entropy with positive weight 30 plus soft Dice, and 10 epochs. The semantic model used 16,384 role-balanced patches, weighted cross-entropy with weights $(0.2,1,1)$ plus plant-role Dice, and 8 epochs. On the 901-image source diagnostic split, the foreground scan reached maximum pixel IoU 0.3821 at threshold 0.99. The semantic specialist reached three-class mean IoU 0.4425; its independently selected role operating point had balanced accuracy 0.7224, crop recall 0.5524, and weed recall 0.8924.
+The source foreground and role specialists were ResNet-18 U-Net models initialised from ImageNet-1K weights. Both used ImageNet normalisation, AdamW, bfloat16 autocasting, gradient clipping at 5, and deterministic $128\times128$ patches. The foreground model used 32,768 patches, binary cross-entropy with positive weight 30 plus soft Dice, and 10 epochs. The role model used 16,384 role-balanced patches, weighted cross-entropy with weights $(0.2,1,1)$ plus plant-role Dice, and 8 epochs.
 
 \begin{table}[htbp]
 \centering
 \caption{Target-trained model recipes. Public initialisation weights were stored by hash before training.}
 \label{tab:s3models}
 \footnotesize
-\begin{tabularx}{\textwidth}{L{2.7cm}L{2.1cm}X L{2.8cm}X}
+\begin{tabularx}{\textwidth}{L{2.8cm}L{2.1cm}X L{2.8cm}X}
 \toprule
 Model & Initialisation & Loss & Training & Validation selection \\
 \midrule
 ResNet-18 U-Net & ImageNet-1K & weighted CE + crop/weed Dice & AdamW, $3\!\times\!10^{-4}$; 40 epochs; 5 seeds & epoch, threshold, area, rank score \\
 DeepLabV3+--ResNet-50 & ImageNet-1K & weighted CE + crop/weed Dice & AdamW, $3\!\times\!10^{-4}$; 30 epochs; 3 seeds & epoch, threshold, area \\
-Mask R-CNN--\linebreak ResNet-50-FPN & COCO V1 & standard detection/mask losses & SGD, $5\!\times\!10^{-3}$; 20 epochs; 3 seeds & epoch \\
+Mask R-CNN--ResNet-50-FPN & COCO V1 & standard detection and mask losses & SGD, $5\!\times\!10^{-3}$; 20 epochs; 3 seeds & epoch \\
 \bottomrule
 \end{tabularx}
 \end{table}
 
-Semantic models trained on random $512\times512$ crops and were evaluated at $600\times600$. Weight decay was $10^{-4}$. Candidate thresholds were $0.30$, $0.50$, and $0.70$; component areas were 16, 32, and 64 pixels. Mask R-CNN used a 600-pixel minimum and maximum side, mask threshold 0.50, detection-score floor 0.05, momentum 0.9, and weight decay $5\times10^{-4}$. Its queue placed predicted weed instances before other detections and then sorted by detection confidence.
+Semantic models trained on random $512\times512$ crops and were evaluated at $600\times600$. Weight decay was $10^{-4}$. Candidate thresholds were 0.30, 0.50, and 0.70. Component areas were 16, 32, and 64 pixels. Mask R-CNN used a 600-pixel minimum and maximum side, mask threshold 0.50, detection-score floor 0.05, momentum 0.9, and weight decay $5\times10^{-4}$.
 
-\section{S4. Proposal definitions, operating-point selection, and matching sensitivity}
+\section{S4. Matching contracts, proposal selection, and crop exposure}
 
-For truth instance $I$, candidate $C$, all labelled plant pixels $L$, and pixels of agricultural role $R$, the offline scorer records
+For truth instance $I$, candidate $C$, all labelled plant pixels $L$, and pixels of role $R$, the offline scorer records
 \[
 q_I=\frac{|I\cap C|}{|I|},\qquad
 q_L=\frac{|C\cap L|}{|C|},\qquad
 q_R=\frac{|C\cap R|}{|C\cap L|}.
 \]
-Spatial support requires $q_I\ge0.50$. Role-qualified support additionally requires $q_L\ge0.50$, $q_R\ge0.90$, and a role match. One-to-one recovery uses a maximum-cardinality bipartite matching over eligible candidate--instance edges. Candidate identifiers and then truth identifiers define the deterministic lexicographic tie order.
+The primary role-qualified edge requires $q_I\ge0.50$, $q_L\ge0.50$, $q_R\ge0.90$, and a role match. The 27-contract grid crosses $q_I\in\{0.25,0.50,0.75\}$, $q_L\in\{0.25,0.50,0.75\}$, and $q_R\in\{0.50,0.75,0.90\}$.
 
 \begin{table}[htbp]
 \centering
-\caption{Official-training proposal grid. Feasible settings have mean burden no greater than 100 candidates per tile.}
+\caption{Proposal operating-point grid on the official training split. Feasible settings have at most 100 candidates per tile on average.}
 \label{tab:s4grid}
-\small
-\resizebox{\textwidth}{!}{%
+\footnotesize
+\setlength{\tabcolsep}{4pt}
 \begin{tabular}{lrrrr}
 \toprule
-Threshold / minimum area (px) & Candidates/tile & Spatial weed recall & Qualified weed recall & Feasible \\
+Threshold / area (px) & Candidates/tile & Spatial recall & Qualified recall & Feasible \\
 \midrule
 0.30 / 8 & 281.35 & 0.7135 & 0.2406 & No \\
 0.30 / 32 & 142.04 & 0.7000 & 0.2297 & No \\
@@ -164,46 +169,19 @@ Threshold / minimum area (px) & Candidates/tile & Spatial weed recall & Qualifie
 0.95 / 8 & 75.71 & 0.2452 & 0.1685 & Yes \\
 0.95 / 32 & 36.83 & 0.2366 & 0.1605 & Yes \\
 \bottomrule
-\end{tabular}}
+\end{tabular}
 \end{table}
 
-The selected proposal setting was threshold 0.70 and area 32. The deterministic order was higher training qualified recall, lower mean burden, higher threshold, and larger minimum area. The original comparison setting was threshold 0.95 and area 32.
+The deterministic selection order was higher training qualified recall, lower mean burden, higher threshold, and larger area. The selected setting was 0.70/32. The original setting was 0.95/32. The burden cap of 100 limited candidate extraction and feature computation. The downstream $K=20$ limit represented a separate review-capacity experiment.
 
 \begin{table}[htbp]
 \centering
-\caption{Official-test proposal layers by date. Recall numerators count weed instances.}
-\label{tab:s4dateproposal}
-\scriptsize
-\resizebox{\textwidth}{!}{%
-\begin{tabular}{llrrrr}
-\toprule
-Date & Setting & Weed $n$ & Spatial support & Qualified support & Candidates/tile \\
-\midrule
-25 May & Original & 392 & 2 (0.0051) & 2 (0.0051) & 13.88 \\
-25 May & Commissioned & 392 & 51 (0.1301) & 13 (0.0332) & 102.75 \\
-30 May & Original & 440 & 106 (0.2409) & 84 (0.1909) & 35.75 \\
-30 May & Commissioned & 440 & 263 (0.5977) & 121 (0.2750) & 119.38 \\
-6 June & Original & 726 & 328 (0.4518) & 237 (0.3264) & 45.13 \\
-6 June & Commissioned & 726 & 566 (0.7796) & 369 (0.5083) & 64.63 \\
-15 June & Original & 154 & 73 (0.4740) & 7 (0.0455) & 22.00 \\
-15 June & Commissioned & 154 & 98 (0.6364) & 15 (0.0974) & 28.50 \\
-\midrule
-Pooled & Original & 1,712 & 509 (0.2973) & 330 (0.1928) & 30.85 \\
-Pooled & Commissioned & 1,712 & 978 (0.5713) & 518 (0.3026) & 90.42 \\
-\bottomrule
-\end{tabular}}
-\end{table}
-
-Raw candidate composition changed from 453 weed-qualified, 148 crop-qualified, and 201 ambiguous candidates (802 total) to 464, 111, and 1,776 (2,351 total). The original burden had median 28.5, interquartile range 19.25--43.75, maximum 62, and seven tiles with fewer than 20 candidates. The commissioned burden had median 89, interquartile range 60--114.25, maximum 183, and no tile with fewer than 20 candidates.
-
-\begin{table}[htbp]
-\centering
-\caption{Split/merge sensitivity across all 156 WeedsGalore tiles. A merge is a candidate overlapping at least two truth instances at the listed instance-coverage threshold.}
+\caption{Split and merge sensitivity across 156 WeedsGalore tiles. A merge overlaps at least two instances at the listed coverage threshold.}
 \label{tab:s4splitmerge}
 \small
 \begin{tabular}{lrrr}
 \toprule
-Setting & Coverage threshold & Split instances & Merge candidates \\
+Setting & Instance coverage & Split instances & Merge candidates \\
 \midrule
 Original & 0.10 & 224 & 735 \\
 Original & 0.25 & 40 & 640 \\
@@ -215,140 +193,136 @@ Commissioned & 0.50 & 0 & 938 \\
 \end{tabular}
 \end{table}
 
-The complete matching-contract grid crosses instance coverage $\{0.25,0.50,0.75\}$, candidate labelled coverage $\{0.25,0.50,0.75\}$, and same-role purity $\{0.50,0.75,0.90\}$. For the masked-DINOv2 $K=20$ queue, many-to-one qualified recall ranges from 0.0485 to 0.2886 and one-to-one recall from 0.0374 to 0.1881. At the primary 0.50/0.50/0.90 contract, these are 319/1,712 (0.1863) and 230/1,712 (0.1343). Under IoU-only matching at thresholds 0.25/0.50/0.75, many-to-one recall is 325/1,712, 163/1,712, and 24/1,712; one-to-one recall is 307/1,712, 163/1,712, and 24/1,712.
+\begin{table}[htbp]
+\centering
+\caption{Crop-exposed tile frequency for the three target-trained model families at $K=20$. Values are mean $\pm$ sample SD across seeds.}
+\label{tab:s4cropmodels}
+\footnotesize
+\setlength{\tabcolsep}{4pt}
+\begin{tabular}{lrrr}
+\toprule
+Model & Any overlap & \shortstack{Crop fraction\\$\ge0.01$} & \shortstack{Crop fraction\\$\ge0.10$} \\
+\midrule
+U-Net & $0.2462\pm0.0439$ & $0.2462\pm0.0439$ & $0.2385\pm0.0501$ \\
+DeepLabV3+ & $0.2436\pm0.0222$ & $0.2436\pm0.0222$ & $0.2308\pm0.0000$ \\
+Mask R-CNN & $0.2308\pm0.0769$ & $0.2051\pm0.0588$ & $0.1538\pm0.0666$ \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\section{S5. Ranker-source and commissioning sensitivity}
+
+Four ranker-training schemes were evaluated without changing the 471-candidate comparison burden. Commissioned-only and original-only used candidate labels from one proposal distribution. Union training combined both distributions. Reciprocal cross-pool training applied each distribution's ranker to the other distribution.
 
 \begin{table}[htbp]
 \centering
-\caption{Crop-overlap tile frequency for frozen-DINOv2 queues at $K=20$. The first column requires any positive crop overlap.}
-\label{tab:s4crop}
+\caption{Primary-contract metrics under each ranker-training scheme. Ceiling and oracle values do not depend on ranker training.}
+\label{tab:s5primary}
+\footnotesize
+\setlength{\tabcolsep}{3.5pt}
+\begin{tabular}{llrrrrrr}
+\toprule
+Ranker & Setting & Precision & Spatial & Set & One-to-one & \shortstack{Set\\ceiling} & \shortstack{$K=20$\\oracle} \\
+\midrule
+Commissioned & Original & 0.5860 & 0.1875 & 0.1197 & 0.0970 & 0.1928 & 0.1396 \\
+Commissioned & Commissioned & 0.5180 & 0.2693 & 0.1571 & 0.1157 & 0.3026 & 0.1618 \\
+Original & Original & 0.5881 & 0.1682 & 0.1046 & 0.0859 & 0.1928 & 0.1396 \\
+Original & Commissioned & 0.2378 & 0.0415 & 0.0350 & 0.0345 & 0.3026 & 0.1618 \\
+Union & Original & 0.5924 & 0.1893 & 0.1221 & 0.0981 & 0.1928 & 0.1396 \\
+Union & Commissioned & 0.5223 & 0.2739 & 0.1600 & 0.1192 & 0.3026 & 0.1618 \\
+Reciprocal & Original & 0.5860 & 0.1875 & 0.1197 & 0.0970 & 0.1928 & 0.1396 \\
+Reciprocal & Commissioned & 0.2378 & 0.0415 & 0.0350 & 0.0345 & 0.3026 & 0.1618 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{table}[htbp]
+\centering
+\caption{Direction of commissioned-minus-original effects across 27 matching contracts. Entries are positive/zero/negative contracts.}
+\label{tab:s5signs}
 \small
-\resizebox{\textwidth}{!}{%
 \begin{tabular}{lrrrr}
 \toprule
-Ranker & Any $>0$ & Crop fraction $\ge0.01$ & $\ge0.10$ & $\ge0.50$ \\
+Ranker & Precision & Spatial & Set & One-to-one \\
 \midrule
-Full-region DINOv2 & 10/26 & 10/26 & 10/26 & 9/26 \\
-Component-masked DINOv2 & 11/26 & 11/26 & 11/26 & 9/26 \\
-\bottomrule
-\end{tabular}}
-\end{table}
-
-\section{S5. Matched review burden and proposal commissioning}
-
-The matched comparison applied one role-plus-local logistic ranker to both proposal pools without changing its weights. Logistic regularisation was selected on validation; $C=100$ was selected from $\{10^{-3},10^{-2},10^{-1},1,10,100\}$. For each test tile, both proposal settings used the same $k_i=\min(20,n_i^{\mathrm{original}},n_i^{\mathrm{commissioned}})$, yielding 471 selected candidates from each pool.
-
-\begin{table}[htbp]
-\centering
-\caption{Paired common-capacity results and 95\% image-cluster bootstrap intervals.}
-\label{tab:s5matched}
-\scriptsize
-\resizebox{\textwidth}{!}{%
-\begin{tabular}{lrrrrr}
-\toprule
-Setting & Precision & Spatial recall & Qualified recall & One-to-one recall & Crop-exposed tiles \\
-\midrule
-Original & 0.5860 [0.4430, 0.7152] & 0.1875 [0.1166, 0.2747] & 0.1197 [0.0826, 0.1583] & 0.0970 [0.0698, 0.1236] & 0.8462 [0.6923, 0.9615] \\
-Commissioned & 0.5180 [0.3831, 0.6464] & 0.2693 [0.1816, 0.3752] & 0.1571 [0.1077, 0.2085] & 0.1157 [0.0848, 0.1453] & 0.8846 [0.7308, 1.0000] \\
-\bottomrule
-\end{tabular}}
-\end{table}
-
-\begin{table}[htbp]
-\centering
-\caption{Commissioned-minus-original paired effects under common per-tile capacity.}
-\label{tab:s5effects}
-\small
-\begin{tabular}{lrr}
-\toprule
-Metric & Difference & 95\% image-bootstrap interval \\
-\midrule
-Candidate precision & $-0.0679$ & $[-0.1384,\ 0.0064]$ \\
-Spatial recall & 0.0818 & $[0.0560,\ 0.1098]$ \\
-Role-qualified recall & 0.0374 & $[0.0166,\ 0.0580]$ \\
-One-to-one recall & 0.0187 & $[0.0032,\ 0.0347]$ \\
-Crop-exposed tile frequency & 0.0385 & $[0,\ 0.1154]$ \\
+Commissioned only & 9/0/18 & 27/0/0 & 19/0/8 & 15/0/12 \\
+Original only & 0/0/27 & 0/0/27 & 0/0/27 & 0/0/27 \\
+Union & 9/0/18 & 27/0/0 & 20/0/7 & 16/1/10 \\
+Reciprocal & 0/0/27 & 0/0/27 & 0/0/27 & 0/0/27 \\
 \bottomrule
 \end{tabular}
 \end{table}
 
-Global equal-$N$ ranking also selected 471 candidates from each pool. One-to-one recall was 0.0970 for the original pool and 0.1174 for the commissioned pool. The paired common-$K$ AURBC values were 0.0470 and 0.0578; global equal-$N$ AURBC values were 0.0598 and 0.0750. These analyses isolate proposal support from the 49-candidate difference that occurs when a nominal $K=20$ is applied independently to each pool.
+The commissioned-only one-to-one effect ranged from $-0.0368$ to 0.0572, with median 0.0175. The union effect ranged from $-0.0368$ to 0.0602, with median 0.0164. Original-only and reciprocal effects were negative throughout. Spatial support remained positive throughout commissioned-only and union training. These results separate ranker-free formation gains from ranker-dependent queued gains.
 
-\section{S6. Candidate-ranking diagnostics, ceilings, and restricted label draws}
+\section{S6. Merge-aware bounds for the frozen U-Net queue}
+
+Set coverage is the number of distinct truth instances incident to at least one qualified selected candidate. One-to-one support is the maximum matching cardinality. Qualified memberships count all candidate-to-instance edges. Memberships beyond the set union equal total memberships minus distinct covered instances. The merge-capacity gap equals set-covered instances minus matched instances.
 
 \begin{table}[htbp]
 \centering
-\caption{Candidate-level discrimination on the complete 2,351-candidate WeedsGalore test pool. AUC and AP are diagnostics rather than plant-level endpoints.}
-\label{tab:s6ranking}
-\small
-\begin{tabular}{lrr}
+\caption{Merge-aware accounting for the 518-region queue. Recall denominators contain 1,712 weed instances.}
+\label{tab:s6merge}
+\footnotesize
+\setlength{\tabcolsep}{4pt}
+\begin{tabular}{lrrrrrr}
 \toprule
-Model and fitting support & AUC & AP \\
+Subset & Regions & Zero-edge & Single & Multi & \shortstack{Set\\instances} & \shortstack{1:1\\instances} \\
 \midrule
-Source weed score, all candidates & 0.4947 & 0.2877 \\
-Eligible-only role+local model, evaluated on all candidates & 0.4420 & 0.1640 \\
-All-candidate role+local model & 0.9049 & 0.6960 \\
-All-candidate geometry model & 0.8154 & 0.5418 \\
-Eligible-only frozen DINOv2, evaluated on all candidates & 0.6321 & 0.3816 \\
-All-candidate frozen DINOv2 & 0.9630 & 0.8684 \\
-All-candidate component-masked DINOv2 & 0.9665 & 0.8813 \\
+All selected & 518 & 170 & 286 & 62 & 453 & 348 \\
+Consensus reviewable & 301 & 52 & 195 & 54 & 346 & 249 \\
+Mask-qualified & 355 & 7 & 286 & 62 & 453 & 348 \\
+Human and mask positive & 249 & 0 & 195 & 54 & 346 & 249 \\
 \bottomrule
 \end{tabular}
-\end{table}
 
-Component masking changed AUC by 0.0035 and AP by 0.0129 in one paired run. This small diagnostic difference is not used as a method claim. At $K=20$, the masked-DINOv2 queue selected 520 regions, of which 278 were role-qualified weed candidates. Many-to-one spatial and qualified recall were 459/1,712 (0.2681) and 319/1,712 (0.1863); one-to-one qualified recall was 230/1,712 (0.1343). The role-qualified proposal ceiling was 518/1,712 (0.3026), the exact unconstrained oracle was 426/1,712 (0.2488), and 1,000 random rankings had 2.5th/97.5th percentiles 0.077/0.104 for qualified recall at $K=20$.
+\vspace{4pt}
 
-\begin{table}[htbp]
-\centering
-\caption{Candidate discrimination by acquisition date for the masked-DINOv2 ranker. Class counts accompany AUC and AP.}
-\label{tab:s6dateauc}
-\small
-\begin{tabular}{lrrrrr}
-\toprule
-Date & Candidates & Weed positive & Other & AUC & AP \\
-\midrule
-25 May & 822 & 15 & 807 & 0.8798 & 0.2131 \\
-30 May & 955 & 132 & 823 & 0.9535 & 0.7492 \\
-6 June & 517 & 279 & 238 & 0.9381 & 0.9402 \\
-15 June & 57 & 38 & 19 & 0.7382 & 0.8577 \\
-\midrule
-Pooled & 2,351 & 464 & 1,887 & 0.9605 & 0.8617 \\
-Date macro & -- & -- & -- & 0.8774 & 0.6901 \\
-\bottomrule
-\end{tabular}
-\end{table}
-
-The restricted-label analysis sampled 300 training candidates per draw but retained all 2,436 labelled validation candidates for regularisation selection. It therefore measures a restricted training-candidate reveal, not an end-to-end 300-label system.
-
-\begin{table}[htbp]
-\centering
-\caption{Mean official-test results over ten draws of 300 training-candidate labels plus the fully labelled validation candidate set.}
-\label{tab:s6labels}
-\small
-\resizebox{\textwidth}{!}{%
 \begin{tabular}{lrrrr}
 \toprule
-Training-candidate selection & AUC & AP & $K=20$ precision & Qualified recall \\
+Subset & Set recall & 1:1 recall & Merge gap & Duplicate excess \\
 \midrule
-Prospective uniform & 0.9549 & 0.8544 & 0.5242 & 0.1724 \\
-Prospective DINOv2 coreset & 0.9543 & 0.8534 & 0.5217 & 0.1717 \\
-Retrospective class-stratified reference & 0.9547 & 0.8502 & 0.5231 & 0.1725 \\
+All selected & 0.2646 & 0.2033 & 105 & 0 \\
+Consensus reviewable & 0.2021 & 0.1454 & 97 & 0 \\
+Mask-qualified & 0.2646 & 0.2033 & 105 & 0 \\
+Human and mask positive & 0.2021 & 0.1454 & 97 & 0 \\
 \bottomrule
-\end{tabular}}
+\end{tabular}
 \end{table}
 
-Paired last-block fine-tuning on the ten coreset draws changed AUC by $-0.0396$ on average (empirical 2.5th/97.5th percentiles $-0.0525/-0.0170$), candidate precision by $-0.0373$, and qualified recall by $-0.0115$. The complete per-draw differences and selected candidate identifiers are retained in the archive.
-
-\section{S7. Strong baselines, semantic ranking, and acquisition-date variation}
+All 453 edge memberships represented distinct instances, so duplicate memberships beyond the set union were zero. The 105-instance all-queue gap was therefore attributable to merged capacity under the matching graph. A selected candidate qualified for at most nine weed instances.
 
 \begin{table}[htbp]
 \centering
-\caption{Per-seed $K=20$ queue results. Precision and recalls use the fixed role-qualified matching contract; crop is the fraction of 26 tiles with any crop overlap.}
+\caption{Operator consensus reviewability by qualified geometric multiplicity.}
+\label{tab:s6multiplicity}
+\footnotesize
+\setlength{\tabcolsep}{4pt}
+\begin{tabular}{lrrrr}
+\toprule
+\shortstack{Qualified instances\\per region} & Regions & Reviewable & \shortstack{Reviewable\\fraction} & Unresolved \\
+\midrule
+0 & 170 & 52 & 0.3059 & 39 \\
+1 & 286 & 195 & 0.6818 & 31 \\
+2 & 43 & 35 & 0.8140 & 4 \\
+3 or more & 19 & 19 & 1.0000 & 0 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+The increase in reviewability with multiplicity shows that merges can retain useful evidence. The operator protocol did not request plant counts. Consequently, set coverage is not interpreted as realised human recovery.
+
+\section{S7. Model stability, standard metrics, and crossed uncertainty}
+
+\begin{table}[htbp]
+\centering
+\caption{Per-seed $K=20$ queue results under the primary contract. Crop is any crop-exposed tile frequency.}
 \label{tab:s7seeds}
-\scriptsize
-\resizebox{\textwidth}{!}{%
+\footnotesize
+\setlength{\tabcolsep}{4pt}
 \begin{tabular}{llrrrrr}
 \toprule
-Model & Seed & Precision & Spatial recall & Qualified recall & One-to-one recall & Crop \\
+Model & Seed & Precision & Spatial & Set & One-to-one & Crop \\
 \midrule
 U-Net & 20260810 & 0.7112 & 0.2704 & 0.2494 & 0.2062 & 0.2692 \\
 U-Net & 20260811 & 0.7248 & 0.2634 & 0.2477 & 0.1992 & 0.3077 \\
@@ -364,205 +338,257 @@ Mask R-CNN & 20260820 & 0.8000 & 0.2453 & 0.2313 & 0.2202 & 0.2308 \\
 Mask R-CNN & 20260821 & 0.7942 & 0.2371 & 0.2255 & 0.2132 & 0.1538 \\
 Mask R-CNN & 20260822 & 0.7731 & 0.2418 & 0.2208 & 0.2144 & 0.3077 \\
 \bottomrule
-\end{tabular}}
+\end{tabular}
 \end{table}
 
 \begin{table}[htbp]
 \centering
-\caption{Validation-selected checkpoints and component policies. Mask R-CNN uses its fixed score floor and therefore has no component threshold or minimum area.}
-\label{tab:s7selection}
-\small
-\resizebox{\textwidth}{!}{%
-\begin{tabular}{llrrl}
-\toprule
-Model & Seed & Epoch & Foreground threshold / area & Ranking policy \\
-\midrule
-U-Net & 20260810 & 38 & 0.50 / 16 & Mean weed probability \\
-U-Net & 20260811 & 36 & 0.70 / 16 & Mean weed probability \\
-U-Net & 20260812 & 40 & 0.30 / 16 & Mean weed probability \\
-U-Net & 20260813 & 39 & 0.50 / 16 & Conditional weed probability \\
-U-Net & 20260814 & 31 & 0.50 / 16 & Mean weed probability \\
-DeepLabV3+ & 20260820 & 24 & 0.30 / 16 & Conditional weed probability \\
-DeepLabV3+ & 20260821 & 28 & 0.50 / 16 & Conditional weed probability \\
-DeepLabV3+ & 20260822 & 24 & 0.50 / 16 & Conditional weed probability \\
-Mask R-CNN & 20260820 & 16 & -- & Weed class, then confidence \\
-Mask R-CNN & 20260821 & 16 & -- & Weed class, then confidence \\
-Mask R-CNN & 20260822 & 18 & -- & Weed class, then confidence \\
-\bottomrule
-\end{tabular}}
-\end{table}
-
-For the five U-Net candidate pools, validation chose mean weed probability in four seeds and conditional weed probability in one. The selected policies had mean $\pm$ sample SD precision $0.7440\pm0.0185$, spatial recall $0.3391\pm0.0249$, qualified recall $0.2873\pm0.0082$, one-to-one recall $0.2117\pm0.0047$, and crop-exposed tile frequency $0.2846\pm0.0516$. Their candidate AUC and AP were $0.9021\pm0.0135$ and $0.9417\pm0.0117$ and remain diagnostic.
-
-\begin{table}[htbp]
-\centering
-\caption{Paired model-minus-U-Net contrasts from 10,000 image-cluster bootstrap resamples. The tile metric is first averaged across training seeds within each model.}
-\label{tab:s7contrasts}
-\small
-\resizebox{\textwidth}{!}{%
-\begin{tabular}{llrr}
-\toprule
-Contrast & Metric & Difference & 95\% interval \\
-\midrule
-DeepLabV3+ minus U-Net & Precision & $-0.0337$ & $[-0.0705,\ 0.0013]$ \\
-DeepLabV3+ minus U-Net & Spatial recall & 0.0042 & $[-0.0090,\ 0.0170]$ \\
-DeepLabV3+ minus U-Net & One-to-one recall & $-0.0103$ & $[-0.0216,\ -0.0002]$ \\
-Mask R-CNN minus U-Net & Precision & 0.0723 & $[0.0231,\ 0.1370]$ \\
-Mask R-CNN minus U-Net & Spatial recall & $-0.0254$ & $[-0.0485,\ -0.0015]$ \\
-Mask R-CNN minus U-Net & One-to-one recall & 0.0132 & $[0.0015,\ 0.0284]$ \\
-\bottomrule
-\end{tabular}}
-\end{table}
-
-Standard semantic IoU complements the queue endpoint. Across five U-Net seeds, background/crop/weed IoU were $0.9783\pm0.0013$, $0.6884\pm0.0279$, and $0.7197\pm0.0120$; three-class mean IoU was $0.7955\pm0.0127$. Across three DeepLabV3+ seeds, corresponding values were $0.9755\pm0.0013$, $0.6795\pm0.0063$, $0.7021\pm0.0121$, and $0.7857\pm0.0030$.
-
-\begin{table}[htbp]
-\centering
-\caption{U-Net one-to-one recall by acquisition date. Values are mean $\pm$ sample SD across five seeds.}
-\label{tab:s7dates}
-\small
+\caption{Crossed seed-by-image contrasts for one-to-one support. Familywise intervals use Bonferroni-adjusted 97.5\% percentiles for two prespecified contrasts.}
+\label{tab:s7crossed}
+\footnotesize
+\setlength{\tabcolsep}{4pt}
 \begin{tabular}{lrrr}
 \toprule
-Date & Tiles & Weed instances & One-to-one recall \\
+Contrast & Difference & \shortstack{Crossed 95\%\\interval} & \shortstack{Familywise 97.5\%\\interval} \\
 \midrule
-25 May & 8 & 392 & $0.1378\pm0.0236$ \\
-30 May & 8 & 440 & $0.2864\pm0.0146$ \\
-6 June & 8 & 726 & $0.2061\pm0.0071$ \\
-15 June & 2 & 154 & $0.1130\pm0.0098$ \\
+DeepLabV3+ minus U-Net & $-0.0103$ & $[-0.0237,\ 0.0026]$ & $[-0.0256,\ 0.0049]$ \\
+Mask R-CNN minus U-Net & $+0.0132$ & $[-0.0009,\ 0.0300]$ & $[-0.0027,\ 0.0329]$ \\
 \bottomrule
 \end{tabular}
 \end{table}
 
-Mean candidate precision for the same dates was 0.4035, 0.8163, 0.9513, and 0.5650. The 15 June stratum contains only two tiles; its date-specific value is therefore reported with its denominator and is not treated as an independent field estimate.
-
-\section{S8. Two-operator technical review}
-
-One frozen 518-region target-semantic queue was presented to two operators. Every item showed the source RGB tile, a highlighted region, and a local crop. Date, scene identity, candidate identifier, score, rank, model and policy names, and mask-derived truth were hidden. Both operators completed all 518 items independently, did not exchange labels or rationales, and did not inspect one another's responses. The analysis excluded the unused timing and submission-time fields.
+Date-block plus seed intervals were $[-0.0244,0.0133]$ for DeepLabV3+ minus U-Net and $[0.0023,0.0341]$ for Mask R-CNN minus U-Net. They resample four observed dates and training seeds. They do not estimate a new-field distribution.
 
 \begin{table}[htbp]
 \centering
-\caption{Two-operator categorical agreement on 518 regions.}
+\caption{Standard predicted-weed instance metrics. Each cell reports the seed mean with sample SD in parentheses.}
+\label{tab:s7standard}
+\footnotesize
+\setlength{\tabcolsep}{4pt}
+\begin{tabular}{lccccc}
+\toprule
+Model & mAP & AP50 & AP75 & AR100 & AR100@50 \\
+\midrule
+U-Net & \shortstack{$0.0853$\\$(0.0037)$} & \shortstack{$0.2616$\\$(0.0157)$} & \shortstack{$0.0375$\\$(0.0074)$} & \shortstack{$0.1293$\\$(0.0082)$} & \shortstack{$0.3412$\\$(0.0207)$} \\
+DeepLabV3+ & \shortstack{$0.0499$\\$(0.0026)$} & \shortstack{$0.1937$\\$(0.0060)$} & \shortstack{$0.0093$\\$(0.0034)$} & \shortstack{$0.1010$\\$(0.0054)$} & \shortstack{$0.2950$\\$(0.0081)$} \\
+Mask R-CNN & \shortstack{$0.1064$\\$(0.0082)$} & \shortstack{$0.3189$\\$(0.0248)$} & \shortstack{$0.0516$\\$(0.0027)$} & \shortstack{$0.1483$\\$(0.0101)$} & \shortstack{$0.3904$\\$(0.0266)$} \\
+\bottomrule
+\end{tabular}
+
+\vspace{4pt}
+
+\begin{tabular}{lccc}
+\toprule
+Model & Queue AR20 & Queue AR20@50 & Queue PQ-style \\
+\midrule
+U-Net & \shortstack{$0.0699$\\$(0.0020)$} & \shortstack{$0.1672$\\$(0.0070)$} & \shortstack{$0.1773$\\$(0.0055)$} \\
+DeepLabV3+ & \shortstack{$0.0517$\\$(0.0013)$} & \shortstack{$0.1456$\\$(0.0045)$} & \shortstack{$0.1464$\\$(0.0023)$} \\
+Mask R-CNN & \shortstack{$0.0782$\\$(0.0049)$} & \shortstack{$0.1861$\\$(0.0079)$} & \shortstack{$0.1936$\\$(0.0085)$} \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+The standard calculations used at most 100 predicted weed regions per image. Queue AR20 used the predicted-weed subset of the $K=20$ review queue. The PQ-style calculation used IoU greater than 0.50 and decomposed into segmentation and recognition terms. It is not a full panoptic score. Primary endpoint replay was checked for 66 model--seed--metric combinations; all differences were zero.
+
+Across the 27 contracts, Mask R-CNN ranked first in 21 and U-Net in six. U-Net ranked first at instance coverage 0.75 with labelled coverage 0.25 or 0.50 across all three purity values. Mask R-CNN ranked first in all remaining cells. DeepLabV3+ did not rank first.
+
+\section{S8. Operator agreement and human--mask correspondence}
+
+The two operators were different natural persons. They followed common written instructions and completed 12 validation-derived practice items. They independently reviewed every formal item without discussion, peer-response access, automatic labelling, or external search. No occupational, demographic, or professional credential data were collected. Results are therefore restricted to these two anonymous operators. Timing fields were excluded because timing was not part of the protocol.
+
+\begin{table}[htbp]
+\centering
+\caption{Agreement on 518 regions. AC1 intervals use 10,000 scene-cluster replicates.}
 \label{tab:s8agreement}
-\small
-\begin{tabular}{lrrr}
-\toprule
-Field & Exact agreements & Agreement & Cohen's $\kappa$ \\
-\midrule
-Primary content & 491 & 0.9479 & 0.9095 \\
-Weed reviewability & 488 & 0.9421 & 0.8930 \\
-Crop presence & 490 & 0.9459 & 0.8492 \\
-Localisation usability & 487 & 0.9402 & 0.9049 \\
-\bottomrule
-\end{tabular}
-\end{table}
-
-For weed reviewability, both operators answered yes for 301 regions and no for 143; 74 regions were disputed or contained at least one uncertain response. A 10,000-replicate scene-cluster bootstrap gave a 95\% percentile interval of 0.9228--0.9611 for exact agreement and 0.8474--0.9249 for $\kappa$. Of the 301 consensus-positive regions, 249 satisfied the mask-derived role-qualified weed contract, a correspondence fraction of 0.8272. The mask contract identified 355 qualified weed candidates in the same queue. These values compare two representations of usefulness---human reviewability and geometric mask qualification---without using operator responses to tune the system. The sample supports inference only to the two fixed operators and presented queue.
-
-\section{S9. Locked CWFID evaluation}
-
-The frozen external pipeline scaled the longer image side to 600 pixels, reflection-padded the shorter side, and applied the training normalisation. Annotations used nearest-neighbour resize and zero padding. Each of five existing U-Net checkpoints retained its WeedsGalore-validation-selected epoch, foreground threshold, minimum component area, and mean/conditional probability score. CWFID labels were not used for fitting, calibration, threshold selection, or allocation.
-
-\begin{table}[htbp]
-\centering
-\caption{Locked CWFID result. All five checkpoints produced the same values.}
-\label{tab:s9external}
-\small
-\resizebox{\textwidth}{!}{%
-\begin{tabular}{lrrrrrr}
-\toprule
-Seeds & Images & Weed components & Candidates & Accepted & One-to-one recall & Crop exposure \\
-\midrule
-5 & 60 & 331 & 0 & 0 & 0/331 (0) & 0/60 (0) \\
-\bottomrule
-\end{tabular}}
-\end{table}
-
-The image-cluster bootstrap interval for the primary endpoint was 0--0. Background IoU was 0.9450, while crop and weed IoU were both 0, yielding three-class mean IoU 0.3150. Every checkpoint predicted background for every pixel at its frozen operating point. The original evaluator successfully wrote the 300 per-image seed rows but stopped when its table writer rejected an empty candidate table. A versioned consolidator then computed the zero-candidate result from those existing rows only. It did not reopen external data, repeat inference, or change a threshold. Both the failed evaluator record and the completed consolidation are retained.
-
-\section{S10. Exploratory allocation and development diagnostics}
-
-The principal queue capacity is fixed $K=20$. A bounded 5--50 candidates-per-tile allocation was examined after the initial WeedsGalore test archive and was not selected by validation in the five-seed study. It is retained as a hypothesis-generating allocation analysis and is absent from the abstract and principal conclusions.
-
-\begin{table}[htbp]
-\centering
-\caption{Exploratory allocation for one masked-DINOv2 queue. All policies except the validation-threshold row accept 520 candidates.}
-\label{tab:s10allocation}
 \scriptsize
 \resizebox{\textwidth}{!}{%
-\begin{tabular}{lrrrrrr}
+\begin{tabular}{lrrrr}
 \toprule
-Policy & Accepted & Precision & Spatial recall & Qualified recall & One-to-one recall & Crop-exposed tiles \\
+Field & Exact agreement & Cohen's $\kappa$ & Gwet's AC1 & AC1 95\% interval \\
 \midrule
-Fixed 20/tile & 520 & 275/520 & 390/1,712 & 324/1,712 & 227/1,712 & 13/26 \\
-Bounded 5--50/tile & 520 & 382/520 & 533/1,712 & 453/1,712 & 315/1,712 & 14/26 \\
-Global top-$N$ diagnostic & 520 & 388/520 & 547/1,712 & 464/1,712 & 320/1,712 & 12/26 \\
-Validation score threshold & 426 & 348/426 & 485/1,712 & 424/1,712 & 290/1,712 & 8/26 \\
+Primary content & 0.9479 & 0.9095 & 0.9355 & [0.9095, 0.9593] \\
+Weed reviewability & 0.9421 & 0.8930 & 0.9206 & [0.8918, 0.9483] \\
+Crop presence & 0.9459 & 0.8492 & 0.9341 & [0.9081, 0.9579] \\
+Localisation usability & 0.9402 & 0.9049 & 0.9243 & [0.8998, 0.9481] \\
+Confidence & 0.9440 & 0.9160 & 0.9328 & [0.9100, 0.9540] \\
 \bottomrule
 \end{tabular}}
 \end{table}
 
-The bounded policy assigned 54.8\% of its reviews to 6 June and had allocation Gini 0.3817; the global top-$N$ diagnostic assigned 56.4\% to 6 June and had Gini 0.4220. Their worst-date one-to-one recall was 0.0153, below 0.0255 for fixed $K=20$. The apparent pooled gain therefore arose with increased allocation concentration and did not constitute locked transfer evidence.
+For 445 determinate localisation pairs, exact agreement was 0.9955, linear weighted $\kappa$ was 0.9944, and quadratic weighted $\kappa$ was 0.9966. For confidence, linear and quadratic weighted $\kappa$ were 0.9366 and 0.9589. Mean confidence was 3.523 for operator A and 3.510 for operator B. Both medians were 4 and both interquartile ranges were 3--4.
 
 \begin{table}[htbp]
 \centering
-\caption{Development diagnostics retained with their observed direction.}
-\label{tab:s10diagnostics}
-\footnotesize
-\begin{tabularx}{\textwidth}{L{3.3cm}L{4.4cm}X}
+\caption{Weed-reviewability contingency table. Rows are operator A and columns are operator B.}
+\label{tab:s8weed}
+\small
+\begin{tabular}{lrrr}
 \toprule
-Analysis & Result & Interpretation \\
+ & No & Yes & Uncertain \\
 \midrule
-Nested Platt calibration & Date-macro Brier 0.2112 before and 0.2776 after; NLL 0.6338 before and 0.8239 after & Date transfer increased both calibration losses \\
-Empirical threshold transfer & Precision 0.1317; empty response 0.7448; crop frequency 0.1042 & A training-date threshold transferred sparsely \\
-Cost-sensitive ranker at $K=20$ & AUC 0.7301; AP 0.7272; precision 0.4327; instance recall 0.0842 & Crop weighting changed recovery and crop exposure in opposite directions \\
-Last-block DINOv2 fine-tuning & Mean paired AUC change $-0.0396$; qualified-recall change $-0.0115$ & The archived small-label recipe did not improve the frozen representation \\
+No & 143 & 0 & 3 \\
+Yes & 0 & 301 & 16 \\
+Uncertain & 1 & 10 & 44 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{table}[htbp]
+\centering
+\caption{Human consensus versus mask qualification. Unresolved includes disagreement or at least one uncertain response.}
+\label{tab:s8humanmask}
+\small
+\begin{tabular}{lrr}
+\toprule
+Human status & Mask positive & Mask negative \\
+\midrule
+Consensus reviewable & 249 & 52 \\
+Consensus not reviewable & 67 & 76 \\
+Unresolved & 39 & 35 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+Mask precision against human consensus was 0.7014, recall was 0.8272, F1 was 0.7591, and Jaccard was 0.6118. These symmetric measures prevent the 249/301 conditional proportion from being interpreted as equivalence.
+
+\begin{table}[htbp]
+\centering
+\caption{Five-point confidence contingency table. Rows are operator A and columns are operator B.}
+\label{tab:s8confidence}
+\small
+\begin{tabular}{lrrrrr}
+\toprule
+ & 1 & 2 & 3 & 4 & 5 \\
+\midrule
+1 & 0 & 0 & 0 & 0 & 0 \\
+2 & 0 & 44 & 11 & 0 & 0 \\
+3 & 0 & 18 & 172 & 0 & 0 \\
+4 & 0 & 0 & 0 & 220 & 0 \\
+5 & 0 & 0 & 0 & 0 & 53 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\section{S9. Locked CWFID result and continuous diagnostics}
+
+The frozen pipeline scaled each longer image side to 600 pixels, reflection-padded the shorter side, and applied training normalisation. Annotations used nearest-neighbour resizing and zero padding. Five U-Net checkpoints retained their validation-selected epoch, foreground threshold, minimum area, and ranking score. CWFID labels were not used for fitting, calibration, threshold selection, or allocation.
+
+\begin{table}[htbp]
+\centering
+\caption{Locked CWFID endpoint. Every checkpoint produced the same structural outcome.}
+\label{tab:s9locked}
+\footnotesize
+\setlength{\tabcolsep}{4pt}
+\begin{tabular}{lrrrrrr}
+\toprule
+\shortstack{Check-\\points} & Images & \shortstack{Weed\\components} & Candidates & Accepted & \shortstack{One-to-\\one} & \shortstack{Crop\\exposure} \\
+\midrule
+5 & 60 & 331 & 0 & 0 & 0/331 & 0/60 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+The all-zero empirical image bootstrap is degenerate and is not used as a population interval. The one-sided 95\% binomial reference upper bound for candidate presence in an image was 0.0487. This quantity does not bound weed-component recall or transfer to other farms.
+
+\begin{table}[htbp]
+\centering
+\caption{Post-lock continuous CWFID diagnostics. AUROC and AP are image-macro plant-pixel scores.}
+\label{tab:s9continuous}
+\footnotesize
+\setlength{\tabcolsep}{4pt}
+\begin{tabular}{lrrrrrr}
+\toprule
+Checkpoint & \shortstack{Frozen\\threshold} & \shortstack{Plant\\AUROC} & \shortstack{Plant\\AP} & \shortstack{Foreground\\$q_{0.99}$} & \shortstack{Foreground\\maximum} & \shortstack{Images with\\frozen candidates} \\
+\midrule
+1 & 0.50 & 0.3871 & 0.0438 & 0.0131 & 0.0184 & 0 \\
+2 & 0.70 & 0.4931 & 0.0509 & 0.0407 & 0.2205 & 0 \\
+3 & 0.30 & 0.6374 & 0.0715 & 0.0198 & 0.0613 & 0 \\
+4 & 0.50 & 0.5514 & 0.0577 & 0.0498 & 0.2122 & 0 \\
+5 & 0.50 & 0.5979 & 0.0677 & 0.0118 & 0.0384 & 0 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+Twenty equal-width calibration bins were specified. Almost all pixels fell below predicted plant probability 0.05. In that bin, mean predicted probability ranged from 0.0072 to 0.0239 across checkpoints, while observed plant prevalence was about 0.055. Higher-probability bins were sparse and often had near-zero observed plant fraction.
+
+The diagnostic threshold grid was 0.01, 0.02, 0.05, 0.10, 0.20, 0.30, 0.40, 0.50, 0.60, 0.70, 0.80, 0.90, and 0.95. At 0.01, spatial recall ranged from 0.0363 to 1.0000. Only checkpoint 2 obtained nonzero role-qualified recall, at 0.0423. Several lower-threshold components were broad or mixed. The diagnostic therefore cannot distinguish threshold mismatch from representation, role-semantic, scale, crop, viewpoint, or annotation-contract shift.
+
+External evaluation was restricted to U-Net because those five checkpoints were frozen before CWFID opening. Mask R-CNN and semantic reordering entered the study after official-test access. Adding them to the frozen external protocol would have created a new post-test external experiment rather than completing the locked one.
+
+\section{S10. Candidate-ranking and allocation diagnostics}
+
+\begin{table}[htbp]
+\centering
+\caption{Candidate discrimination on the complete 2,351-candidate WeedsGalore test pool. AUC and AP are diagnostics.}
+\label{tab:s10ranking}
+\small
+\begin{tabular}{lrr}
+\toprule
+Ranker and fitting support & AUC & AP \\
+\midrule
+Source weed score & 0.4947 & 0.2877 \\
+Role plus local, all candidates & 0.9049 & 0.6960 \\
+Geometry, all candidates & 0.8154 & 0.5418 \\
+Frozen DINOv2, all candidates & 0.9630 & 0.8684 \\
+Component-masked DINOv2, all candidates & 0.9665 & 0.8813 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+The masked DINOv2 ranker reached one-to-one support 0.1343 at $K=20$ despite its candidate AUC of 0.9665. This gap motivates separate candidate and instance-support reporting.
+
+An exploratory 5--50 candidates-per-tile allocation was evaluated after official-test access. It was not selected by validation in the five-seed study. Fixed $K=20$, bounded allocation, and global top-$N$ accepted 520 regions. Their one-to-one numerators were 227, 315, and 320. The bounded and global policies concentrated more than half of reviews on 6 June and reduced worst-date support. These results remain hypothesis-generating.
+
+\section{S11. Metric correspondence}
+
+\begin{table}[htbp]
+\centering
+\caption{Relationship between established instance metrics and the finite-queue contract.}
+\label{tab:s11metrics}
+\footnotesize
+\begin{tabularx}{\textwidth}{L{2.8cm}L{3.1cm}L{3.2cm}X}
+\toprule
+Metric & Matching or aggregation & Capacity representation & Information emphasised \\
+\midrule
+mAP & score-ranked one-to-one matches across IoU thresholds & maximum detections configured externally & precision--recall and mask localisation \\
+AR & recall across IoU thresholds and detection limits & explicit detection limit, here 100 or 20 & localisation recall under a count cap \\
+PQ & one-to-one IoU matching with recognition and segmentation terms & no agricultural review budget & complete panoptic partition quality \\
+Beyond-mAP diagnostics & explicit duplicate and category-error analysis & not tied to a review queue & duplicate and semantic error modes \\
+SortedAP & matching over exact IoU change points & not tied to an agricultural budget & sensitivity and continuity of instance quality \\
+Set coverage & union of all qualified candidate--instance edges & fixed reviewed-region budget & merge-aware geometric support \\
+One-to-one queue support & maximum qualified matching & fixed per-tile review budget & distinct one-region-to-one-record support \\
 \bottomrule
 \end{tabularx}
 \end{table}
 
-\section{S11. Reproducibility, environment, and preserved failures}
+The queue endpoint reuses familiar matching machinery. Its contribution is the agricultural information contract: it records proposal support, role qualification, merge capacity, ranker source, and review truncation as separate evidence layers. It is not proposed as a universal replacement for AP, AR, PQ, or recent instance-quality metrics.
 
-The public release linked in the main manuscript contains frozen configurations, model-acquisition records, environment specifications, training and evaluation source, checkpoint hashes, candidate and matching outputs, source tables for every figure, failure records, and clean-room replay commands. Public dataset imagery and public model weights are acquired from upstream sources and are not redistributed when upstream terms do not permit it.
+\section{S12. Reproducibility boundary and preserved failures}
 
-The principal training environment used Python 3.10.12, PyTorch 2.7.1 with CUDA 12.6, torchvision 0.22.1, and segmentation-models-pytorch 0.5.0. Training runs used NVIDIA H200 accelerators assigned to physical devices 6 and 7; one accelerator was used by each training process. CPU-only aggregation and bootstrap scripts read immutable result tables. Hardware identifiers are provenance fields and are not treated as performance outcomes.
+The release contains frozen configurations, model-acquisition records, environment specifications, training and evaluation source, checkpoint hashes, aggregate and per-image metrics, matching outputs, figure source data, and failure records. Public dataset imagery and weights are acquired from upstream sources. They are not redistributed when upstream terms prohibit redistribution.
 
-\begin{table}[htbp]
-\centering
-\caption{Key integrity anchors. Full values and per-artifact manifests are included in the release.}
-\label{tab:s11hashes}
-\footnotesize
-\begin{tabularx}{\textwidth}{L{4.2cm}X}
-\toprule
-Artifact class & Integrity anchor \\
-\midrule
-WeedsGalore experiment archive & SHA-256 \nolinkurl{5d8395c274d990cd8fbfa728445f65c398be2b5d777bd5145eb9ae5ca4d9b68c} \\
-CWFID upstream source & Git commit \nolinkurl{176612f3506c0ce70d85518cb82ddd938a6206c8} \\
-Locked CWFID protocol & SHA-256 \nolinkurl{d9c7bba0d9c6311551449bf44e6b7a0d50bbd3e4e63327a50b40f9eb9c7d1347} \\
-Strong-baseline configuration & SHA-256 \nolinkurl{d8007d26d5d49d330a2da8b3eb39670701e48943c0f22c4f43a1be217f9fdd93} \\
-Remote experiment backup & SHA-256 \nolinkurl{c42b4e3628face38cd4e2f654be146f6a33eb7353552f617392db84220375e95} \\
-Two-operator aggregate summary & SHA-256 \nolinkurl{233157c59d062b5d5577dcb12890089f87178e8527627633dcf1ec296b331fb9} \\
-\bottomrule
-\end{tabularx}
-\end{table}
+The principal environment used Python 3.10.12, PyTorch 2.7.1 with CUDA 12.6, torchvision 0.22.1, and segmentation-models-pytorch 0.5.0. Training used one NVIDIA H200 accelerator per seed. Physical devices 6 and 7 were explicitly assigned. CPU-only aggregation and bootstrap programs read immutable result tables.
 
 \begin{table}[htbp]
 \centering
 \caption{Preserved execution failures and resolution boundaries.}
-\label{tab:s11failures}
+\label{tab:s12failures}
 \footnotesize
-\begin{tabularx}{\textwidth}{L{3.2cm}L{4.3cm}X}
+\begin{tabularx}{\textwidth}{L{3.0cm}L{4.2cm}X}
 \toprule
 Stage & Failure & Resolution \\
 \midrule
-CWFID acquisition & Several partial public downloads lacked upstream blobs & A separate complete candidate passed all 242 upstream blob checks; partial attempts remain archived \\
-DeepLabV3+ initialisation & Network-dependent model construction was unavailable & Public weights were acquired once, hashed, and loaded locally without changing the frozen protocol \\
-Semantic-ranking aggregation & One attempt encountered an existing output directory; another used an incorrect checkpoint root & New versioned outputs were created; failed attempts were retained \\
-Locked CWFID evaluation & Empty candidate output was rejected by the table writer & Existing per-image outputs were consolidated without data reopening or inference repetition \\
-Remote backup transfer & The first large transfer was truncated & A second archive passed gzip, tar, extraction, entry-count, and SHA-256 verification; the truncated object remains marked invalid \\
+Public data acquisition & Several partial attempts lacked upstream blobs & A complete candidate passed upstream integrity checks; failed attempts remain recorded \\
+DeepLabV3+ initialisation & Network-dependent construction was unavailable & Public weights were acquired once, hashed, and loaded locally \\
+Semantic-ranking aggregation & Existing output and incorrect checkpoint-root attempts failed & New versioned outputs were created without overwriting failures \\
+Locked CWFID evaluation & Empty candidate output was rejected by a table writer & Existing per-image outputs were consolidated without new inference \\
+Standard-metric audit v1 & The execution view could not locate the analysis program & The program was placed in the execution view and rerun \\
+Standard-metric audit v2 & AP75 lookup used an unsafe floating-point key & Threshold indexing was made explicit; the failed log was preserved \\
+Remote backup transfer & The first large transfer was truncated & A second archive passed compression, extraction, entry-count, and hash checks \\
 \bottomrule
 \end{tabularx}
 \end{table}
 
-The clean-room replay verifies configuration hashes before execution, reconstructs aggregate tables from archived predictions and exact matching outputs, compares regenerated source data with release checksums, and returns non-zero status on any mismatch. It also verifies that no credential, internal host, or private data field occurs in the public package.
+The compact verifier reconstructs published aggregate tables and numerical invariants from archived outputs. It verifies checksums and returns nonzero status on mismatch. It is a table-level replay, not complete retraining. Full reproduction requires public datasets and weights, the recorded environment, and the supplied training and evaluation programs. Public-package scanning rejects credentials, internal hosts, and private operator-response files.
 
 \end{document}

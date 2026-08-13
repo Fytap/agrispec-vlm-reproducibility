@@ -1,0 +1,35 @@
+{
+  "status": "completed_crossed_seed_image_uncertainty",
+  "analysis_class": "post_test_exploratory_uncertainty_analysis",
+  "official_test_images": 26,
+  "acquisition_dates": {
+    "2023-05-25": 8,
+    "2023-05-30": 8,
+    "2023-06-06": 8,
+    "2023-06-15": 2
+  },
+  "training_seeds": {
+    "deeplabv3plus": [
+      20260820,
+      20260821,
+      20260822
+    ],
+    "maskrcnn": [
+      20260820,
+      20260821,
+      20260822
+    ],
+    "unet": [
+      20260810,
+      20260811,
+      20260812,
+      20260813,
+      20260814
+    ]
+  },
+  "bootstrap_replicates": 20000,
+  "bootstrap_seed": 20260813,
+  "image_estimand": "conditional_on_the_26_image_official_test_split",
+  "date_block_sensitivity": "resample_four_acquisition_date_blocks_with_replacement",
+  "multiplicity": "Bonferroni_familywise_intervals_for_two_primary_model_contrasts"
+}

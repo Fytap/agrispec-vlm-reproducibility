@@ -1,6 +1,6 @@
-"relative_path"	"bytes"	"sha256"
-"SAT_Overleaf_Source_v1.2.1.zip"	"665765"	"0d2029020caed9369b52a610c6b122d6a125c1d92d45f6a62cb1e32f512fb5f2"
-"SAT_cover_letter.pdf"	"63357"	"1971dbec3868a22ef57bdc3c2c82140f98dc14944552e660e6ada0510889fa26"
-"SAT_manuscript.pdf"	"1055293"	"561cce6295cbffb9f998a5a2318a049ccc0709bf1d123e0432ea9ffa5fa6f7dc"
-"SAT_supplement.pdf"	"361102"	"856c056fe39270ac531021cde2ec50b31dbc1103eb65dbfa40937f9c2c62f863"
-"highlights.txt"	"366"	"a2712df52fc94ed0ed0fba352236bbee35c6562939493f075234b4b42e780f3c"
+relative_path	bytes	sha256
+SAT_manuscript.pdf	1031604	952464ceb856367d793c4d601847ecdad1ecb634ce6b2eb90c1ad7f808115a6b
+SAT_supplement.pdf	358117	a696ff366c65270602155683f1e1ab61da6b2b1d771cead1be78a57dfab949c9
+SAT_cover_letter.pdf	64018	91e5923048e7e89bd6731bcbe4b0cb0251ef27f80517dd68bdaeaf5ae70288f0
+SAT_Overleaf_Source_v1.3.0.zip	660953	7470ca483b3dc3ec353aaae46b6fa4f5fb739a06408048c4d5eb7ed7110582cd
+highlights.txt	357	896e524c5b922766e5076275df739f8733e75ac1242b96c13dae56f3dfdce4f7
