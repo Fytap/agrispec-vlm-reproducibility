@@ -1,36 +1,59 @@
-\documentclass[10pt]{letter}
+\documentclass[11pt]{article}
 \usepackage[T1]{fontenc}
 \usepackage[utf8]{inputenc}
 \usepackage{lmodern}
 \usepackage{microtype}
-\usepackage[a4paper,margin=2.35cm]{geometry}
+\usepackage[a4paper,top=2.0cm,bottom=2.0cm,left=2.55cm,right=2.55cm]{geometry}
+\usepackage[hidelinks]{hyperref}
 \input{author_metadata}
-\ifAuthorMetadataReady
-\signature{\CorrespondingAuthor\\on behalf of all authors}
-\address{\CorrespondingAffiliation\\Email: \CorrespondingEmail}
-\else
-\signature{Corresponding author\\on behalf of all authors}
-\fi
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{0.48em}
+\pagestyle{empty}
+
 \begin{document}
-\begin{letter}{Editors-in-Chief\\Smart Agricultural Technology}
-\opening{Dear Editors,}
 
-Please consider the manuscript, ``Bounded Instance-Support Evaluation for Finite Crop--Weed Review Queues,'' for publication in \emph{Smart Agricultural Technology}.
+\ifAuthorMetadataReady
+{\large\textbf{\CorrespondingAuthor}}\\[-0.15em]
+\CorrespondingAffiliation\\
+Email: \href{mailto:\CorrespondingEmail}{\CorrespondingEmail}
+\else
+{\large\textbf{Corresponding author}}
+\fi
 
-The study addresses an applied quality-assurance question for agricultural vision: when only a finite number of predicted regions can be reviewed, how much distinct-plant support survives candidate formation, role qualification, ranking, and budget truncation? We organise these stages into an executable evaluation contract for finite crop--weed review queues.
+\vspace{0.55em}
+13 August 2026
 
-The contract separates spatial support, role-qualified support, merge-aware set coverage, and one-to-one support. The two final endpoints bound geometric plant support when one region creates one quality-assurance record. On the official WeedsGalore split, proposal commissioning nearly doubled spatial support (0.2973 to 0.5713) and raised role-qualified support by 0.1098 to 0.3026. A 27-contract analysis further showed that the queued effect depends on the proposal distribution used to train the ranker.
+\vspace{0.55em}
+Editors-in-Chief\\
+\emph{Smart Agricultural Technology}
 
-The model study compares U-Net, DeepLabV3+, and Mask R-CNN under the same $K=20$ capacity. It includes crossed training-seed and test-image uncertainty, standard AP and AR, a queue-level PQ-style diagnostic, contract-rank stability, and crop-exposure sensitivity. Mask R-CNN achieved the highest one-to-one point estimate (0.2159); the crossed seed-by-image contrast with U-Net was 0.0132 (95\% interval, $-0.0009$ to 0.0300).
+\vspace{0.55em}
+\textbf{Re: Research Article submission}\\[-0.1em]
+\emph{Bounded Instance-Support Evaluation for Finite Crop--Weed Review Queues}
 
-Two independent operators reviewed the same 518-region queue and reached 0.9421 agreement on weed reviewability (Cohen's $\kappa=0.8930$). Merge-aware analysis identified 453 set-covered instances but 348 one-to-one matches, exposing a 105-instance capacity gap that AP, AR, and queue-level PQ-style summaries did not express.
+\vspace{0.35em}
+Dear Editors-in-Chief,
 
-A cross-dataset transfer applied five validation-selected U-Net checkpoints to 60 CWFID images without external fitting. Validation-selected thresholds exceeded the external foreground responses; continuous-score diagnostics located the shift in ranking and threshold response. This experiment connects the finite-queue endpoint to an explicit external-calibration requirement.
+On behalf of my co-authors, I am pleased to submit the manuscript, ``Bounded Instance-Support Evaluation for Finite Crop--Weed Review Queues,'' for consideration as a Research Article in \emph{Smart Agricultural Technology}.
 
-The accompanying GitHub release contains figure source data, configurations, per-image and per-seed outputs, matching tables, model and data hashes, preserved run records, and replay programs. The compact verifier reproduces the archived tables and numerical invariants; public-data and model-acquisition instructions support full retraining.
+Agricultural segmentation systems are commonly summarised by image- or instance-level averages, whereas practical quality assurance often operates through a finite queue of predicted regions. The manuscript introduces bounded instance-support evaluation, an executable contract that follows distinct plants through candidate formation, agricultural-role qualification, ranking, and capacity truncation. It separates spatial support, role-qualified support, merge-aware set coverage, and one-to-one support, thereby linking segmentation output to the number of plant records that a fixed review queue can represent.
 
-The manuscript is original, is not under consideration elsewhere, and has been approved by all authors.
+On the official WeedsGalore split, proposal commissioning increased spatial support from 0.2973 to 0.5713 and role-qualified support from 0.1928 to 0.3026. Across 27 matching contracts and four ranker-training schemes, the queued effect depended on the proposal distribution used to train the ranker. A matched comparison of U-Net, DeepLabV3+, and Mask R-CNN at $K=20$ placed Mask R-CNN highest at 0.2159 one-to-one support; its crossed seed-by-image contrast with U-Net was 0.0132 (95\% interval, $-0.0009$ to 0.0300). Merge-aware evaluation additionally exposed a 105-instance difference between set coverage and one-to-one support.
 
-\closing{Sincerely,}
-\end{letter}
+The technical endpoint is connected to human review and transfer behaviour. Two independent operators assessed the same 518-region queue and reached 0.9421 agreement on weed reviewability (Cohen's $\kappa=0.8930$). A cross-dataset study applied five validation-selected U-Net checkpoints to 60 Crop/Weed Field Image Dataset images and showed how score-scale and agricultural-role qualification jointly shape external queue formation.
+
+The work aligns with \emph{Smart Agricultural Technology} by integrating crop--weed segmentation, finite-capacity human review, matching design, and external calibration into a reproducible agricultural quality-assurance workflow. The accompanying public repository contains the configurations, source data for figures and tables, per-image and per-seed outputs, matching records, hashes, and replay programs needed to inspect the reported results.
+
+The manuscript is original, has not been published, is not under consideration elsewhere, and has been approved by all authors. The authors declare no known competing interests.
+
+Thank you for considering this manuscript. We believe it will interest readers working on agricultural vision, crop--weed management, model evaluation, and human-centred quality assurance.
+
+Sincerely,
+
+\vspace{0.6em}
+\begin{minipage}{0.55\textwidth}
+\CorrespondingAuthor\\
+on behalf of all authors
+\end{minipage}
+
 \end{document}
