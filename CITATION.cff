@@ -19,5 +19,7 @@ authors:
     given-names: Qiuxue
   - family-names: Kuang
     given-names: Ziyi
+  - family-names: Zhang
+    given-names: Haiyou
 repository-code: "https://github.com/Fytap/agrispec-vlm-reproducibility"
 url: "https://github.com/Fytap/agrispec-vlm-reproducibility/releases/tag/v1.3.1"

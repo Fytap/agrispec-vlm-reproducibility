@@ -14,7 +14,10 @@ from docx.shared import Inches, Pt, RGBColor
 
 
 TITLE = "Bounded Instance-Support Evaluation for Finite Crop--Weed Review Queues"
-AUTHORS = "Shuhao Liu; Zhuo Chen; Zhi Ling; Yu Yan; Jie Liu; Qiuxue Wu; Ziyi Kuang"
+AUTHORS = (
+    "Shuhao Liu; Zhuo Chen; Zhi Ling; Yu Yan; Jie Liu; Qiuxue Wu; "
+    "Ziyi Kuang; Haiyou Zhang"
+)
 DECLARATION = (
     "The authors declare that they have no known competing financial interests "
     "or personal relationships that could have appeared to influence the work "
